@@ -34,6 +34,8 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
             recordView = CovidTestResultRecordDetailView(frame: .zero)
         case .medication:
             recordView = MedicationRecordDetailView(frame: .zero)
+        case .pharmacist:
+            recordView = PharmacistAssessmentDetailView(frame: .zero)
         case .laboratoryOrder:
             recordView = LabOrderRecordDetailView(frame: .zero)
         case .immunization:

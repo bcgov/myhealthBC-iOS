@@ -273,6 +273,9 @@
 		29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */; };
 		29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
 		29F41298274CDEE1004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
+		2D043C182AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D043C172AE730600004974A /* PharmacistAssessmentDetailView.swift */; };
+		2D043C192AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D043C172AE730600004974A /* PharmacistAssessmentDetailView.swift */; };
+		2D043C1A2AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D043C172AE730600004974A /* PharmacistAssessmentDetailView.swift */; };
 		2D120D3B28FF165D00EB8EBF /* DependentsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */; };
 		2D120D3C28FF165D00EB8EBF /* DependentsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */; };
 		2D120D3D28FF165D00EB8EBF /* DependentsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */; };
@@ -1678,6 +1681,7 @@
 		29E19FF7286C715C00C235EF /* HealthRecordDetailFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HealthRecordDetailFieldTableViewCell.xib; sourceTree = "<group>"; };
 		29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+EXT.swift"; sourceTree = "<group>"; };
 		29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitedOnBoardingScreen.swift; sourceTree = "<group>"; };
+		2D043C172AE730600004974A /* PharmacistAssessmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PharmacistAssessmentDetailView.swift; sourceTree = "<group>"; };
 		2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentsResponse.swift; sourceTree = "<group>"; };
 		2D120D3E28FF17FB00EB8EBF /* DependentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentService.swift; sourceTree = "<group>"; };
 		2D120D4228FF25A600EB8EBF /* PostDependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDependent.swift; sourceTree = "<group>"; };
@@ -2181,6 +2185,7 @@
 				29E19FCE286C01E900C235EF /* CovidTestResultRecordDetailView */,
 				29E19FCD286C01D500C235EF /* LabOrderRecordDetailView */,
 				29E19FCC286C01C500C235EF /* MedicationRecordDetailView */,
+				2D043C162AE7303D0004974A /* PharmacistAssessmentDetailView */,
 				3EDC0D21296CBE9900603FED /* Clinical Document */,
 				3EDC0D1C296C93B500603FED /* Hospital Visit */,
 				2D2B49082A1D4F4600E04254 /* DiagnosticImagingDetailView */,
@@ -2652,6 +2657,14 @@
 				29E19FF7286C715C00C235EF /* HealthRecordDetailFieldTableViewCell.xib */,
 			);
 			path = "Detail Field";
+			sourceTree = "<group>";
+		};
+		2D043C162AE7303D0004974A /* PharmacistAssessmentDetailView */ = {
+			isa = PBXGroup;
+			children = (
+				2D043C172AE730600004974A /* PharmacistAssessmentDetailView.swift */,
+			);
+			path = PharmacistAssessmentDetailView;
 			sourceTree = "<group>";
 		};
 		2D120D3928FF15CA00EB8EBF /* Dependant */ = {
@@ -5303,6 +5316,7 @@
 				3EDC0CF52967DCA100603FED /* HospitalVisit+CoreDataClass.swift in Sources */,
 				2DF665942A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */,
 				3EDC0CB12967D12D00603FED /* AuthenticatedClinicalDocumentResponseObject.swift in Sources */,
+				2D043C192AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */,
 				1E046E2E2ACE002A008E621B /* DiagnosticImagingInfoTableViewCell.swift in Sources */,
 				3EF199E92A2860EA00B8C5D8 /* NotificationTableViewCell.swift in Sources */,
 				2922C0EC286E37B3000FF4F7 /* BaseHeaderTableViewCell.swift in Sources */,
@@ -5710,6 +5724,7 @@
 				3EDC0CB22967D12D00603FED /* AuthenticatedClinicalDocumentResponseObject.swift in Sources */,
 				2DF665952A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */,
 				79590D9A2811EA20006EB59F /* CommentsTableViewCell.swift in Sources */,
+				2D043C1A2AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */,
 				1E046E2F2ACE002A008E621B /* DiagnosticImagingInfoTableViewCell.swift in Sources */,
 				3EF199EB2A2860EA00B8C5D8 /* NotificationTableViewCell.swift in Sources */,
 				29A4DF5C27DEFCCC00D5E901 /* ChipsView.swift in Sources */,
@@ -6094,6 +6109,7 @@
 				798005C12852C66E006E390F /* InitialOnboardingView.swift in Sources */,
 				2DF665932A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */,
 				3EDC0CF42967DCA100603FED /* HospitalVisit+CoreDataClass.swift in Sources */,
+				2D043C182AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */,
 				1E046E2D2ACE002A008E621B /* DiagnosticImagingInfoTableViewCell.swift in Sources */,
 				3EF199E72A28608800B8C5D8 /* NotificationTableViewCell.swift in Sources */,
 				3EDC0CB02967D12D00603FED /* AuthenticatedClinicalDocumentResponseObject.swift in Sources */,

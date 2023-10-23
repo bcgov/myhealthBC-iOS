@@ -13,6 +13,7 @@ struct HealthRecordsDetailDataSource {
             case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [CovidImmunizationRecord])
             case covidTestResultRecord(model: TestResult)
             case medication(model: Perscription)
+            case pharmacist(model: Perscription)
             case laboratoryOrder(model: LaboratoryOrder, tests: [LaboratoryTest])
             case immunization(model: Immunization)
             case healthVisit(model: HealthVisit)
@@ -38,6 +39,8 @@ struct HealthRecordsDetailDataSource {
                 return covidTestResultRecord.parentTest?.commentsArray ?? []
             case .medication(let medication):
                 return medication.commentsArray
+            case .pharmacist(let medication):
+                return medication.commentsArray
             case .laboratoryOrder(let laboratoryOrder, _):
                 return laboratoryOrder.commentsArray
             case .immunization:
@@ -60,7 +63,7 @@ struct HealthRecordsDetailDataSource {
         var includesSeparatorUI: Bool {
             switch self.type {
             case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder, .immunization: return true
-            case .medication, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging, .note: return false
+            case .medication, .pharmacist, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging, .note: return false
             }
         }
     }
@@ -69,6 +72,7 @@ struct HealthRecordsDetailDataSource {
         case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [CovidImmunizationRecord])
         case covidTestResultRecord(model: CovidLabTestResult)
         case medication(model: Perscription)
+        case pharmacist(model: Perscription)
         case laboratoryOrder(model: LaboratoryOrder)
         case immunization(model: Immunization)
         case healthVisit(model: HealthVisit)
@@ -98,6 +102,8 @@ struct HealthRecordsDetailDataSource {
             let record = HealthRecordsDetailDataSource.genRecord(testResult: mainResultModel, parentResult: model)
             return records.first(where: {$0.id == record.id})
         case .medication(model: _):
+            return records.first
+        case .pharmacist(model: _):
             return records.first
         case .laboratoryOrder(model: let model):
             if records.isEmpty {
@@ -130,6 +136,8 @@ struct HealthRecordsDetailDataSource {
         case .covidTestResultRecord(let model):
             return model.authenticated
         case .medication(model: let model):
+            return model.authenticated
+        case .pharmacist(model: let model):
             return model.authenticated
         case .laboratoryOrder(model: let model):
             return model.authenticated
@@ -165,7 +173,7 @@ struct HealthRecordsDetailDataSource {
                 .diagnosticImaging,
                 .note:
             return false
-        case .medication:
+        case .medication, .pharmacist:
             return true
         }
     }
@@ -195,6 +203,15 @@ struct HealthRecordsDetailDataSource {
             deleteAlertTitle = .deleteTestResult
             deleteAlertMessage = .deleteTestResultMessage
         case .medication(model: let model):
+            id = model.id
+            title = model.medication?.brandName ?? "Statins"
+            detailNavTitle = model.medication?.brandName ?? "Statins"
+            name = model.patient?.name ?? "-"
+            image = UIImage(named: "blue-bg-medication-record-icon")
+            deleteAlertTitle = "N/A" // Note: We can't delete an auth medical record, so this won't be necessary
+            deleteAlertMessage = "Shouldn't see this" // Showing these values for testing purposes
+        case .pharmacist(model: let model):
+            // TODO: Connor - adjust this here accordingly
             id = model.id
             title = model.medication?.brandName ?? "Statins"
             detailNavTitle = model.medication?.brandName ?? "Statins"
@@ -296,6 +313,10 @@ extension HealthRecordsDetailDataSource {
         case .medication(model: let model):
             result.append(genRecord(prescription: model))
             return result
+        case .pharmacist(model: let model):
+//            result.append(genRecordPharmacist(prescription: model))
+            result.append(genRecord(prescription: model))
+            return result
         case .laboratoryOrder(model: let model):
             result.append(genRecord(labOrder: model))
             return result
@@ -365,6 +386,11 @@ extension HealthRecordsDetailDataSource {
         /// Unsure about status field - this is what it appears to be in designs though
         return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .medication(model: prescription), status: prescription.medication?.genericName, date: dateString, listStatus: prescription.medication?.genericName ?? "", commentID: prescription.prescriptionIdentifier)
     }
+    
+    // MARK: Pharmacist
+//    private static func genRecordPharmacist(prescription: Perscription) -> Record {
+//
+//    }
     
     // MARK: Lab Orders
     private static func genRecord(labOrder:  LaboratoryOrder) -> Record {

@@ -13,6 +13,7 @@ class GetRecordsView: UIView {
         case covidImmunizationRecord
         case covidTestResult
         case medication
+        case pharmacist
         case laboratoryOrder
         case immunization
         case healthVisit
@@ -27,6 +28,8 @@ class GetRecordsView: UIView {
             case .covidImmunizationRecord: return .getVaccinationRecordsTitle
             case .covidTestResult: return .getCovidTestResultsTitle
             case .medication:
+                return ""
+            case .pharmacist:
                 return ""
             case .laboratoryOrder:
                 return ""
@@ -55,6 +58,8 @@ class GetRecordsView: UIView {
                 return ""
             case .medication:
                 return ""
+            case .pharmacist:
+                return ""
             case .laboratoryOrder:
                 return ""
             case .healthVisit:
@@ -78,6 +83,8 @@ class GetRecordsView: UIView {
             case .covidImmunizationRecord: return UIImage(named: "vaccine-record-icon")
             case .covidTestResult: return UIImage(named: "test-result-icon")
             case .medication:
+                return nil
+            case .pharmacist:
                 return nil
             case .laboratoryOrder:
                 return nil

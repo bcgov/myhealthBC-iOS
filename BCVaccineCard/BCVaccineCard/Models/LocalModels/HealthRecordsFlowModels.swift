@@ -20,6 +20,7 @@ struct HealthRecord {
         case CovidTest(CovidLabTestResult)
         case CovidImmunization(VaccineCard)
         case Medication(Perscription)
+        case Pharmacist(Perscription)
         case LaboratoryOrder(LaboratoryOrder)
         case Immunization(Immunization)
         case HealthVisit(HealthVisit)
@@ -53,6 +54,10 @@ struct HealthRecord {
             patientName = card.name ?? ""
             birthDate = card.patient?.birthday
         case .Medication(let prescription):
+            patient = prescription.patient!
+            patientName = prescription.patient?.name ?? ""
+            birthDate = prescription.patient?.birthday
+        case .Pharmacist(let prescription):
             patient = prescription.patient!
             patientName = prescription.patient?.name ?? ""
             birthDate = prescription.patient?.birthday
@@ -101,6 +106,8 @@ extension HealthRecord {
             return ""
         case .Medication(let medication):
             return medication.prescriptionIdentifier ?? ""
+        case .Pharmacist(let medication):
+            return medication.prescriptionIdentifier ?? ""
         case .LaboratoryOrder(let labTest):
             return labTest.labPdfId ?? ""
         case .Immunization(let object):
@@ -147,6 +154,8 @@ extension HealthRecord {
             return HealthRecordsDetailDataSource(type: .covidImmunizationRecord(model: model, immunizations: covidImmunization.immunizations))
         case .Medication(let prescription):
             return HealthRecordsDetailDataSource(type: .medication(model: prescription))
+        case .Pharmacist(let prescription):
+            return HealthRecordsDetailDataSource(type: .pharmacist(model: prescription))
         case .LaboratoryOrder(let labOrder):
             return HealthRecordsDetailDataSource(type: .laboratoryOrder(model: labOrder))
         case .Immunization(let immunization):
@@ -173,6 +182,8 @@ extension HealthRecord {
         case .CovidImmunization(let covidImmunization):
             return covidImmunization.authenticated
         case .Medication(let prescription):
+            return prescription.authenticated
+        case .Pharmacist(let prescription):
             return prescription.authenticated
         case .LaboratoryOrder(let labOrder):
             return labOrder.authenticated
@@ -229,6 +240,8 @@ extension Array where Element == HealthRecord {
                 firstDate = model.mainResult?.resultDateTime
             case .medication(model: let model):
                 firstDate = model.dispensedDate
+            case .pharmacist(model: let model):
+                firstDate = model.dispensedDate
             case .laboratoryOrder(model: let model):
                 firstDate = model.timelineDateTime
             case .immunization(model: let model):
@@ -252,6 +265,8 @@ extension Array where Element == HealthRecord {
             case .covidTestResultRecord(model: let model):
                 secondDate = model.mainResult?.resultDateTime
             case .medication(model: let model):
+                secondDate = model.dispensedDate
+            case .pharmacist(model: let model):
                 secondDate = model.dispensedDate
             case .laboratoryOrder(model: let model):
                 secondDate = model.timelineDateTime
@@ -289,6 +304,11 @@ extension Array where Element == HealthRecord {
                 return false
             case .Medication(let prescription):
                 if recordType == .medication {
+                    return prescription.id == id
+                }
+                return false
+            case .Pharmacist(let prescription):
+                if recordType == .pharmacist {
                     return prescription.id == id
                 }
                 return false
