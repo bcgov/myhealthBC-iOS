@@ -27,5 +27,11 @@ extension Medication {
     @NSManaged public var quantity: Double
     @NSManaged public var strength: String?
     @NSManaged public var strengthUnit: String?
+    @NSManaged public var pharmacyAssessmentTitle: String?
+    @NSManaged public var prescriptionProvided: Bool
+    @NSManaged public var redirectedToHealthCareProvider: Bool
+    @NSManaged public var title: String?
+    @NSManaged public var subtitle: String?
+    @NSManaged public var isPharmacistAssessment: Bool
 
 }

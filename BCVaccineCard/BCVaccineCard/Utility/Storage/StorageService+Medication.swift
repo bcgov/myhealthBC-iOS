@@ -47,6 +47,12 @@ protocol StorageMedicationManager {
         strength: String?,
         strengthUnit: String?,
         isPin: Bool?,
+        pharmacyAssessmentTitle: String?,
+        prescriptionProvided: Bool,
+        redirectedToHealthCareProvider: Bool,
+        title: String?,
+        subtitle: String?,
+        isPharmacistAssessment: Bool,
         initialProtectedMedFetch: Bool
     ) -> Medication?
     
@@ -221,6 +227,12 @@ extension StorageService: StorageMedicationManager {
                                strength: gateWayResponse.strength,
                                strengthUnit: gateWayResponse.strengthUnit,
                                isPin: gateWayResponse.isPin,
+                               pharmacyAssessmentTitle: gateWayResponse.pharmacyAssessmentTitle,
+                               prescriptionProvided: gateWayResponse.prescriptionProvided ?? false,
+                               redirectedToHealthCareProvider: gateWayResponse.redirectedToHealthCareProvider ?? false,
+                               title: gateWayResponse.title,
+                               subtitle: gateWayResponse.subtitle,
+                               isPharmacistAssessment: gateWayResponse.isPharmacistAssessment ?? false,
                                initialProtectedMedFetch: initialProtectedMedFetch
         )
     }
@@ -236,6 +248,12 @@ extension StorageService: StorageMedicationManager {
                          strength: String?,
                          strengthUnit: String?,
                          isPin: Bool?,
+                         pharmacyAssessmentTitle: String?,
+                         prescriptionProvided: Bool,
+                         redirectedToHealthCareProvider: Bool,
+                         title: String?,
+                         subtitle: String?,
+                         isPharmacistAssessment: Bool,
                          initialProtectedMedFetch: Bool
     ) -> Medication? {
         guard let context = managedContext else {return nil}
@@ -251,6 +269,12 @@ extension StorageService: StorageMedicationManager {
         medication.strength = strength
         medication.strengthUnit = strengthUnit
         medication.isPin = isPin ?? false
+        medication.pharmacyAssessmentTitle = pharmacyAssessmentTitle
+        medication.prescriptionProvided = prescriptionProvided
+        medication.redirectedToHealthCareProvider = redirectedToHealthCareProvider
+        medication.title = title
+        medication.subtitle = subtitle
+        medication.isPharmacistAssessment = isPharmacistAssessment
         do {
             try context.save()
             return medication

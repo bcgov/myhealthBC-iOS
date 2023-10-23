@@ -57,6 +57,8 @@ struct AuthenticatedMedicationStatementResponseObject: BaseGatewayResponse, Coda
             let manufacturer, strength: String?
             let strengthUnit: String?
             let isPin: Bool?
+            let pharmacyAssessmentTitle, title, subtitle: String?
+            let prescriptionProvided, redirectedToHealthCareProvider, isPharmacistAssessment: Bool?
         }
     }
 }
