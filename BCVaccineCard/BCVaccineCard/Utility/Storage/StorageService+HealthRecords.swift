@@ -10,6 +10,7 @@ import BCVaccineValidator
 import CoreData
 
 extension StorageService {
+    
     func getRecords(for patient: Patient) -> [HealthRecord] {
         let tests = patient.testResultArray.map({HealthRecord(type: .CovidTest($0))})
         let medications = patient.prescriptionArray.map({HealthRecord(type: .Medication($0))})

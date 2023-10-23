@@ -27,7 +27,7 @@ extension Patient {
             $0.mainResult?.collectionDateTime ?? Date() > $1.mainResult?.collectionDateTime ?? Date()
         }
     }
-    
+    // TODO: sort out medication records here into a pharmacist record and a normal record - basically update this one, then create a pharmacist array
     public var prescriptionArray: [Perscription] {
         let set = prescriptions as? Set<Perscription> ?? []
         return set.sorted {
