@@ -87,7 +87,7 @@ class PharmacistAssessmentDetailView: BaseHealthRecordsDetailView, UITableViewDe
 }
 
 extension PharmacistAssessmentDetailView {
-    // TODO: Connor - update these fields
+    // TODO: Connor - update the UI so that Outcome can be in a separate area
     private func createFields() -> [TextListModel] {
         guard let model = model else {return []}
         switch model.type {
@@ -115,44 +115,28 @@ extension PharmacistAssessmentDetailView {
             }
             
             let dinText = (prescription.medication?.isPin ?? false) ? "PIN:" : "DIN:"
-            let quantity: String = prescription.medication?.quantity.removeZerosFromEnd() ?? ""
+            let outcome = (prescription.medication?.prescriptionProvided == true) ? "Prescription provided" : "Prescription not provided"
+            let thirdLine: TextProperties? = prescription.medication?.prescriptionProvided == true ? TextProperties(text: "Advised the patient to seek medical attention from a physician or other health care professional", bolded: false, italic: true) : nil
             let fields: [TextListModel] = [
                 TextListModel(
                     header: TextProperties(text: "Practitioner:", bolded: true),
                     subtext: TextProperties(text: prescription.practitionerSurname ?? "", bolded: false)),
                 TextListModel(
-                    header: TextProperties(text: "Quantity:", bolded: true),
-                    subtext: TextProperties(text: quantity, bolded: false)),
-                TextListModel(
-                    header: TextProperties(text: "Strength:", bolded: true),
-                    subtext: TextProperties(text: (prescription.medication?.strength ?? "") + " " + (prescription.medication?.strengthUnit ?? ""), bolded: false)),
-                TextListModel(
-                    header: TextProperties(text: "Form:", bolded: true),
-                    subtext: TextProperties(text: prescription.medication?.form ?? "", bolded: false)),
-                TextListModel(
-                    header: TextProperties(text: "Manufacturer:", bolded: true),
-                    subtext: TextProperties(text: prescription.medication?.manufacturer ?? "", bolded: false)),
+                    header: TextProperties(text: "Service type:", bolded: true),
+                    subtext: TextProperties(text: prescription.medication?.pharmacyAssessmentTitle ?? "", bolded: false)),
                 TextListModel(
                     header: TextProperties(text: dinText, bolded: true),
                     subtext: TextProperties(text: prescription.medication?.din ?? "", bolded: false)),
                 TextListModel(
-                    header: TextProperties(text: "Filled at:", bolded: true),
+                    header: TextProperties(text: "Location:", bolded: true),
                     subtext: TextProperties(text: prescription.pharmacy?.name ?? "", bolded: false)),
-                TextListModel(
-                    header: TextProperties(text: "Filled date:", bolded: true),
-                    subtext: TextProperties(text: dateString ?? "", bolded: false)),
                 TextListModel(
                     header: TextProperties(text: "Address:", bolded: true),
                     subtext: TextProperties(text: address, bolded: false)),
                 TextListModel(
-                    header: TextProperties(text: "Phone number:", bolded: true),
-                    subtext: TextProperties(text: prescription.pharmacy?.phoneNumber ?? "", bolded: false)),
-                TextListModel(
-                    header: TextProperties(text: "Fax:", bolded: true),
-                    subtext: TextProperties(text: prescription.pharmacy?.faxNumber ?? "", bolded: false)),
-                TextListModel(
-                    header: TextProperties(text: "Direction for use:", bolded: true),
-                    subtext: TextProperties(text: prescription.directions ?? "", bolded: false))
+                    header: TextProperties(text: "Outcome:", bolded: true),
+                    subtext: TextProperties(text: outcome, bolded: false),
+                    thirdLine: thirdLine)
             ]
             return fields
         default:
