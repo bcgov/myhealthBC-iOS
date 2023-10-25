@@ -87,7 +87,7 @@ class PharmacistAssessmentDetailView: BaseHealthRecordsDetailView, UITableViewDe
 }
 
 extension PharmacistAssessmentDetailView {
-    // TODO: Connor - update the UI so that Outcome can be in a separate area
+    // TODO: Connor - update the UI so that Outcome can be in a separate area - look at how I do LabOrderRecordDetailView, update accordingly
     private func createFields() -> [TextListModel] {
         guard let model = model else {return []}
         switch model.type {
