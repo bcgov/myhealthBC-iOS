@@ -140,8 +140,8 @@ extension StorageService: StorageCommentManager {
                 break
             case .Medication(let medication):
                 medication.addToComments(comment)
-            case .Pharmacist(let medication):
-                medication.addToComments(comment)
+//            case .Pharmacist(let medication):
+//                medication.addToComments(comment)
             case .LaboratoryOrder(let labOrder):
                 labOrder.addToComments(comment)
             case .Immunization(_):
@@ -354,9 +354,9 @@ extension StorageService: StorageCommentManager {
             case .Medication(let medication):
                 medication.removeFromComments(oldComment)
                 medication.addToComments(newComment)
-            case .Pharmacist(let medication):
-                medication.removeFromComments(oldComment)
-                medication.addToComments(newComment)
+//            case .Pharmacist(let medication):
+//                medication.removeFromComments(oldComment)
+//                medication.addToComments(newComment)
             case .LaboratoryOrder(let labOrder):
                 labOrder.removeFromComments(oldComment)
                 labOrder.addToComments(newComment)
@@ -404,8 +404,8 @@ extension StorageService: StorageCommentManager {
                 break
             case .Medication(let medication):
                 medication.removeFromComments(comment)
-            case .Pharmacist(let medication):
-                medication.removeFromComments(comment)
+//            case .Pharmacist(let medication):
+//                medication.removeFromComments(comment)
             case .LaboratoryOrder(let labOrder):
                 labOrder.removeFromComments(comment)
             case .Immunization(_):

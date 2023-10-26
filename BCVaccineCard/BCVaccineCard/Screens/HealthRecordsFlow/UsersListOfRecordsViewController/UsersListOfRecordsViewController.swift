@@ -579,8 +579,8 @@ extension UsersListOfRecordsViewController {
                         showItem = filter.recordTypes.contains(.Covid)
                     case .medication:
                         showItem = filter.recordTypes.contains(.Medication)
-                    case .pharmacist:
-                        showItem = filter.recordTypes.contains(.Pharmacist)
+//                    case .pharmacist:
+//                        showItem = filter.recordTypes.contains(.Pharmacist)
                     case .laboratoryOrder:
                         showItem = filter.recordTypes.contains(.LabTests)
                     case .immunization:

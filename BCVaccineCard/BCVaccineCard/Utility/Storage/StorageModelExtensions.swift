@@ -30,18 +30,18 @@ extension Patient {
     // Should ideally make this more efficient
     public var prescriptionArray: [Perscription] {
         let set = prescriptions as? Set<Perscription> ?? []
-        return set.filter { $0.medication?.isPharmacistAssessment == false }.sorted {
+        return set.sorted {
             $0.dispensedDate ?? Date() > $1.dispensedDate ?? Date()
         }
     }
     
     // Should ideally make this more efficient
-    public var pharmacistArray: [Perscription] {
-        let set = prescriptions as? Set<Perscription> ?? []
-        return set.filter { $0.medication?.isPharmacistAssessment == true }.sorted {
-            $0.dispensedDate ?? Date() > $1.dispensedDate ?? Date()
-        }
-    }
+//    public var pharmacistArray: [Perscription] {
+//        let set = prescriptions as? Set<Perscription> ?? []
+//        return set.filter { $0.medication?.isPharmacistAssessment == true }.sorted {
+//            $0.dispensedDate ?? Date() > $1.dispensedDate ?? Date()
+//        }
+//    }
     
     public var immunizationArray: [Immunization] {
         let set = immunizations as? Set<Immunization> ?? []

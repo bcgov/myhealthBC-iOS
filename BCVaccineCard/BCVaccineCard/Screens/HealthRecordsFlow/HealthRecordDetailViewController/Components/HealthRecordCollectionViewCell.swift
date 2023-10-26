@@ -32,10 +32,14 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
             recordView = CovidImmunizationRecordDetailView(frame: .zero)
         case .covidTestResultRecord:
             recordView = CovidTestResultRecordDetailView(frame: .zero)
-        case .medication:
-            recordView = MedicationRecordDetailView(frame: .zero)
-        case .pharmacist:
-            recordView = PharmacistAssessmentDetailView(frame: .zero)
+        case .medication(let model):
+            if model.medication?.isPharmacistAssessment == true {
+                recordView = PharmacistAssessmentDetailView(frame: .zero)
+            } else {
+                recordView = MedicationRecordDetailView(frame: .zero)
+            }
+//        case .pharmacist:
+//            recordView = PharmacistAssessmentDetailView(frame: .zero)
         case .laboratoryOrder:
             recordView = LabOrderRecordDetailView(frame: .zero)
         case .immunization:

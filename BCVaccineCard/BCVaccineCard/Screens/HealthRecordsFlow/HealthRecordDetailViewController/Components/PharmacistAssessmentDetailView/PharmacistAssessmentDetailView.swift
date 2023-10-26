@@ -121,7 +121,7 @@ extension PharmacistAssessmentDetailView {
     private func createFields() -> [[TextListModel]] {
         guard let model = model else {return []}
         switch model.type {
-        case .pharmacist(model: let prescription):
+        case .medication(model: let prescription):
             let dateString = prescription.dispensedDate?.monthDayYearString
             var address = ""
             if let addy = prescription.pharmacy?.addressLine1 {
@@ -146,7 +146,7 @@ extension PharmacistAssessmentDetailView {
             
             let dinText = (prescription.medication?.isPin ?? false) ? "PIN:" : "DIN:"
             let outcome = (prescription.medication?.prescriptionProvided == true) ? "Prescription provided" : "Prescription not provided"
-            let thirdLine: TextProperties? = prescription.medication?.prescriptionProvided == true ? TextProperties(text: "Advised the patient to seek medical attention from a physician or other health care professional", bolded: false, italic: true, textColor: .grey) : nil
+            let thirdLine: TextProperties? = prescription.medication?.redirectedToHealthCareProvider == true ? TextProperties(text: "Advised the patient to seek medical attention from a physician or other health care professional", bolded: false, italic: true, textColor: .grey) : nil
             let field1: [TextListModel] = [
                 TextListModel(
                     header: TextProperties(text: "Practitioner:", bolded: true),

@@ -13,7 +13,7 @@ struct HealthRecordsDetailDataSource {
             case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [CovidImmunizationRecord])
             case covidTestResultRecord(model: TestResult)
             case medication(model: Perscription)
-            case pharmacist(model: Perscription)
+//            case pharmacist(model: Perscription)
             case laboratoryOrder(model: LaboratoryOrder, tests: [LaboratoryTest])
             case immunization(model: Immunization)
             case healthVisit(model: HealthVisit)
@@ -39,8 +39,8 @@ struct HealthRecordsDetailDataSource {
                 return covidTestResultRecord.parentTest?.commentsArray ?? []
             case .medication(let medication):
                 return medication.commentsArray
-            case .pharmacist(let medication):
-                return medication.commentsArray
+//            case .pharmacist(let medication):
+//                return medication.commentsArray
             case .laboratoryOrder(let laboratoryOrder, _):
                 return laboratoryOrder.commentsArray
             case .immunization:
@@ -63,7 +63,7 @@ struct HealthRecordsDetailDataSource {
         var includesSeparatorUI: Bool {
             switch self.type {
             case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder, .immunization: return true
-            case .medication, .pharmacist, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging, .note: return false
+            case .medication, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging, .note: return false
             }
         }
     }
@@ -72,7 +72,7 @@ struct HealthRecordsDetailDataSource {
         case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [CovidImmunizationRecord])
         case covidTestResultRecord(model: CovidLabTestResult)
         case medication(model: Perscription)
-        case pharmacist(model: Perscription)
+//        case pharmacist(model: Perscription)
         case laboratoryOrder(model: LaboratoryOrder)
         case immunization(model: Immunization)
         case healthVisit(model: HealthVisit)
@@ -103,8 +103,8 @@ struct HealthRecordsDetailDataSource {
             return records.first(where: {$0.id == record.id})
         case .medication(model: _):
             return records.first
-        case .pharmacist(model: _):
-            return records.first
+//        case .pharmacist(model: _):
+//            return records.first
         case .laboratoryOrder(model: let model):
             if records.isEmpty {
                 Logger.log(string: "No Records in lab order \(String(describing: model.id))", type: .general)
@@ -137,8 +137,8 @@ struct HealthRecordsDetailDataSource {
             return model.authenticated
         case .medication(model: let model):
             return model.authenticated
-        case .pharmacist(model: let model):
-            return model.authenticated
+//        case .pharmacist(model: let model):
+//            return model.authenticated
         case .laboratoryOrder(model: let model):
             return model.authenticated
         case .immunization(model: let model):
@@ -173,7 +173,7 @@ struct HealthRecordsDetailDataSource {
                 .diagnosticImaging,
                 .note:
             return false
-        case .medication, .pharmacist:
+        case .medication:
             return true
         }
     }
@@ -203,22 +203,23 @@ struct HealthRecordsDetailDataSource {
             deleteAlertTitle = .deleteTestResult
             deleteAlertMessage = .deleteTestResultMessage
         case .medication(model: let model):
+            let titleString = model.medication?.isPharmacistAssessment ?? false ? "Pharmacist Assessment" : (model.medication?.brandName ?? "Statins")
             id = model.id
-            title = model.medication?.brandName ?? "Statins"
+            title = titleString
             detailNavTitle = model.medication?.brandName ?? "Statins"
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-medication-record-icon")
             deleteAlertTitle = "N/A" // Note: We can't delete an auth medical record, so this won't be necessary
             deleteAlertMessage = "Shouldn't see this" // Showing these values for testing purposes
-        case .pharmacist(model: let model):
-            // TODO: Connor - adjust this here accordingly
-            id = model.id
-            title = "Pharmacist Assessment"
-            detailNavTitle = model.medication?.brandName ?? "Statins"
-            name = model.patient?.name ?? "-"
-            image = UIImage(named: "blue-bg-medication-record-icon")
-            deleteAlertTitle = "N/A" // Note: We can't delete an auth medical record, so this won't be necessary
-            deleteAlertMessage = "Shouldn't see this" // Showing these values for testing purposes
+//        case .pharmacist(model: let model):
+//            // TODO: Connor - adjust this here accordingly
+//            id = model.id
+//            title = "Pharmacist Assessment"
+//            detailNavTitle = model.medication?.brandName ?? "Statins"
+//            name = model.patient?.name ?? "-"
+//            image = UIImage(named: "blue-bg-medication-record-icon")
+//            deleteAlertTitle = "N/A" // Note: We can't delete an auth medical record, so this won't be necessary
+//            deleteAlertMessage = "Shouldn't see this" // Showing these values for testing purposes
         case .laboratoryOrder(model: let model):
             id = model.id
             title = model.commonName ?? "-"
@@ -313,9 +314,9 @@ extension HealthRecordsDetailDataSource {
         case .medication(model: let model):
             result.append(genRecord(prescription: model))
             return result
-        case .pharmacist(model: let model):
-            result.append(genRecordPharmacist(prescription: model))
-            return result
+//        case .pharmacist(model: let model):
+//            result.append(genRecordPharmacist(prescription: model))
+//            return result
         case .laboratoryOrder(model: let model):
             result.append(genRecord(labOrder: model))
             return result
@@ -361,8 +362,14 @@ extension HealthRecordsDetailDataSource {
     private static func genRecord(prescription: Perscription) -> Record {
         let dateString = prescription.dispensedDate?.monthDayYearString
         var address = ""
-        if let addy = prescription.pharmacy?.addressLine1 {
-            address = addy
+        if let addy1 = prescription.pharmacy?.addressLine1 {
+            address = addy1
+        }
+        if let addy2 = prescription.pharmacy?.addressLine2 {
+            if address.count > 0 {
+                address.append(" ")
+            }
+            address.append(addy2)
         }
         if let city = prescription.pharmacy?.city {
             if address.count > 0 {
@@ -380,40 +387,40 @@ extension HealthRecordsDetailDataSource {
                 address = province
             }
         }
-        
+        let listStatus = prescription.medication?.isPharmacistAssessment ?? false ? (prescription.medication?.pharmacyAssessmentTitle ?? "") : (prescription.medication?.genericName ?? "")
         // Notes:
         /// Unsure about status field - this is what it appears to be in designs though
-        return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .medication(model: prescription), status: prescription.medication?.genericName, date: dateString, listStatus: prescription.medication?.genericName ?? "", commentID: prescription.prescriptionIdentifier)
+        return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .medication(model: prescription), status: prescription.medication?.genericName, date: dateString, listStatus: listStatus, commentID: prescription.prescriptionIdentifier)
     }
     
     // MARK: Pharmacist
-    private static func genRecordPharmacist(prescription: Perscription) -> Record {
-        let dateString = prescription.dispensedDate?.monthDayYearString
-        var address = ""
-        if let addy = prescription.pharmacy?.addressLine1 {
-            address = addy
-        }
-        if let city = prescription.pharmacy?.city {
-            if address.count > 0 {
-                address.append(", ")
-                address.append(city)
-            } else {
-                address = city
-            }
-        }
-        if let province = prescription.pharmacy?.province {
-            if address.count > 0 {
-                address.append(", ")
-                address.append(province)
-            } else {
-                address = province
-            }
-        }
-        
-        // Notes:
-        /// Unsure about status field - this is what it appears to be in designs though
-        return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .pharmacist(model: prescription), status: prescription.medication?.genericName, date: dateString, listStatus: prescription.medication?.pharmacyAssessmentTitle ?? "", commentID: prescription.prescriptionIdentifier)
-    }
+//    private static func genRecordPharmacist(prescription: Perscription) -> Record {
+//        let dateString = prescription.dispensedDate?.monthDayYearString
+//        var address = ""
+//        if let addy = prescription.pharmacy?.addressLine1 {
+//            address = addy
+//        }
+//        if let city = prescription.pharmacy?.city {
+//            if address.count > 0 {
+//                address.append(", ")
+//                address.append(city)
+//            } else {
+//                address = city
+//            }
+//        }
+//        if let province = prescription.pharmacy?.province {
+//            if address.count > 0 {
+//                address.append(", ")
+//                address.append(province)
+//            } else {
+//                address = province
+//            }
+//        }
+//        
+//        // Notes:
+//        /// Unsure about status field - this is what it appears to be in designs though
+//        return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .pharmacist(model: prescription), status: prescription.medication?.genericName, date: dateString, listStatus: prescription.medication?.pharmacyAssessmentTitle ?? "", commentID: prescription.prescriptionIdentifier)
+//    }
     
     // MARK: Lab Orders
     private static func genRecord(labOrder:  LaboratoryOrder) -> Record {

@@ -25,7 +25,7 @@ extension StorageService {
         case VaccineCard
         case Perscription
         case Medication
-        case Pharmacist
+//        case Pharmacist
         case Pharmacy
         case LaboratoryOrder
         case Comments
