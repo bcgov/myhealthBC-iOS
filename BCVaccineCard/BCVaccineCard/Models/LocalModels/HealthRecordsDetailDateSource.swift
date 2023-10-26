@@ -203,10 +203,10 @@ struct HealthRecordsDetailDataSource {
             deleteAlertTitle = .deleteTestResult
             deleteAlertMessage = .deleteTestResultMessage
         case .medication(model: let model):
-            let titleString = model.medication?.isPharmacistAssessment ?? false ? "Pharmacist Assessment" : (model.medication?.brandName ?? "Statins")
+            let titleString = model.medication?.isPharmacistAssessment ?? false ? model.medication?.title ?? "Pharmacist Assessment" : (model.medication?.brandName ?? "Statins")
             id = model.id
             title = titleString
-            detailNavTitle = model.medication?.brandName ?? "Statins"
+            detailNavTitle = titleString
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-medication-record-icon")
             deleteAlertTitle = "N/A" // Note: We can't delete an auth medical record, so this won't be necessary
