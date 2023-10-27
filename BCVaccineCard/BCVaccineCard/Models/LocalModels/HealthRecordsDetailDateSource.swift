@@ -361,32 +361,32 @@ extension HealthRecordsDetailDataSource {
     // MARK: Medications
     private static func genRecord(prescription: Perscription) -> Record {
         let dateString = prescription.dispensedDate?.monthDayYearString
-        var address = ""
-        if let addy1 = prescription.pharmacy?.addressLine1 {
-            address = addy1
-        }
-        if let addy2 = prescription.pharmacy?.addressLine2 {
-            if address.count > 0 {
-                address.append(" ")
-            }
-            address.append(addy2)
-        }
-        if let city = prescription.pharmacy?.city {
-            if address.count > 0 {
-                address.append(", ")
-                address.append(city)
-            } else {
-                address = city
-            }
-        }
-        if let province = prescription.pharmacy?.province {
-            if address.count > 0 {
-                address.append(", ")
-                address.append(province)
-            } else {
-                address = province
-            }
-        }
+//        var address = ""
+//        if let addy1 = prescription.pharmacy?.addressLine1 {
+//            address = addy1
+//        }
+//        if let addy2 = prescription.pharmacy?.addressLine2 {
+//            if address.count > 0 {
+//                address.append(" ")
+//            }
+//            address.append(addy2)
+//        }
+//        if let city = prescription.pharmacy?.city {
+//            if address.count > 0 {
+//                address.append(", ")
+//                address.append(city)
+//            } else {
+//                address = city
+//            }
+//        }
+//        if let province = prescription.pharmacy?.province {
+//            if address.count > 0 {
+//                address.append(", ")
+//                address.append(province)
+//            } else {
+//                address = province
+//            }
+//        }
         let listStatus = prescription.medication?.isPharmacistAssessment ?? false ? (prescription.medication?.pharmacyAssessmentTitle ?? "") : (prescription.medication?.genericName ?? "")
         // Notes:
         /// Unsure about status field - this is what it appears to be in designs though

@@ -93,8 +93,14 @@ extension MedicationRecordDetailView {
         case .medication(model: let prescription):
             let dateString = prescription.dispensedDate?.monthDayYearString
             var address = ""
-            if let addy = prescription.pharmacy?.addressLine1 {
-                address = addy
+            if let addy1 = prescription.pharmacy?.addressLine1 {
+                address = addy1
+            }
+            if let addy2 = prescription.pharmacy?.addressLine2 {
+                if address.count > 0 {
+                    address.append(" ")
+                }
+                address.append(addy2)
             }
             if let city = prescription.pharmacy?.city {
                 if address.count > 0 {
