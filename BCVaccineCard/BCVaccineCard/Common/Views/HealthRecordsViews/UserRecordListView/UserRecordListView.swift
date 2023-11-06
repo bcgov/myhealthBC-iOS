@@ -73,6 +73,8 @@ class UserRecordListView: UIView {
             statusToInclude = record.mainRecord?.listStatus
         case .medication:
             statusToInclude = record.mainRecord?.listStatus
+//        case .pharmacist:
+//            statusToInclude = record.mainRecord?.listStatus
         case .immunization:
             statusToInclude = record.mainRecord?.listStatus
         case .healthVisit:

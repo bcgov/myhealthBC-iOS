@@ -20,6 +20,7 @@ struct HealthRecordConstants {
             .covidImmunizationRecord,
             .covidTestResultRecord,
             .medication,
+//            .pharmacist,
             .laboratoryOrder,
             .immunization,
             .healthVisit,
@@ -97,6 +98,7 @@ extension HealthRecordConstants {
         case covidImmunizationRecord
         case covidTestResultRecord
         case medication
+//        case pharmacist
         case laboratoryOrder
         case immunization
         case healthVisit
@@ -134,6 +136,8 @@ extension HealthRecordConstants.RecordType {
             return .Covid
         case .medication:
             return .Medication
+//        case .pharmacist:
+//            return .Pharmacist
         case .laboratoryOrder:
             return .LabTests
         case .immunization:
@@ -152,7 +156,7 @@ extension HealthRecordConstants.RecordType {
             return .Notes
         }
     }
-    
+    // TODO: Connor - look into this for pharmacist
     func toStorageType() -> StorageService.HealthRecordType? {
         switch self {
         case .covidImmunizationRecord:
@@ -161,6 +165,8 @@ extension HealthRecordConstants.RecordType {
             return .CovidTest
         case .medication:
             return .Prescription
+//        case .pharmacist:
+//            return .Prescription
         case .laboratoryOrder:
             return .LaboratoryOrder
         case .immunization:
@@ -177,6 +183,7 @@ extension HealthRecordConstants.RecordType {
             return .DiagnosticImaging
         case .notes:
             return .Notes
+        
         }
     }
 }
@@ -186,6 +193,7 @@ struct RecordsFilter {
         case HeathVisits = "Health Visits"
         case LabTests = "Lab Results"
         case Medication = "Medications"
+//        case Pharmacist = "Pharmacist Assesment"
         case ClinicalDocuments = "Clinical Docs"
         case Covid = "COVID-19 Tests"
         case Immunizations = "Immunizations"
@@ -213,6 +221,7 @@ enum NotificationCategory: String {
     case Covid = "COVID19Laboratory"
     case HeathVisits = "HealthVisit"
     case Medication = "Medications"
+//    case Pharmacist = "Pharmacist Assesment"
     case HospitalVisits = "HospitalVisit"
     case DiagnosticImaging = "DiExam"
 }
@@ -236,6 +245,8 @@ extension NotificationCategory {
             return RecordsFilter.RecordType.HeathVisits
         case .Medication:
             return RecordsFilter.RecordType.Medication
+//        case .Pharmacist:
+//            return RecordsFilter.RecordType.Pharmacist
         case .HospitalVisits:
             return RecordsFilter.RecordType.HospitalVisits
         case .DiagnosticImaging:

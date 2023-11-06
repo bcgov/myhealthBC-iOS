@@ -10,9 +10,11 @@ import BCVaccineValidator
 import CoreData
 
 extension StorageService {
+    
     func getRecords(for patient: Patient) -> [HealthRecord] {
         let tests = patient.testResultArray.map({HealthRecord(type: .CovidTest($0))})
         let medications = patient.prescriptionArray.map({HealthRecord(type: .Medication($0))})
+//        let pharmacist = patient.pharmacistArray.map({HealthRecord(type: .Pharmacist($0))})
         let labOrders = patient.labOrdersArray.map({HealthRecord(type: .LaboratoryOrder($0))})
         let immunizations = patient.immunizationsArray.map({HealthRecord(type: .Immunization($0))})
         let healthVisits = patient.healthVisitsArray.map({HealthRecord(type: .HealthVisit($0))})
@@ -32,7 +34,8 @@ extension StorageService {
         let tests = fetchCovidTestResults().map({HealthRecord(type: .CovidTest($0))})
         // NOTE: Remove vaccineCards if we want to use new immz UI
         //        let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))}).filter({$0.patient.authenticated})
-        let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
+        let medications = fetchPrescriptions().filter { $0.medication?.isPharmacistAssessment == false }.map({HealthRecord(type: .Medication($0))})
+//        let pharmacist = fetchPrescriptions().filter { $0.medication?.isPharmacistAssessment == true }.map({HealthRecord(type: .Pharmacist($0))})
         let labOrders = fetchLaboratoryOrders().map({HealthRecord(type: .LaboratoryOrder($0))})
         let immunizations = fetchImmunization().map({HealthRecord(type: .Immunization($0))})
         let healthVisits = fetchHealthVisits().map({HealthRecord(type: .HealthVisit($0))})
@@ -48,6 +51,7 @@ extension StorageService {
     func getRecords(forDependent dependent: Patient) -> [HealthRecord] {
         let tests = dependent.testResultArray.map { HealthRecord(type: .CovidTest($0)) }
         let medications = dependent.prescriptionArray.map { HealthRecord(type: .Medication($0)) }
+//        let pharmacist = dependent.pharmacistArray.map { HealthRecord(type: .Pharmacist($0)) }
         let labOrders = dependent.labOrdersArray.map { HealthRecord(type: .LaboratoryOrder($0)) }
         let immunizations = dependent.immunizationArray.map { HealthRecord(type: .Immunization($0)) }
         var notesRecords: [HealthRecord] = []
@@ -63,6 +67,8 @@ extension StorageService {
         deleteAllRecords(in: tests)
         let medications = dependent.prescriptionArray
         deleteAllRecords(in: medications)
+//        let pharmacist = dependent.pharmacistArray
+//        deleteAllRecords(in: pharmacist)
         let labOrders = dependent.labOrdersArray
         deleteAllRecords(in: labOrders)
         let immunizations = dependent.immunizationArray
@@ -94,6 +100,9 @@ extension StorageService {
         case .Medication(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: object))
+//        case .Pharmacist(let object):
+//            delete(object: object)
+//            notify(event: StorageEvent(event: .Delete, entity: .Pharmacist, object: object))
         case .LaboratoryOrder(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .LaboratoryOrder, object: object))
@@ -140,7 +149,7 @@ extension StorageService {
                 toDelete.append(contentsOf: vaccineCards)
                 notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: vaccineCards))
             case .Prescription:
-                let medications = fetchPrescriptions().filter({ $0.authenticated == true })
+                let medications = fetchPrescriptions().filter({ $0.authenticated == true})
                 toDelete.append(contentsOf: medications)
                 notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: medications))
             case .LaboratoryOrder:
@@ -246,6 +255,9 @@ extension StorageService {
                 if let medications = dependent.info?.prescriptionArray {
                     deleteAllRecords(in: medications)
                 }
+//                if let pharmacist = dependent.info?.pharmacistArray {
+//                    deleteAllRecords(in: pharmacist)
+//                }
             case .LaboratoryOrder:
                 if let labOrders = dependent.info?.labOrdersArray {
                     deleteAllRecords(in: labOrders)

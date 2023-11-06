@@ -374,6 +374,8 @@ extension HealthRecordsDetailDataSource.Record {
             return HealthRecord(type: .CovidTest(parent))
         case .medication(model: let model):
             return HealthRecord(type: .Medication(model))
+//        case .pharmacist(model: let model):
+//            return HealthRecord(type: .Pharmacist(model))
         case .laboratoryOrder(model: let model, _):
             return HealthRecord(type: .LaboratoryOrder(model))
         case .immunization(model: let model):
