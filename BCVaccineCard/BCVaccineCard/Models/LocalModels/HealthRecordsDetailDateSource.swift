@@ -50,8 +50,8 @@ struct HealthRecordsDetailDataSource {
                 return model.commentsArray
             case .clinicalDocument(model: let model):
                 return model.commentsArray
-            case .diagnosticImaging:
-                return []
+            case .diagnosticImaging(model: let model):
+                return model.commentsArray
             case .note(model: let model):
                 return []
             }

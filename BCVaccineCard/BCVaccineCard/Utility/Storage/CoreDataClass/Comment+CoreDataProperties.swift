@@ -35,7 +35,7 @@ extension Comment {
     @NSManaged public var specialAuthorityDrug: SpecialAuthorityDrug?
     @NSManaged public var hospitalVisit: HospitalVisit?
     @NSManaged public var clinicalDocument: ClinicalDocument?
-
+    @NSManaged public var diagnosticImaging: DiagnosticImaging?
 }
 
 // MARK: Generated accessors for prescription
