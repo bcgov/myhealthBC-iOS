@@ -136,6 +136,11 @@ struct Constants {
         static let retryIn: Int = 5
     }
     
+    struct CommunicationBannerHeights {
+        static let expanded: Int = 150
+        static let collapsed: Int = 75
+    }
+    
     static let vaccineTable: [VaccineTable] = [
         VaccineTable(snowMedCode: 28581000087106, cvx: 208, mvx: "PFR", displayName: "PFIZER-BIONTECH COMIRNATY COVID-19"),
         VaccineTable(snowMedCode: 28571000087109, cvx: 207, mvx: "MOD", displayName: "MODERNA SPIKEVAX COVID-19"),

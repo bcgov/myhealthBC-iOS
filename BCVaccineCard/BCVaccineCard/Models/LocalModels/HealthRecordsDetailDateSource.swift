@@ -50,8 +50,8 @@ struct HealthRecordsDetailDataSource {
                 return model.commentsArray
             case .clinicalDocument(model: let model):
                 return model.commentsArray
-            case .diagnosticImaging:
-                return []
+            case .diagnosticImaging(model: let model):
+                return model.commentsArray
             case .note(model: let model):
                 return []
             }
@@ -371,7 +371,7 @@ extension HealthRecordsDetailDataSource {
         let dateString = labOrder.timelineDateTime?.monthDayYearString
         let labTests = labOrder.labTests
         
-        return Record(id: labOrder.id ?? UUID().uuidString, name: labOrder.patient?.name ?? "", type: .laboratoryOrder(model: labOrder, tests: labTests), status: labOrder.orderStatus, date: dateString, listStatus: "\(labOrder.laboratoryTests?.count ?? 0) tests", commentID: labOrder.labPdfId)
+        return Record(id: labOrder.id ?? UUID().uuidString, name: labOrder.patient?.name ?? "", type: .laboratoryOrder(model: labOrder, tests: labTests), status: labOrder.orderStatus, date: dateString, listStatus: "\(labOrder.laboratoryTests?.count ?? 0) \(String.tests)", commentID: labOrder.labPdfId)
     }
     
     // MARK: Immunization

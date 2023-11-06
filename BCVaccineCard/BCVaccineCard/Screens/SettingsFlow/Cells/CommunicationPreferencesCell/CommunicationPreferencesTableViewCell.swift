@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2023-02-24.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class CommunicationPreferencesTableViewCell: UITableViewCell {
@@ -47,7 +47,7 @@ class CommunicationPreferencesTableViewCell: UITableViewCell {
     }
     
     private func textViewSetup() {
-        let attrString = NSMutableAttributedString(string: "Keep you updated on health record updates (vaccine availability, lab results and more).\n\nTo make changes to email address and phone number, please go to www.healthgateway.gov.bc.ca")
+        let attrString = NSMutableAttributedString(string: "Stay updated on health record updates (vaccine recommendations, lab results and more).\n\nTo make changes to email address and phone number, please go to www.healthgateway.gov.bc.ca")
         let urlString = "www.healthgateway.gov.bc.ca"
         let httpsUrlString = "https:www.healthgateway.gov.bc.ca"
         attrString.addAttribute(.font, value: UIFont.bcSansRegularWithSize(size: 13), range: NSMakeRange(0, attrString.length))

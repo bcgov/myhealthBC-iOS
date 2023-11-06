@@ -4,7 +4,7 @@
 //
 //  Created by Amir Shayegh on 2022-08-23.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class RecommendationsViewController: BaseViewController {
@@ -65,8 +65,9 @@ class RecommendationsViewController: BaseViewController {
         guard let textView = self.textView else {return}
         textView.textColor = AppColours.textGray
         let fontAttribute = [NSAttributedString.Key.font: UIFont.bcSansRegularWithSize(size: 13)]
-        let attributedText = NSMutableAttributedString(string: "Recommended immunization are suggestion for your health journey. This page will containt all of future immunization for you and your dependents. To add dependents to application, click on Dependent in the menu bar at the bottom.\n\nFor more information on vaccines recommendation and eligibility, please visit immunizeBC or speak to your health care provider. ", attributes: fontAttribute)
-        _ = attributedText.setAsLink(textToFind: "immunizeBC", linkURL: "https://immunizebc.ca/")
+        let attributedText = NSMutableAttributedString(string: "Vaccine recommendations for you and your dependents are based on the BC Immunization Schedule. For more information on immunizations, visit ImmunizeBC or speak to your health care provider.", attributes: fontAttribute)
+//        let attributedText = NSMutableAttributedString(string: "Recommended immunization are suggestion for your health journey. This page will containt all of future immunization for you and your dependents. To add dependents to application, click on Dependent in the menu bar at the bottom.\n\nFor more information on vaccines recommendation and eligibility, please visit immunizeBC or speak to your health care provider. ", attributes: fontAttribute)
+        _ = attributedText.setAsLink(textToFind: "ImmunizeBC", linkURL: "https://immunizebc.ca/")
         textView.attributedText = attributedText
         textView.isUserInteractionEnabled = true
         textView.delegate = self

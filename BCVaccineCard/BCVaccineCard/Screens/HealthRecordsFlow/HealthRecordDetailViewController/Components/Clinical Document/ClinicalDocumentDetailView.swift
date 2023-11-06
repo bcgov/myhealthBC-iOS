@@ -4,7 +4,7 @@
 //
 //  Created by Amir Shayegh on 2023-01-09.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class ClinicalDocumentRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
@@ -103,7 +103,8 @@ extension ClinicalDocumentRecordDetailView {
             
             let fields: [TextListModel] = [
                 TextListModel(
-                    header: TextProperties(text: "Discipline:", bolded: true),
+                    // Note To developer: 'Type' used to be discipline
+                    header: TextProperties(text: "Type:", bolded: true),
                     subtext: TextProperties(text: model.discipline ?? "", bolded: false)
                 ),
                 TextListModel(

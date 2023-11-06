@@ -44,7 +44,7 @@ class ForceUpdateView: UIView, Theme {
         decLabel.font = UIFont.bcSansRegularWithSize(size: 17)
         style(button: updateButton,
               style: .Fill,
-              title: "Update Now",
+              title: .updateNow,
               image: nil,
               fillColour: .white,
               fillTitleColour: AppColours.appBlue,

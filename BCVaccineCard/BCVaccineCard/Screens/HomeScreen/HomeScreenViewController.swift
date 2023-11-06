@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2022-03-16.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class HomeScreenViewController: BaseViewController {
@@ -22,12 +22,17 @@ class HomeScreenViewController: BaseViewController {
         }
     }
     
-    enum BannerHeight: Int {
-        case expanded = 150
-        case collapsed = 75
+    enum BannerHeight {
+//        case expanded = 150
+//        case collapsed = 75
+        case expanded(height: Int)
+        case collapsed(height: Int)
         
         var getCGFloat: CGFloat {
-            return CGFloat(self.rawValue)
+            switch self {
+            case .expanded(height: let height), .collapsed(height: let height):
+                return CGFloat(height)
+            }
         }
     }
     
@@ -40,7 +45,9 @@ class HomeScreenViewController: BaseViewController {
     
     @IBOutlet weak private var collectionView: UICollectionView!
     
-    private var bannerHeight: BannerHeight = .expanded
+    private var bannerHeight: BannerHeight = .expanded(height: Constants.CommunicationBannerHeights.expanded)
+    private var communicationLines: Int = 1
+    private var communicationLinesFactor: Int = 20
     
     private var authManager: AuthManager = AuthManager()
         
@@ -396,18 +403,22 @@ extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegat
         }
     }
     
-    func shouldUpdateUI() {
+    func shouldUpdateUI(estimatedTextViewLines lines: Int, isExpanded: Bool) {
+        if isExpanded {
+            communicationLines = lines
+            bannerHeight = .expanded(height: Constants.CommunicationBannerHeights.expanded + (communicationLinesFactor * (communicationLines-1)))
+        }
+        
         collectionView.performBatchUpdates(nil)
     }
     
     func onExpand(banner: CommunicationBanner?) {
-        // TODO: Amir - we may have to look into this and do it more dynamically based on content
-        bannerHeight = .expanded
+        bannerHeight = .expanded(height: Constants.CommunicationBannerHeights.expanded + (communicationLinesFactor * (communicationLines-1)))
         collectionView.reloadData()
     }
     
     func onClose(banner: CommunicationBanner?) {
-        bannerHeight = .collapsed
+        bannerHeight = .collapsed(height: Constants.CommunicationBannerHeights.collapsed)
         collectionView.performBatchUpdates(nil)
     }
     

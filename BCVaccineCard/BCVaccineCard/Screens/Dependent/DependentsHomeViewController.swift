@@ -4,7 +4,7 @@
 //
 //  Created by Amir Shayegh on 2022-10-13.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 
@@ -412,7 +412,7 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
         }
         
         HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records, hadFails in
-            let message: String = !hadFails ? "Records retrieved" : "Not all records were fetched successfully"
+            let message: String = !hadFails ? .recordsRetrieved : "Not all records were fetched successfully"
             self?.showToast(message: message)
             SessionStorage.dependentRecordsFetched.append(dependentPatient)
             self?.showDetails(for: dependentPatient)

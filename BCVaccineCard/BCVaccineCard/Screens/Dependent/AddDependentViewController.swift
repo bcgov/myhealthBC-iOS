@@ -4,7 +4,7 @@
 //
 //  Created by Amir Shayegh on 2022-10-13.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 struct AddDependentFormData {
@@ -116,19 +116,32 @@ class AddDependentViewController: BaseDependentViewController, UITextFieldDelega
             return
         }
         
-        networkService.addDependent(for: patient, object: object) { [weak self] stored in
+        networkService.addDependent(for: patient, object: object) { [weak self] stored, error in
+            guard let `self` = self else {return}
             guard let storedDependent = stored else {
-                self?.showInvalidInfoAlert()
+                switch error {
+                case .offlineAPI:
+                    showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+                case .offlineDevice:
+                    showToast(message: .noInternetConnection, style: .Warn)
+                case .invalidAuthToken:
+                    showToast(message: "Authentication expired. please login again.", style: .Warn)
+                case .none:
+                    self.showInvalidInfoAlert()
+                case .invalidResponse:
+                    self.showInvalidInfoAlert()
+                }
                 return
             }
-            VaccineCardService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: storedDependent, completion: {_ in
+            VaccineCardService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: storedDependent, completion: {[weak self] _ in
+                guard let `self` = self else {return}
                 if let patientName = storedDependent.info?.name {
-                    self?.showToast(message: "\(patientName) was added")
+                    self.showToast(message: "\(patientName) was added")
                 } else {
-                    self?.showToast(message: "Dependent was added")
+                    self.showToast(message: "Dependent was added")
                 }
 
-                self?.navigationController?.popViewController(animated: true)
+                self.navigationController?.popViewController(animated: true)
             })
         }
     }

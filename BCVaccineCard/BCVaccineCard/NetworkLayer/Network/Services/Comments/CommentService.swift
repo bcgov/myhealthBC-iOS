@@ -286,7 +286,7 @@ extension CommentService {
         case covid = "Lab"
         case hospitalVisit = "Hos"
         case clinicalDocument = "CDO"
-        case diagnosticImaging = "DI" // TODO: Confirm this, total guess as of now
+        case diagnosticImaging = "DIA"
         case note = "NO" // Not needed, just need to satisfy switch
     }
     
@@ -392,14 +392,5 @@ extension HealthRecordsDetailDataSource.Record {
             return HealthRecord(type: .Note(model))
         }
         
-    }
-    
-    // TODO: Enable Comments for specific record types here
-    var commentsEnabled: Bool {
-        if !HealthRecordConstants.commentsEnabled { return false}
-        switch self.type {
-            case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument : return true
-            default: return false
-        }
     }
 }

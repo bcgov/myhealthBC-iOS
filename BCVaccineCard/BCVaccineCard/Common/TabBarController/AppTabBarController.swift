@@ -171,16 +171,16 @@ class AppTabBarController: UITabBarController {
     }
     
     func showTermOfServiceRejected() {
-        let message = "You must agree to the Health Gateway terms of service before using this app"
-        self.alert(title: "Terms of service", message: message)
+        let message = String.termsOfServiceMessage
+        self.alert(title: .termsOfService, message: message)
     }
     
     func showAlertForUserUnder(ageInYears age: Int) {
-        self.alert(title: "Age Restriction", message: "You must be \(age) year's of age or older to use Health Gateway.")
+        self.alert(title: .ageRestriction, message: .ageRestrictionMessage(age: String(age)))
     }
     
     func showAlertForUserProfile() {
-        self.alert(title: "Login Error", message: "We're sorry, there was an error logging in. Please try again later.")
+        self.alert(title: .loginError, message: .loginErrorMessage)
     }
     
     private func showSuccessfulLoginAlert() {

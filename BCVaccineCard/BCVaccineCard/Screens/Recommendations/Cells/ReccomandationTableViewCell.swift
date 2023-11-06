@@ -4,7 +4,7 @@
 //
 //  Created by Amir Shayegh on 2022-08-23.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class ReccomandationTableViewCell: UITableViewCell {

@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2021-09-17.
 //
-
+// FIXME: NEED TO LOCALIZE - TIME AGO STRING SECTION, LOWER PRIORITY, BUT SHOULD STILL DO
 import Foundation
 
 extension Date {

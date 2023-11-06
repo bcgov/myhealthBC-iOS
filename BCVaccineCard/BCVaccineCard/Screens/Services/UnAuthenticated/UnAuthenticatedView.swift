@@ -4,7 +4,7 @@
 //
 //  Created by Amir Shayegh on 2023-04-10.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 protocol AuthViewDelegate {

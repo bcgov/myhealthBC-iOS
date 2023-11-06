@@ -38,7 +38,7 @@ struct HealthRecordConstants {
     
     // ENABLE AND DISABLE DEPENDENT RECORD TYPES
     static var enabledDepententRecordTypes: [RecordType] {
-        return [.covidTestResultRecord, .immunization, .medication]
+        return [.covidTestResultRecord, .immunization]
     }
     
     // ENABLE AND DISABLE COMMENTS
@@ -66,6 +66,18 @@ struct HealthRecordConstants {
     
     static var guardianAuditEnabled: Bool {
         return false
+    }
+}
+
+extension HealthRecordsDetailDataSource.Record {
+    
+    // TODO: Enable Comments for specific record types here
+    var commentsEnabled: Bool {
+        if !HealthRecordConstants.commentsEnabled { return false}
+        switch self.type {
+        case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging : return true
+            default: return false
+        }
     }
 }
 
@@ -244,4 +256,12 @@ extension RecordsFilter.RecordType {
         let availableTypes = HealthRecordConstants.enabledDepententRecordTypes
         return availableTypes.compactMap({$0.toRecordsFilterType()})
     }
+}
+
+enum NetworkError {
+    case offlineAPI
+    case offlineDevice
+    case invalidAuthToken
+    case invalidResponse
+    case none
 }

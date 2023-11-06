@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2023-06-07.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 enum NoteVCCellState {

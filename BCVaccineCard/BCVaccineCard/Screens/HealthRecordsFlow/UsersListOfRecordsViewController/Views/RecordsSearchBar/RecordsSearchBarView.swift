@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2023-04-19.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 protocol RecordsSearchBarViewDelegate: AnyObject {
