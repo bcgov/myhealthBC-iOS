@@ -40,6 +40,8 @@ class AuthenticationView: UIView, Theme {
         self.completion = completion
         style()
         fillText()
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .deviceDidRotate, object: nil)
+        adjustUIForIPad()
     }
     
     func style() {
@@ -89,7 +91,7 @@ class AuthenticationView: UIView, Theme {
     }
     
     // Note: This is to be called when the view transitions during rotation
-    func adjustUIForIPad() {
+    private func adjustUIForIPad() {
         guard Constants.deviceType == .iPad else { return }
         if UIDevice.current.orientation.isLandscape {
             buttonsStackView.axis = .horizontal
@@ -103,5 +105,9 @@ class AuthenticationView: UIView, Theme {
             buttonsStackView.spacing = 18
         }
         self.layoutIfNeeded()
+    }
+    
+    @objc private func deviceDidRotate(_ notification: Notification) {
+        adjustUIForIPad()
     }
 }
