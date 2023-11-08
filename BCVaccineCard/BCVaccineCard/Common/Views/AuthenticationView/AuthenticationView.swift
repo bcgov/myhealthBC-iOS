@@ -19,6 +19,7 @@ class AuthenticationView: UIView, Theme {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var secondarySubtitle: UILabel!
+    @IBOutlet weak private var buttonsStackView: UIStackView!
     
     private var completion: ((Result)->Void)?
     
@@ -85,5 +86,22 @@ class AuthenticationView: UIView, Theme {
         if let url = URL(string: Constants.BCSC.downloadURL), UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url)
         }
+    }
+    
+    // Note: This is to be called when the view transitions during rotation
+    func adjustUIForIPad() {
+        guard Constants.deviceType == .iPad else { return }
+        if UIDevice.current.orientation.isLandscape {
+            buttonsStackView.axis = .horizontal
+            buttonsStackView.removeArrangedSubview(loginButton)
+            buttonsStackView.addArrangedSubview(loginButton)
+            buttonsStackView.spacing = 22
+        } else {
+            buttonsStackView.axis = .vertical
+            buttonsStackView.removeArrangedSubview(cancelButton)
+            buttonsStackView.addArrangedSubview(cancelButton)
+            buttonsStackView.spacing = 18
+        }
+        self.layoutIfNeeded()
     }
 }

@@ -133,8 +133,8 @@
 		294BD3D427B1D60B00BD8D46 /* HiddenRecordsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294BD3D027B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.swift */; };
 		294BD3D527B1D60B00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 294BD3D127B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.xib */; };
 		294BD3D727B54AFE00BD8D46 /* StorageService+Medication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294BD3D627B54AFE00BD8D46 /* StorageService+Medication.swift */; };
-		29547E5727A2EC5200562958 /* LocalAuthVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29547E5627A2EC5200562958 /* LocalAuthVIew.swift */; };
-		29547E5827A2EC5200562958 /* LocalAuthVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29547E5627A2EC5200562958 /* LocalAuthVIew.swift */; };
+		29547E5727A2EC5200562958 /* LocalAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29547E5627A2EC5200562958 /* LocalAuthView.swift */; };
+		29547E5827A2EC5200562958 /* LocalAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29547E5627A2EC5200562958 /* LocalAuthView.swift */; };
 		29547E5B27A2EC7700562958 /* LocalAuthView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29547E5A27A2EC7700562958 /* LocalAuthView.xib */; };
 		29547E5C27A2EC7700562958 /* LocalAuthView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29547E5A27A2EC7700562958 /* LocalAuthView.xib */; };
 		296519A5272995680002B778 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296519A4272995680002B778 /* AuthManager.swift */; };
@@ -1290,7 +1290,7 @@
 		798005A12852C66E006E390F /* FormTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */; };
 		798005A22852C66E006E390F /* ButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C27B727183149001A6E12 /* ButtonTableViewCell.swift */; };
 		798005A52852C66E006E390F /* ParseXMLData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA77E2715FC9B00E59FF1 /* ParseXMLData.swift */; };
-		798005A62852C66E006E390F /* LocalAuthVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29547E5627A2EC5200562958 /* LocalAuthVIew.swift */; };
+		798005A62852C66E006E390F /* LocalAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29547E5627A2EC5200562958 /* LocalAuthView.swift */; };
 		798005A72852C66E006E390F /* CommentViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293B32CA27D814EB0064BAAA /* CommentViewTableViewCell.swift */; };
 		798005A82852C66E006E390F /* GatewayVaccineCardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */; };
 		798005A92852C66E006E390F /* StorageService+Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE0275AA10D00532BC4 /* StorageService+Patient.swift */; };
@@ -1620,7 +1620,7 @@
 		294BD3D027B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenRecordsTableViewCell.swift; sourceTree = "<group>"; };
 		294BD3D127B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HiddenRecordsTableViewCell.xib; sourceTree = "<group>"; };
 		294BD3D627B54AFE00BD8D46 /* StorageService+Medication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Medication.swift"; sourceTree = "<group>"; };
-		29547E5627A2EC5200562958 /* LocalAuthVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthVIew.swift; sourceTree = "<group>"; };
+		29547E5627A2EC5200562958 /* LocalAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthView.swift; sourceTree = "<group>"; };
 		29547E5A27A2EC7700562958 /* LocalAuthView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocalAuthView.xib; sourceTree = "<group>"; };
 		296519A4272995680002B778 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		2965281628358F4800C411E1 /* AppDelegate+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+EXT.swift"; sourceTree = "<group>"; };
@@ -2420,7 +2420,7 @@
 		294BD3CD27AACFCF00BD8D46 /* Local Auth View */ = {
 			isa = PBXGroup;
 			children = (
-				29547E5627A2EC5200562958 /* LocalAuthVIew.swift */,
+				29547E5627A2EC5200562958 /* LocalAuthView.swift */,
 				29547E5A27A2EC7700562958 /* LocalAuthView.xib */,
 			);
 			path = "Local Auth View";
@@ -5281,7 +5281,7 @@
 				795AA77F2715FC9B00E59FF1 /* ParseXMLData.swift in Sources */,
 				3E473780291090BC00B5BBA0 /* CovidTestsService.swift in Sources */,
 				2922C0DB286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.swift in Sources */,
-				29547E5727A2EC5200562958 /* LocalAuthVIew.swift in Sources */,
+				29547E5727A2EC5200562958 /* LocalAuthView.swift in Sources */,
 				3E81C4D329B2A99F00C8F5C4 /* UsersListOfRecordsViewModel.swift in Sources */,
 				293B32CC27D814EB0064BAAA /* CommentViewTableViewCell.swift in Sources */,
 				795AA72C271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
@@ -5697,7 +5697,7 @@
 				3E81C4DC29B2AB9100C8F5C4 /* CovidVaccineCardsViewModel.swift in Sources */,
 				794BD6472702EEC00084ADA8 /* QRRetrievalMethodViewController.swift in Sources */,
 				2DD8C0BC2A4DDC8100CC9DA3 /* CommunicationBannerCollectionViewCell.swift in Sources */,
-				29547E5827A2EC5200562958 /* LocalAuthVIew.swift in Sources */,
+				29547E5827A2EC5200562958 /* LocalAuthView.swift in Sources */,
 				3EDA6F6F29EF204700A5DC7B /* ServicesViewModel.swift in Sources */,
 				3E97A2902A49F993004F3DD7 /* ImmunizationScheduleViewController.swift in Sources */,
 				2D2B490C2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */,
@@ -6079,7 +6079,7 @@
 				2922C0DA286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.swift in Sources */,
 				3E81C4D229B2A99F00C8F5C4 /* UsersListOfRecordsViewModel.swift in Sources */,
 				798005A52852C66E006E390F /* ParseXMLData.swift in Sources */,
-				798005A62852C66E006E390F /* LocalAuthVIew.swift in Sources */,
+				798005A62852C66E006E390F /* LocalAuthView.swift in Sources */,
 				798005A72852C66E006E390F /* CommentViewTableViewCell.swift in Sources */,
 				3E81C4DA29B2AB9100C8F5C4 /* CovidVaccineCardsViewModel.swift in Sources */,
 				2DD8C0BA2A4DDC8100CC9DA3 /* CommunicationBannerCollectionViewCell.swift in Sources */,

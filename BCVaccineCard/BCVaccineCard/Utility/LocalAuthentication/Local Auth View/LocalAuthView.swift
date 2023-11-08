@@ -18,6 +18,12 @@ class LocalAuthView: UIView, Theme {
     @IBOutlet weak var turnOnTouchIDButton: UIButton!
     @IBOutlet weak var useTouchIDButton: UIButton!
     @IBOutlet weak var usePasscodeButton: UIButton!
+    @IBOutlet private weak var buttonStackView: UIStackView!
+    // iPad
+    @IBOutlet private weak var leftLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var rightLeadingTitleConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var rightLeadingSubtitleConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var rightLeadingInfoConstraint: NSLayoutConstraint!
     
     // MARK: Local variables
     weak var parent: UIViewController?
@@ -127,6 +133,7 @@ class LocalAuthView: UIView, Theme {
         guard let manager = manager else {
             return
         }
+        adjustForiPad()
         setBaseText()
         var hasBiometric: Bool = false
         
@@ -172,7 +179,7 @@ class LocalAuthView: UIView, Theme {
             alertNotAvailable()
         }
     }
-    
+    // TODO: Adjust font here
     func setBaseText() {
         self.backgroundColor = .white
         titleLabel.text = .protectYourPersonalInformation
@@ -186,7 +193,8 @@ class LocalAuthView: UIView, Theme {
         style(button: useTouchIDButton, style: .Fill, title: .useTouchId, image: nil, bold: true)
         style(button: usePasscodeButton, style: .Fill, title: .usePassCode, image: nil, bold: true)
         
-        style(label: titleLabel, style: .Bold, size: 24, colour: .Blue)
+        let titleSize: CGFloat = Constants.deviceType == .iPad ? 33 : 24
+        style(label: titleLabel, style: .Bold, size: titleSize, colour: .Blue)
         style(label: subtitleLabel, style: .Regular, size: 17, colour: .Grey)
         style(label: infoLabel, style: .Regular, size: 17, colour: .Blue)
         
@@ -232,6 +240,21 @@ class LocalAuthView: UIView, Theme {
     }
 }
 
+// MARK: For iPad
+// 820 by 1180
+extension LocalAuthView {
+    func adjustForiPad() {
+        guard Constants.deviceType == .iPad else { return }
+        let constant: CGFloat = UIDevice.current.orientation.isLandscape ? 300 : 125
+        leftLeadingConstraint.constant = constant
+        rightLeadingTitleConstraint.constant = constant
+        rightLeadingSubtitleConstraint.constant = constant
+        rightLeadingInfoConstraint.constant = constant
+        infoLabel.textAlignment = .left
+    }
+}
+
+
 extension UIView {
     func findTopMostVC() -> UIViewController? {
         let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
@@ -245,4 +268,3 @@ extension UIView {
         return nil
     }
 }
-

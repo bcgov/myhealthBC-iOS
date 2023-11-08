@@ -23,6 +23,7 @@ class AuthenticationInfoView: UIView, Theme {
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var continueButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak private var buttonsStackView: UIStackView!
     
     private var completion: ((Result)->Void)?
     
@@ -83,5 +84,22 @@ class AuthenticationInfoView: UIView, Theme {
     func setupAccessibility() {
         navBackButton.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
         navTitle.accessibilityTraits = .header
+    }
+    
+    // Note: This is to be called when the view transitions during rotation
+    func adjustUIForIPad() {
+        guard Constants.deviceType == .iPad else { return }
+        if UIDevice.current.orientation.isLandscape {
+            buttonsStackView.axis = .horizontal
+            buttonsStackView.removeArrangedSubview(continueButton)
+            buttonsStackView.addArrangedSubview(continueButton)
+            buttonsStackView.spacing = 22
+        } else {
+            buttonsStackView.axis = .vertical
+            buttonsStackView.removeArrangedSubview(cancelButton)
+            buttonsStackView.addArrangedSubview(cancelButton)
+            buttonsStackView.spacing = 18
+        }
+        self.layoutIfNeeded()
     }
 }
