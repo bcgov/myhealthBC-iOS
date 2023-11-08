@@ -359,6 +359,21 @@ extension InitialOnboardingViewController {
         guard Constants.deviceType == .iPad else { return }
         NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
         iPadUIAdjustments()
+//        guard let indexPath = findCenterIndex() else { return }
+//        if let newScreen = getNewScreenTypeAfterScrollingValuesChanged(indexPath: indexPath, screensToShow: self.screensToShow) {
+//            self.screenNumber = newScreen
+//            adjustUI()
+//        }
+        var indexPath: IndexPath?
+        if let row = screensToShow.firstIndex(of: screenNumber) {
+            indexPath = IndexPath(row: row, section: 0)
+        } else if let centerIndexPath = findCenterIndex() {
+            indexPath = centerIndexPath
+        }
+        guard let path = indexPath else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0) {
+            self.collectionView.scrollToItem(at: path, at: .centeredHorizontally, animated: true)
+        }
     }
 }
 

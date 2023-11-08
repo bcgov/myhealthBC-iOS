@@ -93,17 +93,17 @@ class AuthenticationView: UIView, Theme {
     // Note: This is to be called when the view transitions during rotation
     private func adjustUIForIPad() {
         guard Constants.deviceType == .iPad else { return }
-        if UIDevice.current.orientation.isLandscape {
-            buttonsStackView.axis = .horizontal
-            buttonsStackView.removeArrangedSubview(loginButton)
-            buttonsStackView.addArrangedSubview(loginButton)
-            buttonsStackView.spacing = 22
-        } else {
-            buttonsStackView.axis = .vertical
-            buttonsStackView.removeArrangedSubview(cancelButton)
-            buttonsStackView.addArrangedSubview(cancelButton)
-            buttonsStackView.spacing = 18
-        }
+//        if UIDevice.current.orientation.isLandscape {
+//            buttonsStackView.axis = .horizontal
+//            buttonsStackView.removeArrangedSubview(loginButton)
+//            buttonsStackView.addArrangedSubview(loginButton)
+//            buttonsStackView.spacing = 22
+//        } else {
+//            buttonsStackView.axis = .vertical
+//            buttonsStackView.removeArrangedSubview(cancelButton)
+//            buttonsStackView.addArrangedSubview(cancelButton)
+//            buttonsStackView.spacing = 18
+//        }
         self.layoutIfNeeded()
     }
     

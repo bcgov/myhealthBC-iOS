@@ -33,6 +33,7 @@ class OnboardingiPadCollectionViewCell: UICollectionViewCell {
     
     func configure(screenType: OnboardingScreenType, newTextShown: Bool) {
         resourceImageView.image = screenType.getIpadResourceImage
+//        self.backgroundColor = screenType.getIpadBackgroundColour
 //        let sizes = screenType.getResourceImageSizes
 //        resourceImageViewWidthConstraint.constant = sizes.width
 //        resourceImageViewHeightConstraint.constant = sizes.height

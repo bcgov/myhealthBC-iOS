@@ -105,6 +105,21 @@ extension OnboardingScreenType {
             return UIImage(named: "ipad_onboarding_services")
         }
     }
+    // FOR UI Testing Purposes
+    var getIpadBackgroundColour: UIColor {
+        switch self {
+        case .healthPasses:
+            return .blue
+        case .healthRecords:
+            return .purple
+        case .healthResources:
+            return .green
+        case .dependents:
+            return .yellow
+        case .services:
+            return .orange
+        }
+    }
     // Note: Offset is:
     // Phone is 68 * 128
     var getResourceImageSizes: (width: CGFloat, height: CGFloat, xOffset: CGFloat, yOffset: CGFloat) {
