@@ -273,6 +273,12 @@
 		29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */; };
 		29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
 		29F41298274CDEE1004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
+		2D0307A12AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D03079F2AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.swift */; };
+		2D0307A22AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D03079F2AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.swift */; };
+		2D0307A32AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D03079F2AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.swift */; };
+		2D0307A42AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0307A02AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.xib */; };
+		2D0307A52AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0307A02AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.xib */; };
+		2D0307A62AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0307A02AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.xib */; };
 		2D043C182AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D043C172AE730600004974A /* PharmacistAssessmentDetailView.swift */; };
 		2D043C192AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D043C172AE730600004974A /* PharmacistAssessmentDetailView.swift */; };
 		2D043C1A2AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D043C172AE730600004974A /* PharmacistAssessmentDetailView.swift */; };
@@ -1681,6 +1687,8 @@
 		29E19FF7286C715C00C235EF /* HealthRecordDetailFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HealthRecordDetailFieldTableViewCell.xib; sourceTree = "<group>"; };
 		29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+EXT.swift"; sourceTree = "<group>"; };
 		29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitedOnBoardingScreen.swift; sourceTree = "<group>"; };
+		2D03079F2AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingiPadCollectionViewCell.swift; sourceTree = "<group>"; };
+		2D0307A02AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OnboardingiPadCollectionViewCell.xib; sourceTree = "<group>"; };
 		2D043C172AE730600004974A /* PharmacistAssessmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PharmacistAssessmentDetailView.swift; sourceTree = "<group>"; };
 		2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentsResponse.swift; sourceTree = "<group>"; };
 		2D120D3E28FF17FB00EB8EBF /* DependentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentService.swift; sourceTree = "<group>"; };
@@ -2657,6 +2665,24 @@
 				29E19FF7286C715C00C235EF /* HealthRecordDetailFieldTableViewCell.xib */,
 			);
 			path = "Detail Field";
+			sourceTree = "<group>";
+		};
+		2D03079D2AF97C2100C80F83 /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				79A15AFC27FC07D500F8330D /* OnboardingCollectionViewCell.swift */,
+				79A15AFD27FC07D500F8330D /* OnboardingCollectionViewCell.xib */,
+			);
+			path = iPhone;
+			sourceTree = "<group>";
+		};
+		2D03079E2AF97C2C00C80F83 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				2D03079F2AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.swift */,
+				2D0307A02AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.xib */,
+			);
+			path = iPad;
 			sourceTree = "<group>";
 		};
 		2D043C162AE7303D0004974A /* PharmacistAssessmentDetailView */ = {
@@ -4200,8 +4226,8 @@
 		79A15AFB27FC07B400F8330D /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				79A15AFC27FC07D500F8330D /* OnboardingCollectionViewCell.swift */,
-				79A15AFD27FC07D500F8330D /* OnboardingCollectionViewCell.xib */,
+				2D03079E2AF97C2C00C80F83 /* iPad */,
+				2D03079D2AF97C2100C80F83 /* iPhone */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -4586,6 +4612,7 @@
 				3E6831582940DC3C00100402 /* CommentTextFieldView.xib in Resources */,
 				2DD8C0CE2A5EA47000CC9DA3 /* HomeScreenAuthCollectionViewCell.xib in Resources */,
 				293B32C027D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */,
+				2D0307A52AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.xib in Resources */,
 				79CF236B2825789600510489 /* HealthRecordsHomeView.xib in Resources */,
 				2DD8C0C62A5E4F3400CC9DA3 /* HomeScreenRecordCollectionViewCell.xib in Resources */,
 				297D3BB427D947A900B059CA /* TableSectionHeader.xib in Resources */,
@@ -4674,6 +4701,7 @@
 				79CF236C2825789600510489 /* HealthRecordsHomeView.xib in Resources */,
 				794BD65F2702EEC00084ADA8 /* SettingsTableViewCell.xib in Resources */,
 				1E046E322ACE002A008E621B /* DiagnosticImagingInfoTableViewCell.xib in Resources */,
+				2D0307A62AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.xib in Resources */,
 				3E10300E29BA7AFB001E85EC /* AppTabBar.storyboard in Resources */,
 				79218ABB27519E790063004E /* HealthRecordsUserCollectionViewCell.xib in Resources */,
 				2922C0AE286C73F9000FF4F7 /* HealthRecordDetailFieldTableViewCell.xib in Resources */,
@@ -4865,6 +4893,7 @@
 				3E6831572940DC3C00100402 /* CommentTextFieldView.xib in Resources */,
 				2DD8C0CD2A5EA47000CC9DA3 /* HomeScreenAuthCollectionViewCell.xib in Resources */,
 				798006372852C66E006E390F /* CommentsViewTableViewCell.xib in Resources */,
+				2D0307A42AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.xib in Resources */,
 				798006382852C66E006E390F /* HealthRecordsHomeView.xib in Resources */,
 				2DD8C0C52A5E4F3400CC9DA3 /* HomeScreenRecordCollectionViewCell.xib in Resources */,
 				798006392852C66E006E390F /* TableSectionHeader.xib in Resources */,
@@ -5301,6 +5330,7 @@
 				3E6F936D2A27A84C00EB82C5 /* NotificationsViewController.swift in Sources */,
 				3EDC0D0A2968928000603FED /* KVCAccessor.swift in Sources */,
 				3EDC0D1A2968932100603FED /* KVCReflectionMirror.swift in Sources */,
+				2D0307A22AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.swift in Sources */,
 				2D81887C2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */,
 				29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */,
 				3E6F937E2A27B06500EB82C5 /* StorageService+Notifications.swift in Sources */,
@@ -5709,6 +5739,7 @@
 				3E6F936E2A27A84C00EB82C5 /* NotificationsViewController.swift in Sources */,
 				3EDC0D0B2968928000603FED /* KVCAccessor.swift in Sources */,
 				3EDC0D1B2968932100603FED /* KVCReflectionMirror.swift in Sources */,
+				2D0307A32AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.swift in Sources */,
 				2D81887D2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */,
 				79218AF0275672120063004E /* StorageService+HealthRecords.swift in Sources */,
 				3E6F937F2A27B06500EB82C5 /* StorageService+Notifications.swift in Sources */,
@@ -6094,6 +6125,7 @@
 				3E6F936C2A27A84C00EB82C5 /* NotificationsViewController.swift in Sources */,
 				3E78AECD28F9909500C66E28 /* AddDependentViewController.swift in Sources */,
 				3EDC0D092968928000603FED /* KVCAccessor.swift in Sources */,
+				2D0307A12AF97C5200C80F83 /* OnboardingiPadCollectionViewCell.swift in Sources */,
 				2D81887B2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */,
 				3EDC0D192968932100603FED /* KVCReflectionMirror.swift in Sources */,
 				3E6F937D2A27B06500EB82C5 /* StorageService+Notifications.swift in Sources */,
@@ -6392,12 +6424,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -6407,8 +6437,7 @@
 				MARKETING_VERSION = 1.9.7;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-DEV-AppStore";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "ClientVaccineCard-DEV-AppStore";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -6428,12 +6457,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -6443,8 +6470,7 @@
 				MARKETING_VERSION = 1.9.7;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-DEV-AppStore";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "ClientVaccineCard-DEV-AppStore";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

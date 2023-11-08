@@ -181,3 +181,19 @@ extension Constants {
     static let authIssuer = "https://dev.oidc.gov.bc.ca/auth/realms/ff09qn3f"
 #endif
 }
+
+// MARK: Device Type
+extension Constants {
+    enum DeviceType {
+        case iPhone
+        case iPad
+    }
+    
+    static var deviceType: DeviceType {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return .iPad
+        } else {
+            return .iPhone
+        }
+    }
+}
