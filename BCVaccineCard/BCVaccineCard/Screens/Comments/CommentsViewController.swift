@@ -386,6 +386,7 @@ extension CommentsViewController: EditCommentTableViewCellDelegate {
 extension CommentsViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
+        guard Constants.deviceType == .iPad else { return }
         NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
         // TODO: Make iPad adjustments here if necessary
     }
