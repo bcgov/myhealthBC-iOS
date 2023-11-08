@@ -43,4 +43,5 @@ extension Notification.Name {
     static let patientStored = Notification.Name("patientStored")
     static let applyQuickLinkFilter = Notification.Name("applyQuickLinkFilter")
     static let refetchQuickLinksFromCoreData = Notification.Name("refetchQuickLinksFromCoreData")
+    static let deviceDidRotate = Notification.Name("deviceDidRotate")
 }

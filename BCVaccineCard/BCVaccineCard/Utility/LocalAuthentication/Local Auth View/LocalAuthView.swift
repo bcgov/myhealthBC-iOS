@@ -90,6 +90,8 @@ class LocalAuthView: UIView, Theme {
         viewController.view.addSubview(self)
         addEqualSizeContraints(to: viewController.view)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .deviceDidRotate, object: nil)
+        
         layoutIfNeeded()
         style(type: type)
     }
@@ -241,16 +243,22 @@ class LocalAuthView: UIView, Theme {
 }
 
 // MARK: For iPad
-// 820 by 1180
+// 820 by 1180 on 10th gen
+// 125 spacing portrait, 300 spacing landscape
 extension LocalAuthView {
-    func adjustForiPad() {
+    private func adjustForiPad() {
         guard Constants.deviceType == .iPad else { return }
-        let constant: CGFloat = UIDevice.current.orientation.isLandscape ? 300 : 125
+        let width = self.frame.width
+        let constant: CGFloat = UIDevice.current.orientation.isLandscape ? width * 0.25 : width * 0.15
         leftLeadingConstraint.constant = constant
         rightLeadingTitleConstraint.constant = constant
         rightLeadingSubtitleConstraint.constant = constant
         rightLeadingInfoConstraint.constant = constant
         infoLabel.textAlignment = .left
+    }
+    
+    @objc private func deviceDidRotate(_ notification: Notification) {
+        adjustForiPad()
     }
 }
 

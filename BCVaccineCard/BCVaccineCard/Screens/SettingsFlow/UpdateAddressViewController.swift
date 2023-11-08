@@ -54,3 +54,12 @@ extension UpdateAddressViewController: WKNavigationDelegate {
         print("DID FINISH")
     }
 }
+
+// MARK: For iPad
+extension UpdateAddressViewController {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
+        // TODO: Make iPad adjustments here if necessary
+    }
+}

@@ -175,3 +175,10 @@ extension BaseViewController {
     }
 }
 
+// MARK: This is to detect when a view controller rotates
+extension BaseViewController {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
+    }
+}
