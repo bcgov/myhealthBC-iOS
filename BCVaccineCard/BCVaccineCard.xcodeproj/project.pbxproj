@@ -381,6 +381,9 @@
 		2D9B399F2907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
 		2D9B39A02907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
 		2D9B39A12907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
+		2DC1F23A2B055A13003393BE /* Test.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DC1F2392B055A13003393BE /* Test.xib */; };
+		2DC1F23B2B055A13003393BE /* Test.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DC1F2392B055A13003393BE /* Test.xib */; };
+		2DC1F23C2B055A13003393BE /* Test.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DC1F2392B055A13003393BE /* Test.xib */; };
 		2DD5F0FE2A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD5F0FC2A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataClass.swift */; };
 		2DD5F0FF2A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD5F0FC2A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataClass.swift */; };
 		2DD5F1002A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD5F0FC2A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataClass.swift */; };
@@ -1725,6 +1728,7 @@
 		2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageHomeScreenViewController.swift; sourceTree = "<group>"; };
 		2D81887E2A71226A00894756 /* ManageHomeScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageHomeScreenViewModel.swift; sourceTree = "<group>"; };
 		2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsService.swift; sourceTree = "<group>"; };
+		2DC1F2392B055A13003393BE /* Test.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Test.xib; sourceTree = "<group>"; };
 		2DD5F0FC2A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiagnosticImaging+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		2DD5F0FD2A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiagnosticImaging+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		2DD8C0B82A4DDC8100CC9DA3 /* CommunicationBannerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationBannerCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -2841,6 +2845,14 @@
 			path = HealthRecords;
 			sourceTree = "<group>";
 		};
+		2DC1F2382B0559EF003393BE /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				2DC1F2392B055A13003393BE /* Test.xib */,
+			);
+			path = Test;
+			sourceTree = "<group>";
+		};
 		2DD8C0962A4DDA1000CC9DA3 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -3826,6 +3838,7 @@
 		7944F6C226F12C00006B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2DC1F2382B0559EF003393BE /* Test */,
 				3EDCDAF72A5DA53C009FE854 /* TextTag */,
 				29A4DF4527DA673200D5E901 /* FIlterRecordsView */,
 				297D3BB027D9478700B059CA /* TableHeader */,
@@ -4545,6 +4558,7 @@
 				2D4B118C29F0655A00D7C02C /* RecordsSearchBarView.xib in Resources */,
 				7967E74826F9071A00EEF510 /* SettingsTableViewCell.xib in Resources */,
 				79218AB2275196150063004E /* HealthRecordsUserView.xib in Resources */,
+				2DC1F23B2B055A13003393BE /* Test.xib in Resources */,
 				293B32B227D25C5B0064BAAA /* CommentView.xib in Resources */,
 				2942AC57273AC30900A4A466 /* ToggleSettingsTableViewCell.xib in Resources */,
 				795AA757271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
@@ -4785,6 +4799,7 @@
 				2D5218C62984A38000E07382 /* ProfileDetailsTableViewCell.xib in Resources */,
 				3E97A2942A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard in Resources */,
 				2978852F279624E100FF912D /* SettingsProfileTableViewCell.xib in Resources */,
+				2DC1F23C2B055A13003393BE /* Test.xib in Resources */,
 				795AA76527155F6300E59FF1 /* NewsFeed.storyboard in Resources */,
 				794BD66A2702EEC00084ADA8 /* BCSans-BoldItalic.otf in Resources */,
 				293B32BA27D2628A0064BAAA /* CommentsListView.xib in Resources */,
@@ -4826,6 +4841,7 @@
 				2D4B118B29F0655A00D7C02C /* RecordsSearchBarView.xib in Resources */,
 				7980060B2852C66E006E390F /* SettingsTableViewCell.xib in Resources */,
 				7980060C2852C66E006E390F /* HealthRecordsUserView.xib in Resources */,
+				2DC1F23A2B055A13003393BE /* Test.xib in Resources */,
 				7980060D2852C66E006E390F /* CommentView.xib in Resources */,
 				7980060E2852C66E006E390F /* ToggleSettingsTableViewCell.xib in Resources */,
 				7980060F2852C66E006E390F /* InitialOnboardingView.xib in Resources */,

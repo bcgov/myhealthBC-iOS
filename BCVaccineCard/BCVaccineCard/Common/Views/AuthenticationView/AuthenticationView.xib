@@ -18,7 +18,7 @@
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="64" translatesAutoresizingMaskIntoConstraints="NO" id="YSG-jO-thH">
                     <rect key="frame" x="24" y="83" width="366" height="386"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="zVS-Gn-Ohv">
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="zVS-Gn-Ohv" userLabel="Stack View1">
                             <rect key="frame" x="0.0" y="0.0" width="366" height="118"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in with your BC Services Card to access all health records" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="x7D-uH-HLP">
@@ -41,14 +41,34 @@
                                 <constraint firstAttribute="trailing" secondItem="x7D-uH-HLP" secondAttribute="trailing" id="UK1-A5-2PB"/>
                             </constraints>
                         </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="Pef-cy-8rS">
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="Pef-cy-8rS" userLabel="Stack View2">
                             <rect key="frame" x="6.5" y="182" width="353.5" height="204"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="authLogo" translatesAutoresizingMaskIntoConstraints="NO" id="IUh-Gg-vhZ">
                                     <rect key="frame" x="0.0" y="0.0" width="353.5" height="127"/>
                                     <constraints>
+                                        <constraint firstAttribute="height" constant="137" id="6nB-hI-ssM"/>
+                                        <constraint firstAttribute="width" constant="190" id="EWY-5u-Dem"/>
                                         <constraint firstAttribute="height" constant="127" id="meX-gW-bZX"/>
                                     </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="6nB-hI-ssM"/>
+                                            <exclude reference="EWY-5u-Dem"/>
+                                            <exclude reference="meX-gW-bZX"/>
+                                        </mask>
+                                    </variation>
+                                    <variation key="widthClass=compact">
+                                        <mask key="constraints">
+                                            <include reference="meX-gW-bZX"/>
+                                        </mask>
+                                    </variation>
+                                    <variation key="heightClass=regular-widthClass=regular">
+                                        <mask key="constraints">
+                                            <include reference="6nB-hI-ssM"/>
+                                            <include reference="EWY-5u-Dem"/>
+                                        </mask>
+                                    </variation>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yDY-O4-kyu">
                                     <rect key="frame" x="0.0" y="143" width="353.5" height="61"/>
@@ -64,66 +84,107 @@
                         <constraint firstItem="zVS-Gn-Ohv" firstAttribute="leading" secondItem="YSG-jO-thH" secondAttribute="leading" id="Hr1-e0-M1H"/>
                         <constraint firstAttribute="trailing" secondItem="zVS-Gn-Ohv" secondAttribute="trailing" id="Ty0-BX-yn5"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="Hr1-e0-M1H"/>
+                            <exclude reference="Ty0-BX-yn5"/>
+                        </mask>
+                    </variation>
+                    <variation key="widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="Hr1-e0-M1H"/>
+                            <include reference="Ty0-BX-yn5"/>
+                        </mask>
+                    </variation>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fZu-At-NBK">
-                    <rect key="frame" x="24" y="689" width="366" height="141"/>
+                    <rect key="frame" x="24" y="709" width="366" height="96"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="jzQ-Zk-KQB">
-                            <rect key="frame" x="0.0" y="0.0" width="366" height="116"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FZH-by-C09">
-                                    <rect key="frame" x="0.0" y="0.0" width="366" height="54"/>
-                                    <color key="backgroundColor" red="0.0" green="0.1960801482" blue="0.396075815" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="54" id="Myv-ao-Gd0"/>
-                                    </constraints>
-                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                    <state key="normal" title="Log in with BC Services Card"/>
-                                    <connections>
-                                        <action selector="loginAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="LjA-be-Rdg"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u1Y-oU-mI9">
-                                    <rect key="frame" x="0.0" y="62" width="366" height="54"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                    <state key="normal" title="Not now"/>
-                                    <connections>
-                                        <action selector="cancelAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="KaQ-a3-btn"/>
-                                    </connections>
-                                </button>
-                            </subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FZH-by-C09">
+                            <rect key="frame" x="0.0" y="0.0" width="366" height="54"/>
+                            <color key="backgroundColor" red="0.0" green="0.1960801482" blue="0.396075815" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
-                                <constraint firstItem="u1Y-oU-mI9" firstAttribute="height" secondItem="FZH-by-C09" secondAttribute="height" id="F0H-Cb-g4C"/>
+                                <constraint firstAttribute="height" constant="54" id="Myv-ao-Gd0"/>
                             </constraints>
-                        </stackView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don’t have BC Service Card app, please download here. " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="DzU-Ht-4yU">
-                            <rect key="frame" x="0.0" y="124" width="366" height="17"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="Log in with BC Services Card"/>
+                            <connections>
+                                <action selector="loginAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="LjA-be-Rdg"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u1Y-oU-mI9">
+                            <rect key="frame" x="0.0" y="62" width="366" height="34"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="Not now"/>
+                            <connections>
+                                <action selector="cancelAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="KaQ-a3-btn"/>
+                            </connections>
+                        </button>
                     </subviews>
                 </stackView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don’t have BC Service Card app, please download here. " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="DzU-Ht-4yU">
+                    <rect key="frame" x="24" y="813" width="366" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="fZu-At-NBK" secondAttribute="bottom" constant="32" id="1zq-Dl-Hrq"/>
                 <constraint firstItem="YSG-jO-thH" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="35" id="I6y-iw-UWN"/>
+                <constraint firstItem="DzU-Ht-4yU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fZu-At-NBK" secondAttribute="leading" id="LNR-sH-aaJ"/>
+                <constraint firstItem="DzU-Ht-4yU" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="MyL-LK-SwI"/>
                 <constraint firstAttribute="trailing" secondItem="YSG-jO-thH" secondAttribute="trailing" constant="24" id="Qyp-x9-d3P"/>
+                <constraint firstItem="YSG-jO-thH" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="RsJ-SG-1dn"/>
+                <constraint firstItem="DzU-Ht-4yU" firstAttribute="top" relation="greaterThanOrEqual" secondItem="fZu-At-NBK" secondAttribute="bottom" constant="8" id="SoT-HZ-kUr"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="fZu-At-NBK" secondAttribute="trailing" constant="24" id="UIp-pW-6uy"/>
+                <constraint firstItem="fZu-At-NBK" firstAttribute="top" secondItem="YSG-jO-thH" secondAttribute="bottom" constant="110" id="VRJ-Ng-vms"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="DzU-Ht-4yU" secondAttribute="bottom" constant="32" id="XiX-3y-msF"/>
                 <constraint firstItem="fZu-At-NBK" firstAttribute="top" relation="greaterThanOrEqual" secondItem="YSG-jO-thH" secondAttribute="bottom" constant="32" id="aHK-Q1-VoG"/>
+                <constraint firstItem="YSG-jO-thH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="24" id="bSY-7I-SLo"/>
                 <constraint firstItem="YSG-jO-thH" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="pyA-9f-Jzx"/>
+                <constraint firstItem="DzU-Ht-4yU" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fZu-At-NBK" secondAttribute="trailing" id="rpi-J9-59z"/>
                 <constraint firstItem="fZu-At-NBK" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="tBN-iN-CIH"/>
+                <constraint firstItem="DzU-Ht-4yU" firstAttribute="top" secondItem="fZu-At-NBK" secondAttribute="bottom" constant="8" id="zqy-VO-WH2"/>
             </constraints>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="I6y-iw-UWN"/>
+                    <exclude reference="RsJ-SG-1dn"/>
+                    <exclude reference="VRJ-Ng-vms"/>
+                    <exclude reference="aHK-Q1-VoG"/>
+                    <exclude reference="SoT-HZ-kUr"/>
+                    <exclude reference="zqy-VO-WH2"/>
+                </mask>
+            </variation>
+            <variation key="widthClass=compact">
+                <mask key="constraints">
+                    <include reference="I6y-iw-UWN"/>
+                    <include reference="aHK-Q1-VoG"/>
+                    <include reference="zqy-VO-WH2"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=regular">
+                <mask key="constraints">
+                    <include reference="RsJ-SG-1dn"/>
+                    <include reference="VRJ-Ng-vms"/>
+                    <include reference="SoT-HZ-kUr"/>
+                </mask>
+            </variation>
             <connections>
-                <outlet property="buttonsStackView" destination="jzQ-Zk-KQB" id="0q6-G1-x1z"/>
+                <outlet property="buttonsStackView" destination="fZu-At-NBK" id="2qC-PJ-EU1"/>
                 <outlet property="cancelButton" destination="u1Y-oU-mI9" id="eSk-be-bDe"/>
                 <outlet property="downloadBCSCLabel" destination="DzU-Ht-4yU" id="lr0-tZ-zXr"/>
+                <outlet property="imageStackView" destination="Pef-cy-8rS" id="BDG-3d-bxa"/>
                 <outlet property="loginButton" destination="FZH-by-C09" id="u9k-9X-W8U"/>
                 <outlet property="secondarySubtitle" destination="yDY-O4-kyu" id="zyx-iW-WDl"/>
+                <outlet property="stackViewLeadingSpaceConstraint" destination="bSY-7I-SLo" id="xWx-RG-NSm"/>
+                <outlet property="stackViewTrailingSpaceConstraint" destination="Qyp-x9-d3P" id="GkB-1h-pKs"/>
                 <outlet property="subtitleLabel" destination="yzV-g2-YJ4" id="hub-fv-0Hx"/>
+                <outlet property="textAndImageStackView" destination="YSG-jO-thH" id="Pa2-ps-8U7"/>
+                <outlet property="textStackView" destination="zVS-Gn-Ohv" id="1DP-rZ-TWB"/>
                 <outlet property="titleLabel" destination="x7D-uH-HLP" id="JeN-mF-4vT"/>
             </connections>
             <point key="canvasLocation" x="139" y="143"/>
