@@ -86,10 +86,13 @@ class AuthenticationView: UIView, Theme {
         // Image and Text
         imageStackView.removeArrangedSubview(secondarySubtitle)
         textStackView.alignment = .leading
+        textAndImageStackView.removeArrangedSubview(textStackView)
+        textAndImageStackView.addArrangedSubview(textStackView)
         textAndImageStackView.axis = .horizontal
         textAndImageStackView.alignment = .top
         textAndImageStackView.distribution = .fill
         textAndImageStackView.spacing = 12
+        
 //        stackViewTrailingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 300 : 150
 //        stackViewLeadingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 300 : 150
         
@@ -125,8 +128,8 @@ class AuthenticationView: UIView, Theme {
     // Note: This is to be called when the view transitions during rotation
     private func adjustUIForIPadOrientationChange() {
         guard Constants.deviceType == .iPad else { return }
-        stackViewTrailingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 300 : 150
-        stackViewLeadingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 300 : 150
+        stackViewTrailingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 200 : 90
+        stackViewLeadingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 200 : 90
         if UIDevice.current.orientation.isLandscape {
             buttonsStackView.removeArrangedSubview(loginButton)
             buttonsStackView.addArrangedSubview(loginButton)

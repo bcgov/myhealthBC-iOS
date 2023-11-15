@@ -15,7 +15,7 @@ class AuthenticationViewController: UIViewController {
             vc.initialView = viewModel.initialView
             vc.viewModel = viewModel
             if #available(iOS 13.0, *) {
-                vc.isModalInPresentation = true
+                vc.isModalInPresentation = Constants.deviceType == .iPad ? false : true
             }
             return vc
         }
@@ -184,6 +184,6 @@ extension AuthenticationViewController {
         super.viewWillTransition(to: size, with: coordinator)
         guard Constants.deviceType == .iPad else { return }
         NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
-        // TODO: Make iPad adjustments here if necessary
+        self.view.layoutIfNeeded()
     }
 }

@@ -137,7 +137,7 @@
                 <constraint firstItem="DzU-Ht-4yU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fZu-At-NBK" secondAttribute="leading" id="LNR-sH-aaJ"/>
                 <constraint firstItem="DzU-Ht-4yU" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="MyL-LK-SwI"/>
                 <constraint firstAttribute="trailing" secondItem="YSG-jO-thH" secondAttribute="trailing" constant="24" id="Qyp-x9-d3P"/>
-                <constraint firstItem="YSG-jO-thH" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="RsJ-SG-1dn"/>
+                <constraint firstItem="YSG-jO-thH" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-100" id="RsJ-SG-1dn"/>
                 <constraint firstItem="DzU-Ht-4yU" firstAttribute="top" relation="greaterThanOrEqual" secondItem="fZu-At-NBK" secondAttribute="bottom" constant="8" id="SoT-HZ-kUr"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="fZu-At-NBK" secondAttribute="trailing" constant="24" id="UIp-pW-6uy"/>
                 <constraint firstItem="fZu-At-NBK" firstAttribute="top" secondItem="YSG-jO-thH" secondAttribute="bottom" constant="110" id="VRJ-Ng-vms"/>
@@ -151,6 +151,7 @@
             </constraints>
             <variation key="default">
                 <mask key="constraints">
+                    <exclude reference="UIp-pW-6uy"/>
                     <exclude reference="I6y-iw-UWN"/>
                     <exclude reference="RsJ-SG-1dn"/>
                     <exclude reference="VRJ-Ng-vms"/>
@@ -161,6 +162,7 @@
             </variation>
             <variation key="widthClass=compact">
                 <mask key="constraints">
+                    <include reference="UIp-pW-6uy"/>
                     <include reference="I6y-iw-UWN"/>
                     <include reference="aHK-Q1-VoG"/>
                     <include reference="zqy-VO-WH2"/>
