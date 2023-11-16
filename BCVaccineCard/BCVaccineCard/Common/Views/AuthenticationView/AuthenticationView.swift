@@ -25,6 +25,7 @@ class AuthenticationView: UIView, Theme {
     @IBOutlet weak private var buttonsStackView: UIStackView!
     @IBOutlet weak private var stackViewTrailingSpaceConstraint: NSLayoutConstraint!
     @IBOutlet weak private var stackViewLeadingSpaceConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var buttonsStackViewBottomConstraint: NSLayoutConstraint!
    
     
     private var completion: ((Result)->Void)?
@@ -130,6 +131,7 @@ class AuthenticationView: UIView, Theme {
         guard Constants.deviceType == .iPad else { return }
         stackViewTrailingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 200 : 90
         stackViewLeadingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 200 : 90
+        buttonsStackViewBottomConstraint.constant = UIDevice.current.orientation.isLandscape ? 144 : 330
         if UIDevice.current.orientation.isLandscape {
             buttonsStackView.removeArrangedSubview(loginButton)
             buttonsStackView.addArrangedSubview(loginButton)
