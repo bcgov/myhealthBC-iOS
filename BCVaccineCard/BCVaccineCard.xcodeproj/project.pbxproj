@@ -372,6 +372,9 @@
 		2D6DF35929F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */; };
 		2D6DF35A29F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */; };
 		2D6DF35B29F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */; };
+		2D79E4242B075D550075FFB3 /* iPadHome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D79E4232B075D550075FFB3 /* iPadHome.storyboard */; };
+		2D79E4252B075D550075FFB3 /* iPadHome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D79E4232B075D550075FFB3 /* iPadHome.storyboard */; };
+		2D79E4262B075D550075FFB3 /* iPadHome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D79E4232B075D550075FFB3 /* iPadHome.storyboard */; };
 		2D81887B2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */; };
 		2D81887C2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */; };
 		2D81887D2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */; };
@@ -1725,6 +1728,7 @@
 		2D6DF34F29F27CD500F1150F /* NavBarDropDownView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavBarDropDownView.xib; sourceTree = "<group>"; };
 		2D6DF35429F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarDropDownOptionTableViewCell.swift; sourceTree = "<group>"; };
 		2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavBarDropDownOptionTableViewCell.xib; sourceTree = "<group>"; };
+		2D79E4232B075D550075FFB3 /* iPadHome.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = iPadHome.storyboard; sourceTree = "<group>"; };
 		2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageHomeScreenViewController.swift; sourceTree = "<group>"; };
 		2D81887E2A71226A00894756 /* ManageHomeScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageHomeScreenViewModel.swift; sourceTree = "<group>"; };
 		2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsService.swift; sourceTree = "<group>"; };
@@ -2817,6 +2821,14 @@
 			path = NavBarDropDownOptionTableViewCell;
 			sourceTree = "<group>";
 		};
+		2D79E4222B075D3A0075FFB3 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				2D79E4232B075D550075FFB3 /* iPadHome.storyboard */,
+			);
+			path = iPad;
+			sourceTree = "<group>";
+		};
 		2D8188792A710F0E00894756 /* ManageHomeScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -3698,6 +3710,7 @@
 		7944F6AD26F129DE006B9444 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				2D79E4222B075D3A0075FFB3 /* iPad */,
 				7944F67E26F12613006B9444 /* Main.storyboard */,
 				79B9D01627E2950000987D9F /* Home.storyboard */,
 				79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */,
@@ -4656,6 +4669,7 @@
 				7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */,
 				799E0AFF27D13F43009C68FE /* Reusable.storyboard in Resources */,
 				3E7306E928B5F123007FED05 /* ReccomandationTableViewCell.xib in Resources */,
+				2D79E4252B075D550075FFB3 /* iPadHome.storyboard in Resources */,
 				3E31EA9329141F5000E344E6 /* ForceUpdateView.xib in Resources */,
 				2D1C8D132A79F6E5005204B7 /* ManageQuickLinkTableViewCell.xib in Resources */,
 				29A4DF4727DA674100D5E901 /* FilterRecordsView.xib in Resources */,
@@ -4699,6 +4713,7 @@
 				297F6DB5280F16540023E89C /* AuthenticationView.xib in Resources */,
 				3E048CC8291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
 				3E5A68E1298C57C500E94A01 /* DBLoadFatalError.xib in Resources */,
+				2D79E4262B075D550075FFB3 /* iPadHome.storyboard in Resources */,
 				2DF6657B2A3068160009D8F0 /* SegmentedView.xib in Resources */,
 				297F6DB6280F16A70023E89C /* AuthenticationInfoView.xib in Resources */,
 				2DF2102A28DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */,
@@ -4939,6 +4954,7 @@
 				798006422852C66E006E390F /* BCSans-BoldItalic.otf in Resources */,
 				798006432852C66E006E390F /* Reusable.storyboard in Resources */,
 				3E7306E528B5EF32007FED05 /* ReccomandationTableViewCell.xib in Resources */,
+				2D79E4242B075D550075FFB3 /* iPadHome.storyboard in Resources */,
 				3E31EA9229141F5000E344E6 /* ForceUpdateView.xib in Resources */,
 				2D1C8D122A79F6E5005204B7 /* ManageQuickLinkTableViewCell.xib in Resources */,
 				798006442852C66E006E390F /* FilterRecordsView.xib in Resources */,

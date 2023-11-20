@@ -18,14 +18,20 @@ class LocalAuthPrivacyView: UIView, UITextViewDelegate, Theme {
         self.removeFromSuperview()
     }
     
-    public func show(over parentView: UIView) {
+    public func show(over parentView: UIView, foriPad: Bool) {
+        // TODO: Adjust programatically here
         self.frame = parentView.bounds
         let transition = CATransition()
         transition.type = CATransitionType.push
         transition.subtype = CATransitionSubtype.fromLeft
         parentView.layer.add(transition, forKey: nil)
         parentView.addSubview(self)
-        self.addEqualSizeContraints(to: parentView)
+        if foriPad {
+            self.center(in: parentView, width: 604, height: 387)
+            backButton.setImage(UIImage(named: "close-icon-blue"), for: .normal)
+        } else {
+            self.addEqualSizeContraints(to: parentView)
+        }
         style()
     }
     

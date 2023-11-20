@@ -207,7 +207,16 @@ class LocalAuthView: UIView, Theme {
     
     @objc func showPrivacy(_ sender: UITapGestureRecognizer? = nil) {
         let privacyView: LocalAuthPrivacyView = LocalAuthPrivacyView.fromNib()
-        privacyView.show(over: self)
+        let foriPad = Constants.deviceType == .iPad
+        if foriPad {
+            // Show gray background here
+            let grayView = UIView(frame: self.frame)
+            grayView.backgroundColor = AppColours.backgroundGray
+            self.addSubview(grayView)
+            grayView.addEqualSizeContraints(to: self)
+            
+        }
+        privacyView.show(over: self, foriPad: foriPad)
     }
     
     func setState(state: LocalAuthView.State) {
@@ -255,6 +264,9 @@ extension LocalAuthView {
         rightLeadingSubtitleConstraint.constant = constant
         rightLeadingInfoConstraint.constant = constant
         infoLabel.textAlignment = .left
+        usePasscodeButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        useTouchIDButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        turnOnTouchIDButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
     }
     
     @objc private func deviceDidRotate(_ notification: Notification) {
