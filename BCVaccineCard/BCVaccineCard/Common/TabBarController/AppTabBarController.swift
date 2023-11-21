@@ -56,6 +56,7 @@ class AppTabBarController: UITabBarController {
             self.setupListeners()
             self.showOnBoardingIfNeeded() { authenticatedDuringOnBoarding in
                 self.setup(selectedIndex: 0)
+                // TODO: Show iPad side tab here (notification)
                 if authenticatedDuringOnBoarding {
                     self.performSync()
                 }
@@ -195,6 +196,7 @@ class AppTabBarController: UITabBarController {
         guard let first = unseen.first else {
             return completion(false)
         }
+        // TODO: Hide ipad side tab here (notification)
         let vm = InitialOnboardingViewController.ViewModel(delegate: self, startScreenNumber: first, screensToShow: unseen, completion: completion)
         let vc = InitialOnboardingViewController.construct(viewModel: vm)
         vc.modalPresentationStyle = .overFullScreen

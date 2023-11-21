@@ -39,6 +39,14 @@
             </objects>
             <point key="canvasLocation" x="107" y="-2"/>
         </scene>
+        <!--iPad Parent Split View Controller-->
+        <scene sceneID="COn-2j-lhr">
+            <objects>
+                <splitViewController storyboardIdentifier="iPadParentSplitViewController" allowDoubleColumnStyle="YES" primaryBackgroundStyle="sidebar" id="3su-u8-tJb" customClass="iPadParentSplitViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zoQ-oY-JvZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="83" y="826"/>
+        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">

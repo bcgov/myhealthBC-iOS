@@ -8,22 +8,42 @@
 import UIKit
 
 class iPadParentSplitViewController: UISplitViewController {
+    
+    class func construct(authManager: AuthManager,
+                         syncService: SyncService,
+                         networkService: Network,
+                         configService: MobileConfigService
+    ) -> iPadParentSplitViewController {
+        if let vc =  Storyboard.iPadHome.instantiateViewController(withIdentifier: String(describing: iPadParentSplitViewController.self)) as? iPadParentSplitViewController {
+            return vc
+        }
+        return iPadParentSplitViewController()
+    }
+    
+    private var authManager: AuthManager?
+    private var syncService: SyncService?
+    private var networkService: Network?
+    private var configService: MobileConfigService?
+    
+    private var appTabBar: AppTabBarController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        configure()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    // TODO: Set configuration for side menu, and app tab bar - hide/remove and show/add side tab bar controller based on onboarding screen or not
+    private func configure() {
+        guard let authManager = authManager,
+              let syncService = syncService,
+              let networkService = networkService,
+              let configService = configService
+            else {
+            showToast(message: "Fatal Error")
+            return
+        }
+        appTabBar = AppTabBarController.construct(authManager: authManager, syncService: syncService, networkService: networkService, configService: configService)
     }
-    */
+    
 
 }

@@ -231,11 +231,20 @@ extension AppDelegate {
             showToast(message: "Fatal Error")
             return
         }
-        let vc = AppTabBarController.construct(authManager: authManager,
-                                               syncService: syncService,
-                                               networkService: networkService,
-                                               configService: configService)
-        self.window?.rootViewController = vc
+        if Constants.deviceType == .iPad {
+            let vc = iPadParentSplitViewController.construct(authManager: authManager,
+                                                             syncService: syncService,
+                                                             networkService: networkService,
+                                                             configService: configService)
+            self.window?.rootViewController = vc
+        } else {
+            let vc = AppTabBarController.construct(authManager: authManager,
+                                                   syncService: syncService,
+                                                   networkService: networkService,
+                                                   configService: configService)
+            self.window?.rootViewController = vc
+        }
+        
 //        let unseen = Defaults.unseenOnBoardingScreens()
 //        guard let first = unseen.first else {
 //            let vc = AppTabBarController.construct(authManager: authManager,
