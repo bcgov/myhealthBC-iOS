@@ -33,6 +33,8 @@ class LocalAuthView: UIView, Theme {
     var useTouchIdCallback: (()->Void)?
     var usePasscodeCallback: (()->Void)?
     
+    var grayView: UIView?
+    
     enum State {
         case Success
         case Fail
@@ -210,7 +212,8 @@ class LocalAuthView: UIView, Theme {
         let foriPad = Constants.deviceType == .iPad
         if foriPad {
             // Show gray background here
-            let grayView = UIView(frame: self.frame)
+            grayView = UIView(frame: self.frame)
+            guard let grayView = grayView else { return }
             grayView.backgroundColor = AppColours.backgroundGray
             self.addSubview(grayView)
             grayView.addEqualSizeContraints(to: self)

@@ -14,7 +14,12 @@ class LocalAuthPrivacyView: UIView, UITextViewDelegate, Theme {
 //    @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var tableView: UITableView!
     
+    var parentView: LocalAuthView?
+    
     @IBAction func backButtonAction(_ sender: Any) {
+        if Constants.deviceType == .iPad {
+            parentView?.grayView?.removeFromSuperview()
+        }
         self.removeFromSuperview()
     }
     
@@ -22,14 +27,20 @@ class LocalAuthPrivacyView: UIView, UITextViewDelegate, Theme {
         // TODO: Adjust programatically here
         self.frame = parentView.bounds
         let transition = CATransition()
-        transition.type = CATransitionType.push
-        transition.subtype = CATransitionSubtype.fromLeft
-        parentView.layer.add(transition, forKey: nil)
-        parentView.addSubview(self)
+        
         if foriPad {
+            transition.type = CATransitionType.push
+            transition.subtype = CATransitionSubtype.fromTop
+            parentView.layer.add(transition, forKey: nil)
+            parentView.addSubview(self)
+            self.parentView = parentView as? LocalAuthView
             self.center(in: parentView, width: 604, height: 387)
             backButton.setImage(UIImage(named: "close-icon-blue"), for: .normal)
         } else {
+            transition.type = CATransitionType.push
+            transition.subtype = CATransitionSubtype.fromLeft
+            parentView.layer.add(transition, forKey: nil)
+            parentView.addSubview(self)
             self.addEqualSizeContraints(to: parentView)
         }
         style()
