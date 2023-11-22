@@ -47,6 +47,14 @@
             </objects>
             <point key="canvasLocation" x="83" y="826"/>
         </scene>
+        <!--Reusable Split View Controller-->
+        <scene sceneID="eqE-DB-h6C">
+            <objects>
+                <splitViewController storyboardIdentifier="ReusableSplitViewController" allowDoubleColumnStyle="YES" primaryBackgroundStyle="sidebar" id="y7W-HI-hcJ" customClass="ReusableSplitViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9jg-an-79e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="82" y="1519"/>
+        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">

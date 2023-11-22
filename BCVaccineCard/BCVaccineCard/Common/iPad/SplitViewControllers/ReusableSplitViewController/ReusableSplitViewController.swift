@@ -8,6 +8,18 @@
 import UIKit
 
 class ReusableSplitViewController: UISplitViewController {
+    
+    class func construct(masterVC: UIViewController, secondaryVC: UIViewController?) -> ReusableSplitViewController {
+        if let vc =  Storyboard.iPadHome.instantiateViewController(withIdentifier: String(describing: ReusableSplitViewController.self)) as? ReusableSplitViewController {
+            vc.masterVC = masterVC
+            vc.secondaryVC = secondaryVC
+            return vc
+        }
+        return ReusableSplitViewController()
+    }
+    
+    private var masterVC: UIViewController?
+    private var secondaryVC: UIViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -107,4 +107,45 @@ enum AppTabs: Int, CaseIterable {
         }
     }
     
+    // TODO: Adjust this function for split screen VC
+    func iPadProperties(delegate: TabDelegate,
+                    authManager: AuthManager,
+                    syncService: SyncService,
+                    networkService: Network,
+                    configService: MobileConfigService,
+                    patient: Patient?
+    ) -> ReusableSplitViewController? {
+        
+        switch self {
+        case .Home:
+            let masterVC = HomeScreenViewController.construct()
+            var secondaryVC: NotificationsViewController?
+            if let patient = patient {
+                let vm = NotificationsViewController.ViewModel.init(patient: patient, network: networkService, authManager: authManager, configService: configService)
+                secondaryVC = NotificationsViewController.construct(viewModel: vm)
+            } else {
+                secondaryVC = nil
+            }
+            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: secondaryVC)
+            
+        case .Proofs:
+            return nil
+        case .Dependents:
+            let vm = DependentsHomeViewController.ViewModel(patient: patient)
+            let masterVC = DependentsHomeViewController.construct(viewModel: vm)
+            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+        case .UnAuthenticatedRecords:
+            let masterVC = HealthRecordsViewController.construct()
+            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+        case .AuthenticatedRecords:
+            let vm = UsersListOfRecordsViewController.ViewModel(patient: patient, authenticated: patient?.authenticated ?? false, userType: .PrimaryPatient)
+            let masterVC = UsersListOfRecordsViewController.construct(viewModel: vm)
+            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+        case .Services:
+            let vm = ServicesViewController.ViewModel(authManager: authManager, network: networkService, configService: configService)
+            let masterVC = ServicesViewController.construct(viewModel: vm)
+            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+        }
+    }
+    
 }

@@ -85,7 +85,4 @@ extension iPadSideTabTableViewController: UITableViewDelegate, UITableViewDataSo
         NotificationCenter.default.post(name: .tabChangedFromiPad, object: nil, userInfo: userInfo as [AnyHashable : Any])
     }
     
-    
-    
-    
 }

@@ -260,7 +260,7 @@ class AppTabBarController: UITabBarController {
     private func setViewControllers(tabs: [AppTabs]) -> [UIViewController] {
         return tabs.compactMap({setViewController(tab: $0)})
     }
-    
+    // TODO: Adjust this function to accomodate for iPad
     private func setViewController(tab vc: AppTabs) -> UIViewController? {
         
         guard let authManager = authManager,
@@ -270,26 +270,50 @@ class AppTabBarController: UITabBarController {
         else {
             return nil
         }
-        
-        guard let properties = vc.properties(
-            delegate: self,
-            authManager: authManager,
-            syncService: syncService,
-            networkService: networkService,
-            configService: configService,
-            patient: self.patient
-        )  else {
-            return nil
+        if Constants.deviceType == .iPad {
+            // TODO: Update this
+            // FIXME: update this section for iPad
+            guard let properties = vc.iPadProperties(
+                delegate: self,
+                authManager: authManager,
+                syncService: syncService,
+                networkService: networkService,
+                configService: configService,
+                patient: self.patient
+            )  else {
+                return nil
+            }
+            
+            let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
+    //        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+            tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansRegularWithSize(size: 10)], for: .normal)
+            let viewController = properties.baseViewController
+            viewController.tabBarItem = tabBarItem
+            viewController.title = properties.title
+            let navController = CustomNavigationController.init(rootViewController: viewController)
+            return navController
+        } else {
+            guard let properties = vc.properties(
+                delegate: self,
+                authManager: authManager,
+                syncService: syncService,
+                networkService: networkService,
+                configService: configService,
+                patient: self.patient
+            )  else {
+                return nil
+            }
+            
+            let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
+    //        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+            tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansRegularWithSize(size: 10)], for: .normal)
+            let viewController = properties.baseViewController
+            viewController.tabBarItem = tabBarItem
+            viewController.title = properties.title
+            let navController = CustomNavigationController.init(rootViewController: viewController)
+            return navController
         }
         
-        let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
-//        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
-        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansRegularWithSize(size: 10)], for: .normal)
-        let viewController = properties.baseViewController
-        viewController.tabBarItem = tabBarItem
-        viewController.title = properties.title
-        let navController = CustomNavigationController.init(rootViewController: viewController)
-        return navController
     }
     
     func whenConnected() {
