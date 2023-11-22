@@ -27,7 +27,7 @@ class ReusableSplitViewController: UISplitViewController {
         // Do any additional setup after loading the view.
     }
     
-
+    // TODO: Play around with configuration here...
     /*
     // MARK: - Navigation
 

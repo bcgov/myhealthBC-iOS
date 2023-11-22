@@ -108,7 +108,7 @@ enum AppTabs: Int, CaseIterable {
     }
     
     // TODO: Adjust this function for split screen VC
-    func iPadProperties(delegate: TabDelegate,
+    func iPadSplitVC(delegate: TabDelegate,
                     authManager: AuthManager,
                     syncService: SyncService,
                     networkService: Network,
@@ -118,11 +118,13 @@ enum AppTabs: Int, CaseIterable {
         
         switch self {
         case .Home:
-            let masterVC = HomeScreenViewController.construct()
-            var secondaryVC: NotificationsViewController?
+            let masterVCRoot = HomeScreenViewController.construct()
+            let masterVC = CustomNavigationController.init(rootViewController: masterVCRoot)
+            var secondaryVC: CustomNavigationController?
             if let patient = patient {
                 let vm = NotificationsViewController.ViewModel.init(patient: patient, network: networkService, authManager: authManager, configService: configService)
-                secondaryVC = NotificationsViewController.construct(viewModel: vm)
+                let notificationVC = NotificationsViewController.construct(viewModel: vm)
+                secondaryVC = CustomNavigationController.init(rootViewController: notificationVC)
             } else {
                 secondaryVC = nil
             }
@@ -132,18 +134,22 @@ enum AppTabs: Int, CaseIterable {
             return nil
         case .Dependents:
             let vm = DependentsHomeViewController.ViewModel(patient: patient)
-            let masterVC = DependentsHomeViewController.construct(viewModel: vm)
+            let masterVCRoot = DependentsHomeViewController.construct(viewModel: vm)
+            let masterVC = CustomNavigationController.init(rootViewController: masterVCRoot)
             return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
         case .UnAuthenticatedRecords:
-            let masterVC = HealthRecordsViewController.construct()
+            let masterVCRoot = HealthRecordsViewController.construct()
+            let masterVC = CustomNavigationController.init(rootViewController: masterVCRoot)
             return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
         case .AuthenticatedRecords:
             let vm = UsersListOfRecordsViewController.ViewModel(patient: patient, authenticated: patient?.authenticated ?? false, userType: .PrimaryPatient)
-            let masterVC = UsersListOfRecordsViewController.construct(viewModel: vm)
+            let masterVCRoot = UsersListOfRecordsViewController.construct(viewModel: vm)
+            let masterVC = CustomNavigationController.init(rootViewController: masterVCRoot)
             return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
         case .Services:
             let vm = ServicesViewController.ViewModel(authManager: authManager, network: networkService, configService: configService)
-            let masterVC = ServicesViewController.construct(viewModel: vm)
+            let masterVCRoot = ServicesViewController.construct(viewModel: vm)
+            let masterVC = CustomNavigationController.init(rootViewController: masterVCRoot)
             return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
         }
     }

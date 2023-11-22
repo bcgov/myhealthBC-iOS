@@ -68,8 +68,6 @@ class AppTabBarController: UITabBarController {
         didSet {
             guard let selectedVC = viewControllers?[selectedIndex] else { return }
             selectedViewController?.tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
-//            let userInfo: [String: Int] = ["index": selectedIndex]
-//            NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: userInfo as [AnyHashable : Any])
         }
     }
     
@@ -121,6 +119,7 @@ class AppTabBarController: UITabBarController {
             self.performSync()
         }
         
+        guard Constants.deviceType == .iPad else { return }
         NotificationCenter.default.addObserver(self, selector: #selector(tabChangedFromiPad), name: .tabChangedFromiPad, object: nil)
     }
     
@@ -271,9 +270,7 @@ class AppTabBarController: UITabBarController {
             return nil
         }
         if Constants.deviceType == .iPad {
-            // TODO: Update this
-            // FIXME: update this section for iPad
-            guard let properties = vc.iPadProperties(
+            guard let splitVC = vc.iPadSplitVC(
                 delegate: self,
                 authManager: authManager,
                 syncService: syncService,
@@ -283,15 +280,7 @@ class AppTabBarController: UITabBarController {
             )  else {
                 return nil
             }
-            
-            let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
-    //        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
-            tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansRegularWithSize(size: 10)], for: .normal)
-            let viewController = properties.baseViewController
-            viewController.tabBarItem = tabBarItem
-            viewController.title = properties.title
-            let navController = CustomNavigationController.init(rootViewController: viewController)
-            return navController
+            return splitVC
         } else {
             guard let properties = vc.properties(
                 delegate: self,
@@ -338,6 +327,9 @@ extension AppTabBarController: TabDelegate {
             availableTabs = unAuthenticatedTabs
         }
         self.selectedIndex = availableTabs.firstIndex(where: {$0 == tab}) ?? 0
+        guard Constants.deviceType == .iPad else { return }
+        let userInfo: [String: Int] = ["index": self.selectedIndex]
+        NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: userInfo as [AnyHashable : Any])
     }
     
     func showLogin() {

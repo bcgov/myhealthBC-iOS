@@ -32,7 +32,7 @@ class iPadSideTabTableViewController: UIViewController {
             self.setupDataSource()
             self.tableView.reloadData()
         }
-//        NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
     }
     
     private func setupDataSource() {
@@ -43,12 +43,12 @@ class iPadSideTabTableViewController: UIViewController {
         }
     }
     
-//    @objc private func tabChanged(_ notification: Notification) {
-//        guard let userInfo = notification.userInfo as? [String: Int] else { return }
-//        guard let index = userInfo["index"] else { return }
-//        self.index = index
-//        self.tableView.reloadData()
-//    }
+    @objc private func tabChanged(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: Int] else { return }
+        guard let index = userInfo["index"] else { return }
+        self.index = index
+        self.tableView.reloadData()
+    }
 
 }
 
