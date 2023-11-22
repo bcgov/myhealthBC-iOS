@@ -97,6 +97,10 @@ class CommunicationBannerCollectionViewCell: UICollectionViewCell {
         textView.attributedText = textAttributed
         textView.delegate = self
         style()
+        
+        if Constants.deviceType == .iPad {
+            expandButton.isHidden = true
+        }
     }
 
     private func style() {

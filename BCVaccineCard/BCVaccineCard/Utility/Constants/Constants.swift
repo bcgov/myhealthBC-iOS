@@ -137,8 +137,9 @@ struct Constants {
     }
     
     struct CommunicationBannerHeights {
-        static let expanded: Int = 150
-        static let collapsed: Int = 75
+        static let expanded: Int = Constants.deviceType == .iPad ? 169 : 150
+        static let collapsed: Int = Constants.deviceType == .iPad ? 75 : 75
+        
     }
     
     static let vaccineTable: [VaccineTable] = [

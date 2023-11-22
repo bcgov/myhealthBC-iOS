@@ -9,11 +9,26 @@ import UIKit
 
 class iPadSideTabTableViewController: UIViewController {
     
+    class func construct() -> iPadSideTabTableViewController {
+        if let vc =  Storyboard.iPadHome.instantiateViewController(withIdentifier: String(describing: iPadSideTabTableViewController.self)) as? iPadSideTabTableViewController {
+            return vc
+        }
+        return iPadSideTabTableViewController()
+    }
+    
     @IBOutlet weak private var tableView: UITableView!
     
     private var dataSource: [AppTabs] = []
     
-    private var index = 0
+    private var index = 0 {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
+    
+    public func adjustUserInteraction(enabled: Bool) {
+        self.tableView.isUserInteractionEnabled = enabled
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +37,7 @@ class iPadSideTabTableViewController: UIViewController {
     
     private func setup() {
         self.view.backgroundColor = AppColours.appBlue
+        self.tableView.backgroundColor = AppColours.appBlue
         setupListeners()
         setupDataSource()
         tableViewSetup()

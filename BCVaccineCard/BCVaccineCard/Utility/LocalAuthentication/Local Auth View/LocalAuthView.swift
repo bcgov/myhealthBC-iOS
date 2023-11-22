@@ -89,6 +89,11 @@ class LocalAuthView: UIView, Theme {
         }
         tag = LocalAuthView.viewTag
         
+        if Constants.deviceType == .iPad {
+            let userInfo: [String: Bool] = ["hide": true]
+            NotificationCenter.default.post(name: .adjustIPadSideTab, object: nil, userInfo: userInfo as [AnyHashable : Any])
+        }
+        
         viewController.view.addSubview(self)
         addEqualSizeContraints(to: viewController.view)
         
@@ -113,9 +118,14 @@ class LocalAuthView: UIView, Theme {
                 self.layoutIfNeeded()
             } completion: { [weak self] done in
                 guard let self = self else {return}
+                if Constants.deviceType == .iPad {
+                    let userInfo: [String: Bool] = ["hide": false]
+                    NotificationCenter.default.post(name: .adjustIPadSideTab, object: nil, userInfo: userInfo as [AnyHashable : Any])
+                }
                 self.removeFromSuperview()
             }
         }
+        
     }
 
     // MARK: States

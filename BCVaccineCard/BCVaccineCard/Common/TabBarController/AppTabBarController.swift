@@ -55,8 +55,14 @@ class AppTabBarController: UITabBarController {
             self.setup(selectedIndex: 0)
             self.setupListeners()
             self.showOnBoardingIfNeeded() { authenticatedDuringOnBoarding in
+                
+                if Constants.deviceType == .iPad {
+                    let userInfo: [String: Bool] = ["hide": false]
+                    NotificationCenter.default.post(name: .adjustIPadSideTab, object: nil, userInfo: userInfo as [AnyHashable : Any])
+                }
+                
                 self.setup(selectedIndex: 0)
-                // TODO: Show iPad side tab here (notification)
+        
                 if authenticatedDuringOnBoarding {
                     self.performSync()
                 }
@@ -206,7 +212,12 @@ class AppTabBarController: UITabBarController {
         guard let first = unseen.first else {
             return completion(false)
         }
-        // TODO: Hide ipad side tab here (notification)
+
+        if Constants.deviceType == .iPad {
+            let userInfo: [String: Bool] = ["hide": true]
+            NotificationCenter.default.post(name: .adjustIPadSideTab, object: nil, userInfo: userInfo as [AnyHashable : Any])
+        }
+        
         let vm = InitialOnboardingViewController.ViewModel(delegate: self, startScreenNumber: first, screensToShow: unseen, completion: completion)
         let vc = InitialOnboardingViewController.construct(viewModel: vm)
         vc.modalPresentationStyle = .overFullScreen

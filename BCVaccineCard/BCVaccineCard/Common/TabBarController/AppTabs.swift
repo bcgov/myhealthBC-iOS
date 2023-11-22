@@ -26,7 +26,7 @@ enum AppTabs: Int, CaseIterable {
         case .UnAuthenticatedRecords, .AuthenticatedRecords: return UIImage(named: "iPad-records-selected")
         case .Services: return UIImage(named: "iPad-services-selected")
         case .Proofs: return nil
-        case .Dependents: return UIImage(named: "iPad-dependents-selected")
+        case .Dependents: return UIImage(named: "iPad-dependent-selected")
         }
     }
     
@@ -36,7 +36,7 @@ enum AppTabs: Int, CaseIterable {
         case .UnAuthenticatedRecords, .AuthenticatedRecords: return UIImage(named: "iPad-records-unselected")
         case .Services: return UIImage(named: "iPad-services-unselected")
         case .Proofs: return nil
-        case .Dependents: return UIImage(named: "iPad-dependents-unselected")
+        case .Dependents: return UIImage(named: "iPad-dependent-unselected")
         }
     }
     
@@ -114,7 +114,7 @@ enum AppTabs: Int, CaseIterable {
                     networkService: Network,
                     configService: MobileConfigService,
                     patient: Patient?
-    ) -> ReusableSplitViewController? {
+    ) -> UIViewController? {
         
         switch self {
         case .Home:
@@ -128,7 +128,8 @@ enum AppTabs: Int, CaseIterable {
             } else {
                 secondaryVC = nil
             }
-            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: secondaryVC)
+//            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: secondaryVC)
+            return masterVC
             
         case .Proofs:
             return nil
@@ -136,21 +137,48 @@ enum AppTabs: Int, CaseIterable {
             let vm = DependentsHomeViewController.ViewModel(patient: patient)
             let masterVCRoot = DependentsHomeViewController.construct(viewModel: vm)
             let masterVC = CustomNavigationController.init(rootViewController: masterVCRoot)
-            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+//            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+            return masterVC
         case .UnAuthenticatedRecords:
             let masterVCRoot = HealthRecordsViewController.construct()
             let masterVC = CustomNavigationController.init(rootViewController: masterVCRoot)
-            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+//            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+            return masterVC
         case .AuthenticatedRecords:
             let vm = UsersListOfRecordsViewController.ViewModel(patient: patient, authenticated: patient?.authenticated ?? false, userType: .PrimaryPatient)
             let masterVCRoot = UsersListOfRecordsViewController.construct(viewModel: vm)
             let masterVC = CustomNavigationController.init(rootViewController: masterVCRoot)
-            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+//            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+            return masterVC
         case .Services:
             let vm = ServicesViewController.ViewModel(authManager: authManager, network: networkService, configService: configService)
             let masterVCRoot = ServicesViewController.construct(viewModel: vm)
             let masterVC = CustomNavigationController.init(rootViewController: masterVCRoot)
-            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+//            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: nil)
+            return masterVC
+        }
+    }
+    
+    func iPadSplitVCTest(delegate: TabDelegate,
+                    authManager: AuthManager,
+                    syncService: SyncService,
+                    networkService: Network,
+                    configService: MobileConfigService,
+                    patient: Patient?
+    ) -> UIViewController? {
+        
+        switch self {
+        case .Home:
+//            let masterVCRoot = TestViewController.construct(tab: "Home")
+//            let masterVC = CustomNavigationController.init(rootViewController: masterVCRoot)
+            
+            let masterVCRoot = HomeScreenViewController.construct()
+            let masterVC = CustomNavigationController.init(rootViewController: masterVCRoot)
+            
+            return masterVC
+            
+        case .Proofs, .Dependents, .UnAuthenticatedRecords, .AuthenticatedRecords, .Services:
+            return nil
         }
     }
     

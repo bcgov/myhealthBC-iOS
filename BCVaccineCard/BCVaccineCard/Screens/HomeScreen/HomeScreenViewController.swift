@@ -13,10 +13,11 @@ class HomeScreenViewController: BaseViewController {
         case banner(data: CommunicationBanner)
         case loginStatus(status: AuthStatus)
         case quickAccess(types: [HomeScreenCellType]) // Note: Will have to modify this slightly once we are hitting the API
+        case iPadFirstSection(data: CommunicationBanner?, status: AuthStatus)
         
         var isQuickAccessSection: Bool {
             switch self {
-            case .banner, .loginStatus: return false
+            case .banner, .loginStatus, .iPadFirstSection: return false
             case .quickAccess: return true
             }
         }
@@ -126,15 +127,26 @@ class HomeScreenViewController: BaseViewController {
         default: break
         }
         
-        if let banner = communicationBanner {
-            data.insert(.banner(data: banner), at: 0)
+        if Constants.deviceType == .iPad {
+            var iPadBanner: CommunicationBanner?
+            if let banner = communicationBanner {
+                iPadBanner = banner
+            }
+            data.insert(.iPadFirstSection(data: iPadBanner, status: authManager.authStaus), at: 0)
+        } else {
+            if let banner = communicationBanner {
+                data.insert(.banner(data: banner), at: 0)
+            }
+            if authManager.authStaus != .Authenticated {
+                let index = data.count - 1
+                data.insert(.loginStatus(status: authManager.authStaus), at: index)
+            }
         }
-        if authManager.authStaus != .Authenticated {
-            let index = data.count - 1
-            data.insert(.loginStatus(status: authManager.authStaus), at: index)
-        }
+        
+        
         return data
     }
+    
     
     private func reduceQuickLinksPreferencesAndSort() -> [HomeScreenCellType] {
         let phn = StorageService.shared.fetchAuthenticatedPatient()?.phn ?? ""
@@ -222,6 +234,7 @@ extension HomeScreenViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(authStatusChanged), name: .authStatusChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(storageChangeEvent), name: .storageChangeEvent, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .deviceDidRotate, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
     }
         
@@ -272,7 +285,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
         collectionView.dataSource = self
     }
     
-    func cellSize(for sectionType: DataSource) -> CGSize {
+    func cellSize(for sectionType: DataSource, iPad: Bool) -> CGSize {
         let cView = collectionView.frame
         switch sectionType {
         case .banner:
@@ -281,10 +294,29 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
             let height: CGFloat = status == .UnAuthenticated ? 169 : 139
             return CGSize(width: cView.width, height: height)
         case .quickAccess:
-            let width = (cView.width / 2)
-            let height = width * (125/153)
+            var width: CGFloat
+            var height: CGFloat
+            if iPad {
+                if UIDevice.current.orientation.isLandscape {
+                    width = (cView.width / 4)
+                    height = width * (105/228)
+                } else {
+                    width = (cView.width / 3)
+                    height = width * (140/226)
+                }
+            } else {
+                width = (cView.width / 2)
+                height = width * (125/153)
+            }
             return CGSize(width: width, height: height)
+        case .iPadFirstSection(data: let data, status: let status):
+            if (status != .Authenticated && data != nil) {
+                return CGSize(width: (cView.width/2) - 20, height: bannerHeight.getCGFloat)
+            } else {
+                return CGSize(width: cView.width, height: bannerHeight.getCGFloat)
+            }
         }
+        
     }
     
     func getDataSourceType(dataSource: [DataSource], section: Int) -> DataSource? {
@@ -302,7 +334,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
             // TODO: Come up with better default size
             return CGSize(width: 100, height: 100)
         }
-        return cellSize(for: ds)
+        return cellSize(for: ds, iPad: Constants.deviceType == .iPad)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -310,6 +342,10 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
         switch type {
         case .banner, .loginStatus: return 1
         case .quickAccess(types: let types): return types.count
+        case .iPadFirstSection(data: let banner, status: let status):
+            let authStatusCount = status != .Authenticated ? 1 : 0
+            let bannerCount = banner != nil ? 1 : 0
+            return authStatusCount + bannerCount
         }
     }
     
@@ -330,7 +366,39 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
             let type = types[indexPath.row]
             cell.configure(forType: type, delegateOwner: self, indexPath: indexPath)
             return cell
+        case .iPadFirstSection(data: let banner, status: let status):
+            return generateIPadCell(banner: banner, status: status, indexPath: indexPath, collectionView: collectionView)
         }
+    }
+    
+    private func generateIPadCell(banner: CommunicationBanner?, status: AuthStatus, indexPath: IndexPath, collectionView: UICollectionView) -> UICollectionViewCell {
+        if banner != nil && status != .Authenticated {
+            if indexPath.row == 0 {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeScreenAuthCollectionViewCell.getName, for: indexPath) as? HomeScreenAuthCollectionViewCell else { return UICollectionViewCell() }
+                let type: HomeScreenAuthCollectionViewCell.ContentType = authManager.authStaus == .AuthenticationExpired ? .LoginExpired : .Unauthenticated
+                cell.configure(type: type, delegateOwner: self)
+                return cell
+            } else if indexPath.row == 1 {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CommunicationBannerCollectionViewCell.getName, for: indexPath) as? CommunicationBannerCollectionViewCell else { return UICollectionViewCell() }
+                cell.configure(data: communicationBanner, delegate: self)
+                return cell
+            }
+        } else if banner == nil && status != .Authenticated {
+            if indexPath.row == 0 {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeScreenAuthCollectionViewCell.getName, for: indexPath) as? HomeScreenAuthCollectionViewCell else { return UICollectionViewCell() }
+                let type: HomeScreenAuthCollectionViewCell.ContentType = authManager.authStaus == .AuthenticationExpired ? .LoginExpired : .Unauthenticated
+                cell.configure(type: type, delegateOwner: self)
+                return cell
+            }
+        } else if banner != nil && status == .Authenticated {
+            if indexPath.row == 0 {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CommunicationBannerCollectionViewCell.getName, for: indexPath) as? CommunicationBannerCollectionViewCell else { return UICollectionViewCell() }
+                cell.configure(data: communicationBanner, delegate: self)
+                return cell
+            }
+        }
+        return UICollectionViewCell()
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -361,6 +429,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
         switch ds {
         case .banner(data: let data): break
         case .loginStatus(status: let status): break
+        case .iPadFirstSection(data: let data, status: let status): break
         case .quickAccess(types: let types):
             let type = types[indexPath.row]
             goToTabForType(type: type)
@@ -566,6 +635,23 @@ extension HomeScreenViewController {
                 show(tab: .AuthenticatedRecords, appliedFilter: type.name.getFilterType)
             }
         }
+    }
+}
+
+// MARK: iPad rotation
+extension HomeScreenViewController {
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
+    @objc private func deviceDidRotate(_ notification: Notification) {
+        adjustForiPad()
+    }
+    
+    private func adjustForiPad() {
+        
     }
 }
 

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+// NOTE: Not using for now, not until I can get things sorted
 class ReusableSplitViewController: UISplitViewController {
     
     class func construct(masterVC: UIViewController, secondaryVC: UIViewController?) -> ReusableSplitViewController {
@@ -23,19 +23,59 @@ class ReusableSplitViewController: UISplitViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        setup()
     }
     
-    // TODO: Play around with configuration here...
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func setup() {
+        delegate = self
+        if let masterVC = masterVC {
+            self.viewControllers = [masterVC]
+        }
+//        if let secondaryVC = secondaryVC {
+//            self.viewControllers.append(secondaryVC)
+//        }
+        preferredDisplayMode = .oneBesideSecondary
+        if #available(iOS 14.0, *) {
+            preferredSplitBehavior = .tile
+        }
+        presentsWithGesture = false
+        preferredPrimaryColumnWidthFraction = 2.0
     }
-    */
+    
+    func configure() {
+        
+    }
 
+}
+
+extension ReusableSplitViewController: UISplitViewControllerDelegate {
+    func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
+        return false
+    }
+}
+
+
+class TestViewController: UIViewController {
+    
+    class func construct(tab: String) -> TestViewController {
+        if let vc =  Storyboard.iPadHome.instantiateViewController(withIdentifier: String(describing: TestViewController.self)) as? TestViewController {
+            vc.tab = tab
+            return vc
+        }
+        return TestViewController()
+    }
+    
+    private var tab: String!
+    
+    @IBOutlet weak private var labelTab: UILabel!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setup(tab: tab)
+        self.view.backgroundColor = .green
+    }
+    
+    private func setup(tab: String) {
+        labelTab.text = tab
+    }
 }
