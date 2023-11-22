@@ -277,8 +277,15 @@ extension InitialOnboardingViewController {
                 accessibilityValue = AccessibilityLabels.Onboarding.buttonGetStartedTitle
                 accessibilityHint = AccessibilityLabels.Onboarding.buttonGetStartedHint
                 skipButton.alpha = 0
+                if Constants.deviceType == .iPad {
+                    skipButton.isHidden = true
+                }
+                
             } else {
                 skipButton.alpha = 1
+                if Constants.deviceType == .iPad {
+                    skipButton.isHidden = false
+                }
                 buttonType = .next
                 accessibilityValue = AccessibilityLabels.Onboarding.buttonNextTitle
                 accessibilityHint = AccessibilityLabels.Onboarding.buttonNextHint

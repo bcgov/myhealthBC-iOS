@@ -232,10 +232,15 @@ extension AppDelegate {
             return
         }
         if Constants.deviceType == .iPad {
-            let vc = iPadParentSplitViewController.construct(authManager: authManager,
-                                                             syncService: syncService,
-                                                             networkService: networkService,
-                                                             configService: configService)
+//            let vc = iPadParentSplitViewController.construct(authManager: authManager,
+//                                                             syncService: syncService,
+//                                                             networkService: networkService,
+//                                                             configService: configService)
+//            self.window?.rootViewController = vc
+            let vc = AppTabBarController.construct(authManager: authManager,
+                                                   syncService: syncService,
+                                                   networkService: networkService,
+                                                   configService: configService)
             self.window?.rootViewController = vc
         } else {
             let vc = AppTabBarController.construct(authManager: authManager,
