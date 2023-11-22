@@ -15,6 +15,10 @@ class iPadParentSplitViewController: UISplitViewController {
                          configService: MobileConfigService
     ) -> iPadParentSplitViewController {
         if let vc =  Storyboard.iPadHome.instantiateViewController(withIdentifier: String(describing: iPadParentSplitViewController.self)) as? iPadParentSplitViewController {
+            vc.authManager = authManager
+            vc.syncService = syncService
+            vc.networkService = networkService
+            vc.configService = configService
             return vc
         }
         return iPadParentSplitViewController()

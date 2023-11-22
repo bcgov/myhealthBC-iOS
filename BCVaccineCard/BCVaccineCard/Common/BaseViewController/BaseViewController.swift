@@ -63,11 +63,11 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
                 hideTab = false
             }
         }
-        
+     
         if hideTab {
             self.parent?.tabBarController?.tabBar.isHidden = true
         } else {
-            self.parent?.tabBarController?.tabBar.isHidden = false
+            self.parent?.tabBarController?.tabBar.isHidden = Constants.deviceType == .iPad
         }
     }
     

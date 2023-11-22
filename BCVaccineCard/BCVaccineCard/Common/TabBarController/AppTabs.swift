@@ -20,6 +20,36 @@ enum AppTabs: Int, CaseIterable {
         return self.rawValue
     }
     
+    var getIPadIconSelected: UIImage? {
+        switch self {
+        case .Home: return UIImage(named: "iPad-home-selected")
+        case .UnAuthenticatedRecords, .AuthenticatedRecords: return UIImage(named: "iPad-records-selected")
+        case .Services: return UIImage(named: "iPad-services-selected")
+        case .Proofs: return nil
+        case .Dependents: return UIImage(named: "iPad-dependents-selected")
+        }
+    }
+    
+    var getIPadIconUnselected: UIImage? {
+        switch self {
+        case .Home: return UIImage(named: "iPad-home-unselected")
+        case .UnAuthenticatedRecords, .AuthenticatedRecords: return UIImage(named: "iPad-records-unselected")
+        case .Services: return UIImage(named: "iPad-services-unselected")
+        case .Proofs: return nil
+        case .Dependents: return UIImage(named: "iPad-dependents-unselected")
+        }
+    }
+    
+    var getIPadText: String? {
+        switch self {
+        case .Home: return "Home"
+        case .UnAuthenticatedRecords, .AuthenticatedRecords: return "Records"
+        case .Services: return "Service"
+        case .Proofs: return nil
+        case .Dependents: return "Dependent"
+        }
+    }
+
     struct Properties {
         let title: String
         let selectedTabBarImage: UIImage

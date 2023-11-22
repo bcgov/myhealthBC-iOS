@@ -8,16 +8,29 @@
 import UIKit
 
 class iPadSideTabTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak private var homeScreenTabIconImageView: UIImageView!
+    @IBOutlet weak private var homeScreenTabTitleLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        setup()
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    private func setup() {
+        self.contentView.backgroundColor = AppColours.appBlue
+        homeScreenTabTitleLabel.textColor = .white
+    }
+    
+    private func setTextFont(selected: Bool) {
+        homeScreenTabTitleLabel.font = selected ? UIFont.bcSansBoldWithSize(size: 12) : UIFont.bcSansRegularWithSize(size: 12)
+    }
+    
+    func configure(tab: AppTabs, selected: Bool) {
+        setTextFont(selected: selected)
+        homeScreenTabTitleLabel.text = tab.getIPadText
+        homeScreenTabIconImageView.image = selected ? tab.getIPadIconSelected : tab.getIPadIconUnselected
+        self.isSelected = selected
     }
     
 }

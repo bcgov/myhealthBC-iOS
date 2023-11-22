@@ -72,7 +72,7 @@ class AppPDFView: UIView {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) { [weak self] in
             guard let `self` = self else {return}
             self.alpha = 0
-            self.parent?.tabBarController?.tabBar.isHidden = false
+            self.parent?.tabBarController?.tabBar.isHidden = Constants.deviceType == .iPad
             self.parent?.view.layoutIfNeeded()
         } completion: { [weak self] done in
             guard let `self` = self else {return}

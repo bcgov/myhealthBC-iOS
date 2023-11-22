@@ -68,6 +68,8 @@ class AppTabBarController: UITabBarController {
         didSet {
             guard let selectedVC = viewControllers?[selectedIndex] else { return }
             selectedViewController?.tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+//            let userInfo: [String: Int] = ["index": selectedIndex]
+//            NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: userInfo as [AnyHashable : Any])
         }
     }
     
@@ -118,6 +120,15 @@ class AppTabBarController: UITabBarController {
         AppStates.shared.listenToSyncRequest {
             self.performSync()
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(tabChangedFromiPad), name: .tabChangedFromiPad, object: nil)
+    }
+    
+    // MARK: For iPad
+    @objc private func tabChangedFromiPad(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: Int] else { return }
+        guard let index = userInfo["index"] else { return }
+        self.selectedIndex = index
     }
     
     // MARK: Auth and validation
@@ -208,7 +219,7 @@ class AppTabBarController: UITabBarController {
         tabBar.tintColor = AppColours.appBlue
         tabBar.unselectedItemTintColor = AppColours.textGray
         tabBar.barTintColor = .white
-        tabBar.isHidden = false
+        tabBar.isHidden = Constants.deviceType == .iPad
         setTabs()
     }
     
@@ -241,7 +252,7 @@ class AppTabBarController: UITabBarController {
             currentTabs = unAuthenticatedTabs
             viewControllers = setViewControllers(tabs: unAuthenticatedTabs)
         }
-        tabBar.isHidden = false
+        tabBar.isHidden = Constants.deviceType == .iPad
         view.layoutIfNeeded()
         tabBar.layoutIfNeeded()
     }
