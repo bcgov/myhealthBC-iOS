@@ -23,9 +23,12 @@ class NotificationTableViewCell: UITableViewCell {
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var dismissButton: UIButton!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet private weak var topMarginConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var bottomMarginConstraint: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupUI()
     }
     
     @IBAction func dismiss(_ sender: Any) {
@@ -46,11 +49,16 @@ class NotificationTableViewCell: UITableViewCell {
         delegate.showDetail(notification: notification)
     }
     
+    private func setupUI() {
+        style()
+        layoutIfNeeded()
+    }
+    
     func setup(notification: GatewayNotification, delegate: NotificationTableViewCellDelegate) {
         self.notification = notification
         self.delegate = delegate
         fillData()
-        style()
+//        style()
         layoutIfNeeded()
     }
     
@@ -90,5 +98,8 @@ class NotificationTableViewCell: UITableViewCell {
         let getstureRecognizer = UITapGestureRecognizer(target: self, action: #selector(showDetailsAction))
         detailsLabel.isUserInteractionEnabled = true
         detailsLabel.addGestureRecognizer(getstureRecognizer)
+        let isIpad = Constants.deviceType == .iPad
+        bottomMarginConstraint.constant = isIpad ? 16 : 8
+        topMarginConstraint.constant = isIpad ? 16 : 8
     }
 }
