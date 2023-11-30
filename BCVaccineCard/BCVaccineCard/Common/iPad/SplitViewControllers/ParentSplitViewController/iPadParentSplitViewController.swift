@@ -56,7 +56,7 @@ class iPadParentSplitViewController: UISplitViewController {
         }
         appTabBar = AppTabBarController.construct(authManager: authManager, syncService: syncService, networkService: networkService, configService: configService)
         
-        iPadSideMenu = iPadSideTabTableViewController.construct()
+        iPadSideMenu = iPadSideTabTableViewController.construct(with: 0)
         
         guard let iPadSideMenu = iPadSideMenu, let appTabBar = appTabBar else { return }
         self.viewControllers = [iPadSideMenu, appTabBar]

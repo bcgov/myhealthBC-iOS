@@ -9,37 +9,88 @@ import UIKit
 // NOTE: Not using for now, not until I can get things sorted
 class ReusableSplitViewController: UISplitViewController {
     
-    class func construct(masterVC: UIViewController, secondaryVC: UIViewController?) -> ReusableSplitViewController {
-        if let vc =  Storyboard.iPadHome.instantiateViewController(withIdentifier: String(describing: ReusableSplitViewController.self)) as? ReusableSplitViewController {
-            vc.masterVC = masterVC
-            vc.secondaryVC = secondaryVC
-            return vc
+//    class func construct(baseVC: UIViewController, secondVC: UIViewController?, tabIndex: Int) -> ReusableSplitViewController {
+//        if let vc =  Storyboard.iPadHome.instantiateViewController(withIdentifier: String(describing: ReusableSplitViewController.self)) as? ReusableSplitViewController {
+//            vc.tabIndex = tabIndex
+//            vc.baseVC = baseVC
+//            vc.secondVC = secondVC
+//            return vc
+//        }
+//        return ReusableSplitViewController()
+//    }
+    
+    class func construct(baseVC: UIViewController, secondVC: UIViewController?, tabIndex: Int) -> ReusableSplitViewController {
+        var vc: ReusableSplitViewController
+        if #available(iOS 14.0, *) {
+            vc = ReusableSplitViewController(style: .doubleColumn)
+        } else {
+            vc = ReusableSplitViewController()
         }
-        return ReusableSplitViewController()
+        vc.baseVC = baseVC
+        vc.secondVC = secondVC
+        vc.tabIndex = tabIndex
+        return vc
     }
     
-    private var masterVC: UIViewController?
-    private var secondaryVC: UIViewController?
+    private var tabIndex: Int = 0
+    private var baseVC: UIViewController?
+    private var secondVC: UIViewController?
+    
+    private var masterVC: iPadSideTabTableViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
-    
+    // TODO: Modify:
+    // 340 width for primary - reversed
+    // configure for both compact and landscape
     private func setup() {
         delegate = self
-        if let masterVC = masterVC {
-            self.viewControllers = [masterVC]
+        masterVC = iPadSideTabTableViewController.construct(with: tabIndex)
+        if #available(iOS 14.0, *) {
+            setViewController(masterVC!, for: .primary)
+        } else {
+            self.viewControllers = [masterVC!]
         }
-//        if let secondaryVC = secondaryVC {
-//            self.viewControllers.append(secondaryVC)
-//        }
-        preferredDisplayMode = .oneBesideSecondary
+        if let baseVC = baseVC {
+//            self.viewControllers.append(baseVC)
+            if #available(iOS 14.0, *) {
+                setViewController(baseVC, for: .supplementary)
+            } else {
+                self.viewControllers.append(baseVC)
+            }
+        }
+        if let secondVC = secondVC {
+            if #available(iOS 14.0, *) {
+//                self.viewControllers.append(secondVC)
+                setViewController(secondVC, for: .secondary)
+            } else {
+                self.viewControllers.append(secondVC)
+            }
+        }
+                
+        if #available(iOS 14.0, *) {
+            preferredDisplayMode = .twoBesideSecondary
+        } else {
+            preferredDisplayMode = .oneBesideSecondary
+        }
         if #available(iOS 14.0, *) {
             preferredSplitBehavior = .tile
         }
         presentsWithGesture = false
-        preferredPrimaryColumnWidthFraction = 2.0
+        if #available(iOS 14.0, *) {
+            self.preferredPrimaryColumnWidth = 92
+            if self.viewControllers.count > 2 {
+                preferredSupplementaryColumnWidth = 621
+//                preferredSupplementaryColumnWidthFraction = 621/self.view.frame.width
+                minimumSupplementaryColumnWidth = 600
+            }
+        } else {
+            self.preferredPrimaryColumnWidthFraction = 92/self.view.frame.width
+        }
+        
+        primaryEdge = .trailing
     }
     
     func configure() {
@@ -50,7 +101,7 @@ class ReusableSplitViewController: UISplitViewController {
 
 extension ReusableSplitViewController: UISplitViewControllerDelegate {
     func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
-        return false
+        return true
     }
 }
 

@@ -130,6 +130,7 @@ enum AppTabs: Int, CaseIterable {
             }
 //            return ReusableSplitViewController.construct(masterVC: masterVC, secondaryVC: secondaryVC)
             return masterVC
+//            return ReusableSplitViewController.construct(baseVC: masterVC, secondVC: secondaryVC, tabIndex: 0)
             
         case .Proofs:
             return nil

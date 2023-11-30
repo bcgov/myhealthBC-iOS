@@ -9,8 +9,9 @@ import UIKit
 
 class iPadSideTabTableViewController: UIViewController {
     
-    class func construct() -> iPadSideTabTableViewController {
+    class func construct(with index: Int) -> iPadSideTabTableViewController {
         if let vc =  Storyboard.iPadHome.instantiateViewController(withIdentifier: String(describing: iPadSideTabTableViewController.self)) as? iPadSideTabTableViewController {
+            vc.index = index
             return vc
         }
         return iPadSideTabTableViewController()
@@ -22,6 +23,7 @@ class iPadSideTabTableViewController: UIViewController {
     
     private var index = 0 {
         didSet {
+            guard tableView != nil else { return }
             self.tableView.reloadData()
         }
     }
@@ -58,7 +60,7 @@ class iPadSideTabTableViewController: UIViewController {
             dataSource = AppTabBarController.iPadUnauthenticatedTabs
         }
     }
-    
+    // TODO: May not need this anymore
     @objc private func tabChanged(_ notification: Notification) {
         guard let userInfo = notification.userInfo as? [String: Int] else { return }
         guard let index = userInfo["index"] else { return }
