@@ -30,7 +30,7 @@ class iPadSideTabTableViewCell: UITableViewCell {
         setTextFont(selected: selected)
         homeScreenTabTitleLabel.text = tab.getIPadText
         homeScreenTabIconImageView.image = selected ? tab.getIPadIconSelected : tab.getIPadIconUnselected
-        self.contentView.backgroundColor = selected ? AppColours.appBlueLight : AppColours.appBlue
+        self.contentView.backgroundColor = selected ? AppColours.blueLightText : AppColours.appBlue
     }
     
 }

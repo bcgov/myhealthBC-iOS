@@ -186,13 +186,14 @@ extension HomeScreenViewController {
                                                                     label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle,
                                                                     hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
         rightbuttons.append(settingsButton)
-        if AuthManager().isAuthenticated {
+        if AuthManager().isAuthenticated && !UIDevice.current.orientation.isLandscape {
             let notificationsButton = NavButton(image: UIImage(named: "notifications"),
-                                           action: #selector(self.notificationsButton),
-                                           accessibility: Accessibility(traits: .button,
-                                                                        label: "Notificatioms",
-                                                                        hint: "Open Notifications"))
+                                                action: #selector(self.notificationsButton),
+                                                accessibility: Accessibility(traits: .button,
+                                                                             label: "Notificatioms",
+                                                                             hint: "Open Notifications"))
             rightbuttons.append(notificationsButton)
+            
         }
         
 
@@ -298,8 +299,14 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
             var height: CGFloat
             if iPad {
                 if UIDevice.current.orientation.isLandscape {
-                    width = (cView.width / 4)
-                    height = width * (105/228)
+                    if authManager.isAuthenticated {
+                        width = (cView.width / 2)
+                        height = width * (105/280)
+                    } else {
+                        width = (cView.width / 4)
+                        height = width * (105/228)
+                    }
+                    
                 } else {
                     width = (cView.width / 3)
                     height = width * (140/226)
@@ -651,7 +658,7 @@ extension HomeScreenViewController {
     }
     
     private func adjustForiPad() {
-        
+        navSetup()
     }
 }
 

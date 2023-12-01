@@ -46,51 +46,54 @@ class ReusableSplitViewController: UISplitViewController {
     // 340 width for primary - reversed
     // configure for both compact and landscape
     private func setup() {
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .deviceDidRotate, object: nil)
         delegate = self
-        masterVC = iPadSideTabTableViewController.construct(with: tabIndex)
-        if #available(iOS 14.0, *) {
-            setViewController(masterVC!, for: .primary)
+        var rightVC: UIViewController
+        if let secondVC = secondVC {
+            rightVC = secondVC
         } else {
-            self.viewControllers = [masterVC!]
+            rightVC = CustomNavigationController.init(rootViewController: UIViewController())
+        }
+        
+        if #available(iOS 14.0, *) {
+            setViewController(rightVC, for: .primary)
+        } else {
+            self.viewControllers = [rightVC]
         }
         if let baseVC = baseVC {
-//            self.viewControllers.append(baseVC)
             if #available(iOS 14.0, *) {
-                setViewController(baseVC, for: .supplementary)
+                setViewController(baseVC, for: .secondary)
             } else {
                 self.viewControllers.append(baseVC)
             }
         }
-        if let secondVC = secondVC {
-            if #available(iOS 14.0, *) {
-//                self.viewControllers.append(secondVC)
-                setViewController(secondVC, for: .secondary)
-            } else {
-                self.viewControllers.append(secondVC)
-            }
-        }
                 
-        if #available(iOS 14.0, *) {
-            preferredDisplayMode = .twoBesideSecondary
-        } else {
-            preferredDisplayMode = .oneBesideSecondary
-        }
         if #available(iOS 14.0, *) {
             preferredSplitBehavior = .tile
         }
         presentsWithGesture = false
-        if #available(iOS 14.0, *) {
-            self.preferredPrimaryColumnWidth = 92
-            if self.viewControllers.count > 2 {
-                preferredSupplementaryColumnWidth = 621
-//                preferredSupplementaryColumnWidthFraction = 621/self.view.frame.width
-                minimumSupplementaryColumnWidth = 600
+        primaryEdge = .trailing
+        if secondVC != nil {
+            preferredPrimaryColumnWidthFraction = 1.0
+            if #available(iOS 14.0, *) {
+                if UIDevice.current.orientation.isLandscape {
+                    preferredDisplayMode = .oneBesideSecondary
+                } else {
+                    preferredDisplayMode = .secondaryOnly
+                }
+                
+            } else {
+                preferredDisplayMode = .allVisible
             }
         } else {
-            self.preferredPrimaryColumnWidthFraction = 92/self.view.frame.width
+            if #available(iOS 14.0, *) {
+                preferredDisplayMode = .secondaryOnly
+            } else {
+                preferredDisplayMode = .primaryHidden
+            }
         }
         
-        primaryEdge = .trailing
+        
     }
     
     func configure() {
@@ -99,34 +102,42 @@ class ReusableSplitViewController: UISplitViewController {
 
 }
 
-extension ReusableSplitViewController: UISplitViewControllerDelegate {
-    func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
-        return true
+extension ReusableSplitViewController {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        guard Constants.deviceType == .iPad else { return }
+        NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
     }
-}
-
-
-class TestViewController: UIViewController {
     
-    class func construct(tab: String) -> TestViewController {
-        if let vc =  Storyboard.iPadHome.instantiateViewController(withIdentifier: String(describing: TestViewController.self)) as? TestViewController {
-            vc.tab = tab
-            return vc
+    @objc private func deviceDidRotate(_ notification: Notification) {
+        if !UIDevice.current.orientation.isLandscape {
+            if #available(iOS 14.0, *) {
+                hide(.primary)
+            } else {
+                
+            }
         }
-        return TestViewController()
-    }
-    
-    private var tab: String!
-    
-    @IBOutlet weak private var labelTab: UILabel!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setup(tab: tab)
-        self.view.backgroundColor = .green
-    }
-    
-    private func setup(tab: String) {
-        labelTab.text = tab
     }
 }
+
+extension ReusableSplitViewController: UISplitViewControllerDelegate {
+//    func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
+//        return false
+//    }
+//    @available(iOS 14.0, *)
+//    func splitViewController(_ svc: UISplitViewController, displayModeForExpandingToProposedDisplayMode proposedDisplayMode: UISplitViewController.DisplayMode) -> UISplitViewController.DisplayMode {
+//        return .secondaryOnly
+//    }
+//    
+//    @available(iOS 14.0, *)
+//    func splitViewControllerDidCollapse(_ svc: UISplitViewController) {
+//        print("CONNOR: COLLAPSED")
+//    }
+//    
+//    @available(iOS 14.0, *)
+//    func splitViewControllerDidExpand(_ svc: UISplitViewController) {
+//        print("CONNOR: DID EXPAND")
+//    }
+    
+}
+

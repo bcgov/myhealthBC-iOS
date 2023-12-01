@@ -11,6 +11,8 @@ extension Notification.Name {
     static let tabChanged = Notification.Name("TabChanged")
     static let tabChangedFromiPad = Notification.Name("TabChangedFromiPad")
     static let adjustIPadSideTab = Notification.Name("AdjustIPadSideTab")
+    static let adjustIPadRightView = Notification.Name("adjustIPadRightView")
+    static let notificationsLoadedFromSplitVC = Notification.Name("notificationsLoadedFromSplitVC")
     static let reloadNewsFeed = Notification.Name("ReloadNewsFeed")
     static let cardAddedNotification = Notification.Name("cardAddedNotification")
     static let storageChangeEvent = Notification.Name("StorageChangeEvent")

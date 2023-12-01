@@ -74,11 +74,13 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
     func listenToLocalAuthNotification() {
         Notification.Name.shouldPerformLocalAuth.onPost(object: nil, queue: .main) {[weak self] _ in
             guard let `self` = self, UIApplication.topViewController() == self else {return}
+//            guard Constants.deviceType != .iPad else { return }
             self.performLocalAuthIfNeeded()
         }
     }
     
     func performLocalAuthIfNeeded() {
+//        guard Constants.deviceType != .iPad else { return }
         if LocalAuthManager.shouldAuthenticate {
             // Dont show local auth if onboading should be shown
             let unseen = Defaults.unseenOnBoardingScreens()

@@ -95,6 +95,9 @@ class AppTabBarController: UITabBarController {
         // When authentication status changes, we can set the records tab to the appropriate VC
         // and fetch records - after validation
         AppStates.shared.listenToAuth { authenticated in
+            if !authenticated {
+                self.patient = nil
+            }
             self.performSync()
         }
         
@@ -127,7 +130,34 @@ class AppTabBarController: UITabBarController {
         
         guard Constants.deviceType == .iPad else { return }
         NotificationCenter.default.addObserver(self, selector: #selector(tabChangedFromiPad), name: .tabChangedFromiPad, object: nil)
+//        listenToLocalAuthNotificationForiPad()
     }
+    
+//    func listenToLocalAuthNotificationForiPad() {
+//        Notification.Name.shouldPerformLocalAuth.onPost(object: nil, queue: .main) {[weak self] _ in
+//            guard let `self` = self, UIApplication.topViewController() == self else {return}
+//            self.performLocalAuthIfNeeded()
+//        }
+//    }
+    
+//    func performLocalAuthIfNeeded() {
+//        if LocalAuthManager.shouldAuthenticate {
+//            // Dont show local auth if onboading should be shown
+//            let unseen = Defaults.unseenOnBoardingScreens()
+//            guard unseen.isEmpty else {return}
+//            
+//            showLocalAuth(onSuccess: { [weak self] in
+//                guard let `self` = self else {return}
+////                self.localAuthPerformed()
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                    if !Defaults.hasSeenFirstLogin {
+//                        Defaults.hasSeenFirstLogin = true
+//                        self.showLogin(initialView: .Landing, showTabOnSuccess: .Home)
+//                    }
+//                }
+//            })
+//        }
+//    }
     
     // MARK: For iPad
     @objc private func tabChangedFromiPad(_ notification: Notification) {

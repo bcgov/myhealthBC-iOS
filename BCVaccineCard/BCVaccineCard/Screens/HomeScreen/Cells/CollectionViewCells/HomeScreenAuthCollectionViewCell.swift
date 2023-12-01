@@ -23,7 +23,6 @@ class HomeScreenAuthCollectionViewCell: UICollectionViewCell, Theme {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
     @IBAction func loginAction(_ sender: Any) {

@@ -81,6 +81,8 @@ class AuthenticationView: UIView, Theme {
         downloadBCSCLabel.attributedText = attributedString
         
         setupDownloadBCSCLabel()
+        
+        self.layoutIfNeeded()
     }
     
     private func iPadUIAdjustments() {
@@ -131,7 +133,7 @@ class AuthenticationView: UIView, Theme {
         guard Constants.deviceType == .iPad else { return }
         stackViewTrailingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 200 : 90
         stackViewLeadingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 200 : 90
-        buttonsStackViewBottomConstraint.constant = UIDevice.current.orientation.isLandscape ? 144 : 330
+        buttonsStackViewBottomConstraint.constant = UIDevice.current.orientation.isLandscape ? 144 : 200
         if UIDevice.current.orientation.isLandscape {
             buttonsStackView.removeArrangedSubview(loginButton)
             buttonsStackView.addArrangedSubview(loginButton)

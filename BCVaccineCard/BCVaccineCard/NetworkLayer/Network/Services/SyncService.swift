@@ -104,6 +104,18 @@ struct SyncService {
                 group.leave()
             }
             
+            if Constants.deviceType == .iPad {
+                NotificationCenter.default.post(name: .notificationsLoadedFromSplitVC, object: nil, userInfo: nil)
+                if false {
+                    group.enter()
+                    notificationService.fetchAndStore(for: patient, loadingStyle: .empty) { notifications in
+                        NotificationCenter.default.post(name: .notificationsLoadedFromSplitVC, object: nil, userInfo: nil)
+                        group.leave()
+                    }
+                }
+                
+            }
+            
             group.enter()
             recordsService.fetchAndStore(for: patient, protectiveWord: protectiveWord) { records, hadFails in
                 if hadFails {

@@ -36,7 +36,16 @@ class CommunicationBannerCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        setup()
+    }
+    
+    private func setup() {
+        if Constants.deviceType != .iPad {
+            self.removeConstraint(messageHeight)
+        } else {
+            messageHeight.constant = CGFloat(Constants.CommunicationBannerHeights.expanded)
+        }
+        
     }
 
     var isExpanded: Bool {
@@ -106,7 +115,7 @@ class CommunicationBannerCollectionViewCell: UICollectionViewCell {
     private func style() {
         layoutIfNeeded()
         container.backgroundColor = UIColor(red: 0.851, green: 0.918, blue: 0.969, alpha: 1)
-        container.layer.cornerRadius = 10
+        container.layer.cornerRadius = Constants.deviceType == .iPad ? 4 : 10
 
         titleLabel.textColor = AppColours.blueLightText
         titleLabel.font = UIFont.bcSansBoldWithSize(size: 15)
@@ -118,10 +127,12 @@ class CommunicationBannerCollectionViewCell: UICollectionViewCell {
         textView.sizeToFit()
         textView.isEditable = false
 
-        container.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07).cgColor
-        container.layer.shadowOpacity = 1
-        container.layer.shadowOffset = CGSize(width: -1, height: 5)
-        container.layer.shadowRadius = 3
+        if Constants.deviceType != .iPad {
+            container.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07).cgColor
+            container.layer.shadowOpacity = 1
+            container.layer.shadowOffset = CGSize(width: -1, height: 5)
+            container.layer.shadowRadius = 3
+        }
 
         learnMoreButton.setTitle("", for: .normal)
         dismissButton.setTitle("", for: .normal)
