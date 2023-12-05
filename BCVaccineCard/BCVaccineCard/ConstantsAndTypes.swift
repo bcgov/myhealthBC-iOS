@@ -12,7 +12,7 @@ struct UXConstants {
         return false
     }
 }
-
+// TODO: Switch from using this to using feature toggle
 struct HealthRecordConstants {
     // ENABLE AND DISABLE PRIMARY PATIENT RECORD TYPES
     static var enabledTypes: [RecordType] {
