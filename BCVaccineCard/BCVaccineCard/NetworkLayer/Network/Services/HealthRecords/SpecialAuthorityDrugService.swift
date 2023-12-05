@@ -20,7 +20,8 @@ struct SpecialAuthorityDrugService {
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([SpecialAuthorityDrug]?)->Void) {
-        if !HealthRecordConstants.enabledTypes.contains(.specialAuthorityDrug) {return completion([])}
+        let shouldFetch = patient.isDependent() ? (Defaults.enabledTypes?.contains(dependentDataset: .SpecialAuthorityRequest) == true) : (Defaults.enabledTypes?.contains(dataset: .SpecialAuthorityRequest) == true)
+        if !shouldFetch {return completion([])}
         Logger.log(string: "Fetching SpecialAuthorityDrug records for \(patient.name)", type: .Network)
         network.addLoader(message: .SyncingRecords, caller: .SpecialAuthorityDrugService_fetchAndStore)
         fetch(for: patient) { result in

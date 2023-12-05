@@ -85,7 +85,7 @@ struct SyncService {
                 group.leave()
             }
             
-            if HealthRecordConstants.diagnosticImagingEnabled {
+            if Defaults.enabledTypes?.contains(dataset: .DiagnosticImaging) == true {
                 group.enter()
                 patientService.fetchAndStoreDiagnosticImaging(for: patient) { imaging in
                     if imaging == nil {
