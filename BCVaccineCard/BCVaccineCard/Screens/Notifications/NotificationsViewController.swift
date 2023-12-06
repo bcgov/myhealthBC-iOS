@@ -99,10 +99,14 @@ class NotificationsViewController: BaseViewController {
         imageView.image = UIImage(named: imageName)
         imageView.contentMode = .scaleAspectFit
         imageView.tag = unavailableTag
-        let leadingAnchor: CGFloat = Constants.deviceType == .iPad ? 74 : 32
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 64).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: leadingAnchor).isActive = true
+        if Constants.deviceType == .iPad {
+            imageView.heightAnchor.constraint(equalToConstant: 156).isActive = true
+            imageView.widthAnchor.constraint(equalToConstant: 192).isActive = true
+        } else {
+            imageView.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 64).isActive = true
+            imageView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 32).isActive = true
+        }
         imageView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
         imageView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
         
@@ -112,7 +116,7 @@ class NotificationsViewController: BaseViewController {
             tableView.addSubview(button)
             button.translatesAutoresizingMaskIntoConstraints = false
             button.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -54).isActive = true
-            button.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: leadingAnchor).isActive = true
+            button.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 32).isActive = true
             button.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
             button.heightAnchor.constraint(equalToConstant: 54).isActive = true
             style(button: button, style: .Fill, title: "Try Again", image: nil)
