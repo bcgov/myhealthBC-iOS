@@ -105,15 +105,13 @@ struct SyncService {
             }
             
             if Constants.deviceType == .iPad {
-                NotificationCenter.default.post(name: .notificationsLoadedFromSplitVC, object: nil, userInfo: nil)
-                if false {
-                    group.enter()
-                    notificationService.fetchAndStore(for: patient, loadingStyle: .empty) { notifications in
-                        NotificationCenter.default.post(name: .notificationsLoadedFromSplitVC, object: nil, userInfo: nil)
-                        group.leave()
-                    }
+//                NotificationCenter.default.post(name: .notificationsLoadedFromSplitVC, object: nil, userInfo: nil)
+                group.enter()
+                notificationService.fetchAndStore(for: patient, loadingStyle: .empty) { notifications in
+                    NotificationCenter.default.post(name: .notificationsLoadedFromSplitVC, object: nil, userInfo: nil)
+                    group.leave()
                 }
-                
+ 
             }
             
             group.enter()

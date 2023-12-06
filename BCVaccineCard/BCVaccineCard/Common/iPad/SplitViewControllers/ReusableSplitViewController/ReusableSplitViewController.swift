@@ -43,37 +43,21 @@ class ReusableSplitViewController: UISplitViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        configuration()
     }
     // TODO: Cleanup
     private func setup() {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .deviceDidRotate, object: nil)
         delegate = self
+        presentsWithGesture = false
+        primaryEdge = .trailing
+    }
+    
+    private func configuration() {
+        // Setup right VC - can probably clean this up after playing around with it
         var rightVC: UIViewController
         if let secondVC = secondVC {
             rightVC = secondVC
-        } else {
-            rightVC = CustomNavigationController.init(rootViewController: UIViewController())
-        }
-        
-        if #available(iOS 14.0, *) {
-            setViewController(rightVC, for: .primary)
-        } else {
-            self.viewControllers = [rightVC]
-        }
-        if let baseVC = baseVC {
-            if #available(iOS 14.0, *) {
-                setViewController(baseVC, for: .secondary)
-            } else {
-                self.viewControllers.append(baseVC)
-            }
-        }
-                
-        if #available(iOS 14.0, *) {
-            preferredSplitBehavior = .tile
-        }
-        presentsWithGesture = false
-        primaryEdge = .trailing
-        if secondVC != nil {
             preferredPrimaryColumnWidthFraction = 1.0
             if #available(iOS 14.0, *) {
                 if UIDevice.current.orientation.isLandscape {
@@ -86,6 +70,7 @@ class ReusableSplitViewController: UISplitViewController {
                 preferredDisplayMode = .allVisible
             }
         } else {
+            rightVC = CustomNavigationController.init(rootViewController: UIViewController())
             if #available(iOS 14.0, *) {
                 preferredDisplayMode = .secondaryOnly
             } else {
@@ -93,11 +78,24 @@ class ReusableSplitViewController: UISplitViewController {
             }
         }
         
+        if #available(iOS 14.0, *) {
+            setViewController(rightVC, for: .primary)
+        } else {
+            self.viewControllers = [rightVC]
+        }
         
-    }
-    
-    func configure() {
-        
+        // Setup Base VC
+        if let baseVC = baseVC {
+            if #available(iOS 14.0, *) {
+                setViewController(baseVC, for: .secondary)
+            } else {
+                self.viewControllers.append(baseVC)
+            }
+        }
+                
+        if #available(iOS 14.0, *) {
+            preferredSplitBehavior = .tile
+        }
     }
     
     // TODO: Create function to reload primary VC for when device is in landscape mode
@@ -118,6 +116,45 @@ class ReusableSplitViewController: UISplitViewController {
         }
     }
     
+    private func adjustLayoutForPortraitToLandscapeRotation() {
+        switch self.tabType {
+        case .Home:
+            if let nav = baseVC as? CustomNavigationController {
+                if let last = nav.viewControllers.last as? HomeScreenViewController {
+                    // Do Nothing
+                    print("NOTHING")
+                } else if let last = nav.viewControllers.last {
+                    if !isVCAlreadyShown(viewController: last) {
+                        last.removeFromParent()
+                        adjustFarRightVC(viewController: last)
+                    }
+                    if let first = nav.viewControllers.first as? HomeScreenViewController {
+//                        nav.popToRootViewController(animated: true)
+                        baseVC = CustomNavigationController(rootViewController: first)
+                        if #available(iOS 14.0, *) {
+                            setViewController(baseVC!, for: .secondary)
+                        } else {
+                            self.viewControllers.append(baseVC!)
+                        }
+                    }
+                }
+            }
+            
+            
+        default: break
+//        case .UnAuthenticatedRecords:
+//            <#code#>
+//        case .AuthenticatedRecords:
+//            <#code#>
+//        case .Services:
+//            <#code#>
+//        case .Proofs:
+//            <#code#>
+//        case .Dependents:
+//            <#code#>
+        }
+    }
+    
 
 }
 
@@ -126,6 +163,9 @@ extension ReusableSplitViewController {
         super.viewWillTransition(to: size, with: coordinator)
         guard Constants.deviceType == .iPad else { return }
         NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
+        if UIDevice.current.orientation.isLandscape {
+            adjustLayoutForPortraitToLandscapeRotation()
+        }
     }
     
     @objc private func deviceDidRotate(_ notification: Notification) {
@@ -135,6 +175,8 @@ extension ReusableSplitViewController {
             } else {
                 
             }
+        } else {
+//            adjustLayoutForPortraitToLandscapeRotation()
         }
     }
 }
