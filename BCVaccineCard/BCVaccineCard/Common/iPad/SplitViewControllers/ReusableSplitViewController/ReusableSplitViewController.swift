@@ -19,7 +19,7 @@ class ReusableSplitViewController: UISplitViewController {
 //        return ReusableSplitViewController()
 //    }
     
-    class func construct(baseVC: UIViewController, secondVC: UIViewController?, tabIndex: Int) -> ReusableSplitViewController {
+    class func construct(baseVC: UIViewController, secondVC: UIViewController?, tabIndex: Int, tabType: AppTabs) -> ReusableSplitViewController {
         var vc: ReusableSplitViewController
         if #available(iOS 14.0, *) {
             vc = ReusableSplitViewController(style: .doubleColumn)
@@ -29,12 +29,14 @@ class ReusableSplitViewController: UISplitViewController {
         vc.baseVC = baseVC
         vc.secondVC = secondVC
         vc.tabIndex = tabIndex
+        vc.tabType = tabType
         return vc
     }
     
     private var tabIndex: Int = 0
     private var baseVC: UIViewController?
     private var secondVC: UIViewController?
+    private var tabType: AppTabs = .Home
     
     private var masterVC: iPadSideTabTableViewController?
 
@@ -42,9 +44,7 @@ class ReusableSplitViewController: UISplitViewController {
         super.viewDidLoad()
         setup()
     }
-    // TODO: Modify:
-    // 340 width for primary - reversed
-    // configure for both compact and landscape
+    // TODO: Cleanup
     private func setup() {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .deviceDidRotate, object: nil)
         delegate = self
@@ -99,6 +99,25 @@ class ReusableSplitViewController: UISplitViewController {
     func configure() {
         
     }
+    
+    // TODO: Create function to reload primary VC for when device is in landscape mode
+    
+    func isVCAlreadyShown(viewController: UIViewController) -> Bool {
+        guard let nav = self.secondVC as? CustomNavigationController, let rightVC = nav.viewControllers.first else { return false }
+        return type(of: viewController) == type(of: rightVC)
+    }
+    
+    func adjustFarRightVC(viewController: UIViewController) {
+        let nav = CustomNavigationController(rootViewController: viewController)
+        self.secondVC = nav
+        guard let rightVC = self.secondVC else { return }
+        if #available(iOS 14.0, *) {
+            setViewController(rightVC, for: .primary)
+        } else {
+            self.viewControllers.insert(rightVC, at: 0)
+        }
+    }
+    
 
 }
 

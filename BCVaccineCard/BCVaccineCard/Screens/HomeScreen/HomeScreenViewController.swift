@@ -186,7 +186,7 @@ extension HomeScreenViewController {
                                                                     label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle,
                                                                     hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
         rightbuttons.append(settingsButton)
-        if AuthManager().isAuthenticated && !UIDevice.current.orientation.isLandscape {
+        if AuthManager().isAuthenticated {
             let notificationsButton = NavButton(image: UIImage(named: "notifications"),
                                                 action: #selector(self.notificationsButton),
                                                 accessibility: Accessibility(traits: .button,
@@ -221,10 +221,21 @@ extension HomeScreenViewController {
             showToast(message: "No internet connection")
             return
         }
-        
-        service.fetchAndStore(for: patient, loadingStyle: .empty) { results in
-            let vm = NotificationsViewController.ViewModel(patient: patient, network: network, authManager: authManager, configService: configService)
-            self.show(route: .Notifications, withNavigation: true, viewModel: vm)
+        // TODO: Check if iPad, if in landscape, and notifications screen already showing.
+        if UIDevice.current.orientation.isLandscape {
+            let vcTest = NotificationsViewController()
+            if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vcTest) {
+                service.fetchAndStore(for: patient, loadingStyle: .empty) { results in
+                    let vm = NotificationsViewController.ViewModel(patient: patient, network: network, authManager: authManager, configService: configService)
+                    let vc = NotificationsViewController.construct(viewModel: vm)
+                    split.adjustFarRightVC(viewController: vc)
+                }
+            }
+        } else {
+            service.fetchAndStore(for: patient, loadingStyle: .empty) { results in
+                let vm = NotificationsViewController.ViewModel(patient: patient, network: network, authManager: authManager, configService: configService)
+                self.show(route: .Notifications, withNavigation: true, viewModel: vm)
+            }
         }
     }
 }

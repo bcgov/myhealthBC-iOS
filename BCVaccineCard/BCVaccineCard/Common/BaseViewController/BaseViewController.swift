@@ -43,6 +43,15 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
 //    var getPassesFlowType: PassesFlowVCs? {
 //        return nil
 //    }
+    
+    var getReusableSplitViewController: ReusableSplitViewController? {
+        if let nav = self.navigationController as? CustomNavigationController {
+            if let split = nav.parent as? ReusableSplitViewController {
+                return split
+            }
+        }
+        return nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,7 +175,16 @@ extension BaseViewController {
     }
     
     private func goToSettingsScreen() {
-        show(route: .Settings, withNavigation: true)
+        if UIDevice.current.orientation.isLandscape {
+            let vcTest = ProfileAndSettingsViewController()
+            if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vcTest) {
+                let vc = ProfileAndSettingsViewController.construct()
+                split.adjustFarRightVC(viewController: vc)
+            }
+        } else {
+            show(route: .Settings, withNavigation: true)
+        }
+        
     }
 }
 
