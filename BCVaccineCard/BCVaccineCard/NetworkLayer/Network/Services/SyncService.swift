@@ -36,12 +36,12 @@ struct SyncService {
         SessionStorage.syncPerformedThisSession = true
         
         // API status
-        MobileConfigService(network: network).fetchConfig { config in
+        MobileConfigService(network: network).fetchConfig(forceNetworkRefetch: true) { config in
             guard let config = config, config.online else {
                 return completion(nil)
             }
             
-            Defaults.enabledTypes = config.getEnabledTypes()
+//            Defaults.enabledTypes = config.getEnabledTypes()
             // Submit comments before removing all records
             let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
             commentsService.submitUnsyncedComments {

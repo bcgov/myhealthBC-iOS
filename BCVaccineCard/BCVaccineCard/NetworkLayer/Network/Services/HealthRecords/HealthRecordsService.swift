@@ -24,7 +24,7 @@ struct HealthRecordsService {
     
         network.addLoader(message: .SyncingRecords, caller: .HealthRecordsService_fetchAndStore)
         Logger.log(string: "fetching patient records for \(patient.name)", type: .Network)
-        let typesToFetch = EnabledTypes.convertToHealthRecordType(types: Defaults.enabledTypes?.datasets ?? [])
+        let typesToFetch = patient.isDependent() ? EnabledTypes.convertToHealthRecordType(types: Defaults.enabledTypes?.dependentDatasets ?? []) : EnabledTypes.convertToHealthRecordType(types: Defaults.enabledTypes?.datasets ?? [])
         var hadFailures = false
         for recordType in typesToFetch {
             dispatchGroup.enter()
@@ -169,10 +169,18 @@ struct HealthRecordsService {
     
     public func fetchAndStore(for dependent: Dependent, completion: @escaping ([HealthRecord], _ hadfailures: Bool)->Void) {
         guard let patient = dependent.info else {return completion([], false)}
-        let types = EnabledTypes.convertToHealthRecordType(types: Defaults.enabledTypes?.dependentDatasets ?? [])
-        fetchAndStore(for: patient,
-                      protectiveWord: nil,
-                      types: types,
-                      completion: completion)
+        let types = EnabledTypes.convertToHealthRecordType(types: Defaults.enabledTypes?.dependentDatasets ?? []) // Note: This isn't even being used right now
+        // TODO: Test this out
+        MobileConfigService(network: network).fetchConfig(forceNetworkRefetch: true) { config in
+            guard let config = config, config.online else {
+                return completion([], true)
+            }
+            self.fetchAndStore(for: patient,
+                          protectiveWord: nil,
+                          types: types,
+                          completion: completion)
+        }
+        
     }
 }
+
