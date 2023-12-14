@@ -98,8 +98,6 @@ class ReusableSplitViewController: UISplitViewController {
         }
     }
     
-    // TODO: Create function to reload primary VC for when device is in landscape mode
-    
     func isVCAlreadyShown(viewController: UIViewController) -> Bool {
         guard let nav = self.secondVC as? CustomNavigationController, let rightVC = nav.viewControllers.first else { return false }
         return type(of: viewController) == type(of: rightVC)
@@ -166,6 +164,23 @@ extension ReusableSplitViewController {
         if UIDevice.current.orientation.isLandscape {
             adjustLayoutForPortraitToLandscapeRotation()
         }
+        // TODO: Make more reusable
+        
+        if #available(iOS 14.0, *) {
+            if UIDevice.current.orientation.isLandscape {
+                if let _ = secondVC {
+                    preferredDisplayMode = .oneBesideSecondary
+                } else {
+                    preferredDisplayMode = .secondaryOnly
+                }
+            } else {
+                preferredDisplayMode = .secondaryOnly
+            }
+            
+        } else {
+            preferredDisplayMode = .allVisible
+        }
+        
     }
     
     @objc private func deviceDidRotate(_ notification: Notification) {
