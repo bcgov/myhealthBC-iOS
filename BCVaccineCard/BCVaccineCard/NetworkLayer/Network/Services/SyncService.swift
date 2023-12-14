@@ -76,13 +76,15 @@ struct SyncService {
             var hadFailures = false
             let group = DispatchGroup()
             
-            group.enter()
-            patientService.fetchAndStoreOrganDonorStatus(for: patient) { status in
-                if status == nil {
-                    hadFailures = true
+            if Defaults.enabledTypes?.contains(service: .OrganDonorRegistration) == true {
+                group.enter()
+                patientService.fetchAndStoreOrganDonorStatus(for: patient) { status in
+                    if status == nil {
+                        hadFailures = true
+                    }
+                    Logger.log(string: "\(String.fetchedDonorStatus) \(status != nil)", type: .Network)
+                    group.leave()
                 }
-                Logger.log(string: "\(String.fetchedDonorStatus) \(status != nil)", type: .Network)
-                group.leave()
             }
             
             if Defaults.enabledTypes?.contains(dataset: .DiagnosticImaging) == true {

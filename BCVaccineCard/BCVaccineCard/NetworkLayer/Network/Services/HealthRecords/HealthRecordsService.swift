@@ -17,7 +17,7 @@ struct HealthRecordsService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, protectiveWord: String?, types: [StorageService.HealthRecordType]? = StorageService.HealthRecordType.allCases, completion: @escaping ([HealthRecord],_ hadFailures: Bool)->Void) {
+    public func fetchAndStore(for patient: Patient, protectiveWord: String?, completion: @escaping ([HealthRecord],_ hadFailures: Bool)->Void) {
         
         let dispatchGroup = DispatchGroup()
         var records: [HealthRecord] = []
@@ -169,7 +169,6 @@ struct HealthRecordsService {
     
     public func fetchAndStore(for dependent: Dependent, completion: @escaping ([HealthRecord], _ hadfailures: Bool)->Void) {
         guard let patient = dependent.info else {return completion([], false)}
-        let types = EnabledTypes.convertToHealthRecordType(types: Defaults.enabledTypes?.dependentDatasets ?? []) // Note: This isn't even being used right now
         // TODO: Test this out
         MobileConfigService(network: network).fetchConfig(forceNetworkRefetch: true) { config in
             guard let config = config, config.online else {
@@ -177,7 +176,6 @@ struct HealthRecordsService {
             }
             self.fetchAndStore(for: patient,
                           protectiveWord: nil,
-                          types: types,
                           completion: completion)
         }
         
