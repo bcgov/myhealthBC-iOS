@@ -1073,6 +1073,12 @@
 		7944F71526F3A26D006B9444 /* QRSelectionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F71326F3A26D006B9444 /* QRSelectionTableViewCell.xib */; };
 		7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F71726F3B59B006B9444 /* TextTableViewCell.swift */; };
 		7944F71A26F3B59C006B9444 /* TextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F71826F3B59B006B9444 /* TextTableViewCell.xib */; };
+		794B68172B2C64140089874E /* iPadAlertSplitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B68162B2C64140089874E /* iPadAlertSplitVC.swift */; };
+		794B68182B2C64140089874E /* iPadAlertSplitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B68162B2C64140089874E /* iPadAlertSplitVC.swift */; };
+		794B68192B2C64140089874E /* iPadAlertSplitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B68162B2C64140089874E /* iPadAlertSplitVC.swift */; };
+		794B681B2B2C64260089874E /* iPadAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertView.swift */; };
+		794B681C2B2C64260089874E /* iPadAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertView.swift */; };
+		794B681D2B2C64260089874E /* iPadAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertView.swift */; };
 		794BD61C270235430084ADA8 /* AccessibilityLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD61B270235430084ADA8 /* AccessibilityLabels.swift */; };
 		794BD6272702E0E90084ADA8 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD6262702E0E90084ADA8 /* CustomNavigationController.swift */; };
 		794BD62F2702EEC00084ADA8 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75926F930E200EEF510 /* UIView+Ext.swift */; };
@@ -2037,6 +2043,8 @@
 		7944F71326F3A26D006B9444 /* QRSelectionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QRSelectionTableViewCell.xib; sourceTree = "<group>"; };
 		7944F71726F3B59B006B9444 /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
 		7944F71826F3B59B006B9444 /* TextTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextTableViewCell.xib; sourceTree = "<group>"; };
+		794B68162B2C64140089874E /* iPadAlertSplitVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadAlertSplitVC.swift; sourceTree = "<group>"; };
+		794B681A2B2C64260089874E /* iPadAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadAlertView.swift; sourceTree = "<group>"; };
 		794BD61B270235430084ADA8 /* AccessibilityLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityLabels.swift; sourceTree = "<group>"; };
 		794BD6262702E0E90084ADA8 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		794BD66F2702EEC00084ADA8 /* HealthGateway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthGateway.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2887,6 +2895,7 @@
 		2D79E4402B0D50330075FFB3 /* SplitViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				794B68132B2C63D80089874E /* AlertStyleUI */,
 				2D79E4412B0D50400075FFB3 /* ReusableSplitViewController */,
 				2D79E4282B0C34860075FFB3 /* ParentSplitViewController */,
 			);
@@ -4087,6 +4096,31 @@
 				7944F71826F3B59B006B9444 /* TextTableViewCell.xib */,
 			);
 			path = TextTableViewCell;
+			sourceTree = "<group>";
+		};
+		794B68132B2C63D80089874E /* AlertStyleUI */ = {
+			isa = PBXGroup;
+			children = (
+				794B68152B2C63F00089874E /* iPadAlertSplitVC */,
+				794B68142B2C63E40089874E /* iPadAlertView */,
+			);
+			path = AlertStyleUI;
+			sourceTree = "<group>";
+		};
+		794B68142B2C63E40089874E /* iPadAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				794B681A2B2C64260089874E /* iPadAlertView.swift */,
+			);
+			path = iPadAlertView;
+			sourceTree = "<group>";
+		};
+		794B68152B2C63F00089874E /* iPadAlertSplitVC */ = {
+			isa = PBXGroup;
+			children = (
+				794B68162B2C64140089874E /* iPadAlertSplitVC.swift */,
+			);
+			path = iPadAlertSplitVC;
 			sourceTree = "<group>";
 		};
 		794BD6252702E0CC0084ADA8 /* CustomNavigationController */ = {
@@ -5456,6 +5490,7 @@
 				3EDC0CF52967DCA100603FED /* HospitalVisit+CoreDataClass.swift in Sources */,
 				2DF665942A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */,
 				3EDC0CB12967D12D00603FED /* AuthenticatedClinicalDocumentResponseObject.swift in Sources */,
+				794B68182B2C64140089874E /* iPadAlertSplitVC.swift in Sources */,
 				2D043C192AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */,
 				1E046E2E2ACE002A008E621B /* DiagnosticImagingInfoTableViewCell.swift in Sources */,
 				3EF199E92A2860EA00B8C5D8 /* NotificationTableViewCell.swift in Sources */,
@@ -5542,6 +5577,7 @@
 				3E87F4B529032092002F0A0E /* AppStates.swift in Sources */,
 				3EDC0CAD2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,
 				3E5924C1297086C900936CF1 /* EmptyTableViewCell.swift in Sources */,
+				794B681C2B2C64260089874E /* iPadAlertView.swift in Sources */,
 				3E81C4CA29B2A73F00C8F5C4 /* Routes.swift in Sources */,
 				291A0CB9282AC33B00035B0F /* Device.swift in Sources */,
 				2D9B39A02907171D00AE9FA1 /* HealthRecordsService.swift in Sources */,
@@ -5869,6 +5905,7 @@
 				3EDC0CB22967D12D00603FED /* AuthenticatedClinicalDocumentResponseObject.swift in Sources */,
 				2DF665952A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */,
 				79590D9A2811EA20006EB59F /* CommentsTableViewCell.swift in Sources */,
+				794B68192B2C64140089874E /* iPadAlertSplitVC.swift in Sources */,
 				2D043C1A2AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */,
 				1E046E2F2ACE002A008E621B /* DiagnosticImagingInfoTableViewCell.swift in Sources */,
 				3EF199EB2A2860EA00B8C5D8 /* NotificationTableViewCell.swift in Sources */,
@@ -5955,6 +5992,7 @@
 				79A15AFF27FC07D500F8330D /* OnboardingCollectionViewCell.swift in Sources */,
 				3E87F4B629032092002F0A0E /* AppStates.swift in Sources */,
 				3EDC0CAE2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,
+				794B681D2B2C64260089874E /* iPadAlertView.swift in Sources */,
 				3E5924C2297086C900936CF1 /* EmptyTableViewCell.swift in Sources */,
 				3E81C4CB29B2A74000C8F5C4 /* Routes.swift in Sources */,
 				794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */,
@@ -6259,6 +6297,7 @@
 				798005C12852C66E006E390F /* InitialOnboardingView.swift in Sources */,
 				2DF665932A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */,
 				3EDC0CF42967DCA100603FED /* HospitalVisit+CoreDataClass.swift in Sources */,
+				794B68172B2C64140089874E /* iPadAlertSplitVC.swift in Sources */,
 				2D043C182AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */,
 				1E046E2D2ACE002A008E621B /* DiagnosticImagingInfoTableViewCell.swift in Sources */,
 				3EF199E72A28608800B8C5D8 /* NotificationTableViewCell.swift in Sources */,
@@ -6345,6 +6384,7 @@
 				2D5218D92988881B00E07382 /* UpdateAddressViewController.swift in Sources */,
 				798005EB2852C66E006E390F /* HiddenRecordsTableViewCell.swift in Sources */,
 				3E87F4B429032092002F0A0E /* AppStates.swift in Sources */,
+				794B681B2B2C64260089874E /* iPadAlertView.swift in Sources */,
 				3EDC0CAC2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,
 				3E5924C0297086C900936CF1 /* EmptyTableViewCell.swift in Sources */,
 				2D9B399F2907171D00AE9FA1 /* HealthRecordsService.swift in Sources */,
