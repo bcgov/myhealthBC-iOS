@@ -173,7 +173,7 @@ extension BaseViewController {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         goToSettingsScreen()
     }
-    
+    // TODO: May have to adjust this to be in it's own view
     private func goToSettingsScreen() {
         if UIDevice.current.orientation.isLandscape {
             let vcTest = ProfileAndSettingsViewController()

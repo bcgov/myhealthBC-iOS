@@ -240,6 +240,14 @@ extension HomeScreenViewController {
     }
 }
 
+//if UIDevice.current.orientation.isLandscape {
+//    let vcTest = ProfileAndSettingsViewController()
+//    if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vcTest) {
+//        let vc = ProfileAndSettingsViewController.construct()
+//        split.adjustFarRightVC(viewController: vc)
+//    }
+//}
+
 // MARK: Observable logic for authentication status change
 extension HomeScreenViewController {
     private func addObservablesForChangeInAuthenticationStatus() {
@@ -468,7 +476,15 @@ extension HomeScreenViewController: QuickAccessCollectionReusableViewDelegate {
     func manageButtonTapped() {
         var vm = ManageHomeScreenViewController.ViewModel()
         vm.createDataSourceForManageScreen()
-        show(route: .ManageHomeScreen, withNavigation: true, viewModel: vm)
+        
+        if UIDevice.current.orientation.isLandscape {
+            let vc = ManageHomeScreenViewController.construct(viewModel: vm)
+            if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vc) {
+                split.adjustFarRightVC(viewController: vc)
+            }
+        } else {
+            show(route: .ManageHomeScreen, withNavigation: true, viewModel: vm)
+        }
     }
 }
 

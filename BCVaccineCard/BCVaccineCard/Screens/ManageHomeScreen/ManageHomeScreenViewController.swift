@@ -158,6 +158,9 @@ extension ManageHomeScreenViewController {
             self.view.endLoadingIndicator()
             self.alert(title: "Success", message: "Preferences updated") {
                 NotificationCenter.default.post(name: .refetchQuickLinksFromCoreData, object: nil, userInfo: nil)
+                guard !UIDevice.current.orientation.isLandscape else {
+                    return
+                }
                 self.navigationController?.popViewController(animated: true)
             }
         })

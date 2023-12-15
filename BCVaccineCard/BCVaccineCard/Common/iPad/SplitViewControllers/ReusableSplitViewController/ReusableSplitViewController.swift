@@ -6,18 +6,8 @@
 //
 
 import UIKit
-// NOTE: Not using for now, not until I can get things sorted
+// TODO: Clean up/refactor this screen to become more reusable and more concise
 class ReusableSplitViewController: UISplitViewController {
-    
-//    class func construct(baseVC: UIViewController, secondVC: UIViewController?, tabIndex: Int) -> ReusableSplitViewController {
-//        if let vc =  Storyboard.iPadHome.instantiateViewController(withIdentifier: String(describing: ReusableSplitViewController.self)) as? ReusableSplitViewController {
-//            vc.tabIndex = tabIndex
-//            vc.baseVC = baseVC
-//            vc.secondVC = secondVC
-//            return vc
-//        }
-//        return ReusableSplitViewController()
-//    }
     
     class func construct(baseVC: UIViewController, secondVC: UIViewController?, tabIndex: Int, tabType: AppTabs) -> ReusableSplitViewController {
         var vc: ReusableSplitViewController
@@ -38,8 +28,6 @@ class ReusableSplitViewController: UISplitViewController {
     private var secondVC: UIViewController?
     private var tabType: AppTabs = .Home
     
-    private var masterVC: iPadSideTabTableViewController?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
