@@ -25,6 +25,9 @@ struct HealthRecordsService {
         network.addLoader(message: .SyncingRecords, caller: .HealthRecordsService_fetchAndStore)
         Logger.log(string: "fetching patient records for \(patient.name)", type: .Network)
         let typesToFetch = patient.isDependent() ? EnabledTypes.convertToHealthRecordType(types: Defaults.enabledTypes?.dependentDatasets ?? []) : EnabledTypes.convertToHealthRecordType(types: Defaults.enabledTypes?.datasets ?? [])
+        if patient.isDependent(), let dependent = patient.dependencyInfo {
+            StorageService.shared.deleteHealthRecordsForDependent(dependent: dependent)
+        }
         var hadFailures = false
         for recordType in typesToFetch {
             dispatchGroup.enter()
