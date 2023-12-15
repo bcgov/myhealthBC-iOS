@@ -55,7 +55,14 @@ class AppTabBarController: UITabBarController {
             self.setup(selectedIndex: 0)
             self.setupListeners()
             self.showOnBoardingIfNeeded() { authenticatedDuringOnBoarding in
+                
+                if Constants.deviceType == .iPad {
+                    let userInfo: [String: Bool] = ["hide": false]
+                    NotificationCenter.default.post(name: .adjustIPadSideTab, object: nil, userInfo: userInfo as [AnyHashable : Any])
+                }
+                
                 self.setup(selectedIndex: 0)
+        
                 if authenticatedDuringOnBoarding {
                     self.performSync()
                 }
@@ -88,6 +95,9 @@ class AppTabBarController: UITabBarController {
         // When authentication status changes, we can set the records tab to the appropriate VC
         // and fetch records - after validation
         AppStates.shared.listenToAuth { authenticated in
+            if !authenticated {
+                self.patient = nil
+            }
             self.performSync()
         }
         
@@ -117,6 +127,43 @@ class AppTabBarController: UITabBarController {
         AppStates.shared.listenToSyncRequest {
             self.performSync()
         }
+        
+        guard Constants.deviceType == .iPad else { return }
+        NotificationCenter.default.addObserver(self, selector: #selector(tabChangedFromiPad), name: .tabChangedFromiPad, object: nil)
+//        listenToLocalAuthNotificationForiPad()
+    }
+    
+//    func listenToLocalAuthNotificationForiPad() {
+//        Notification.Name.shouldPerformLocalAuth.onPost(object: nil, queue: .main) {[weak self] _ in
+//            guard let `self` = self, UIApplication.topViewController() == self else {return}
+//            self.performLocalAuthIfNeeded()
+//        }
+//    }
+    
+//    func performLocalAuthIfNeeded() {
+//        if LocalAuthManager.shouldAuthenticate {
+//            // Dont show local auth if onboading should be shown
+//            let unseen = Defaults.unseenOnBoardingScreens()
+//            guard unseen.isEmpty else {return}
+//            
+//            showLocalAuth(onSuccess: { [weak self] in
+//                guard let `self` = self else {return}
+////                self.localAuthPerformed()
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                    if !Defaults.hasSeenFirstLogin {
+//                        Defaults.hasSeenFirstLogin = true
+//                        self.showLogin(initialView: .Landing, showTabOnSuccess: .Home)
+//                    }
+//                }
+//            })
+//        }
+//    }
+    
+    // MARK: For iPad
+    @objc private func tabChangedFromiPad(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: Int] else { return }
+        guard let index = userInfo["index"] else { return }
+        self.selectedIndex = index
     }
     
     // MARK: Auth and validation
@@ -195,6 +242,12 @@ class AppTabBarController: UITabBarController {
         guard let first = unseen.first else {
             return completion(false)
         }
+
+        if Constants.deviceType == .iPad {
+            let userInfo: [String: Bool] = ["hide": true]
+            NotificationCenter.default.post(name: .adjustIPadSideTab, object: nil, userInfo: userInfo as [AnyHashable : Any])
+        }
+        
         let vm = InitialOnboardingViewController.ViewModel(delegate: self, startScreenNumber: first, screensToShow: unseen, completion: completion)
         let vc = InitialOnboardingViewController.construct(viewModel: vm)
         vc.modalPresentationStyle = .overFullScreen
@@ -206,7 +259,7 @@ class AppTabBarController: UITabBarController {
         tabBar.tintColor = AppColours.appBlue
         tabBar.unselectedItemTintColor = AppColours.textGray
         tabBar.barTintColor = .white
-        tabBar.isHidden = false
+        tabBar.isHidden = Constants.deviceType == .iPad
         setTabs()
     }
     
@@ -239,7 +292,7 @@ class AppTabBarController: UITabBarController {
             currentTabs = unAuthenticatedTabs
             viewControllers = setViewControllers(tabs: unAuthenticatedTabs)
         }
-        tabBar.isHidden = false
+        tabBar.isHidden = Constants.deviceType == .iPad
         view.layoutIfNeeded()
         tabBar.layoutIfNeeded()
     }
@@ -247,7 +300,7 @@ class AppTabBarController: UITabBarController {
     private func setViewControllers(tabs: [AppTabs]) -> [UIViewController] {
         return tabs.compactMap({setViewController(tab: $0)})
     }
-    
+    // TODO: Adjust this function to accomodate for iPad
     private func setViewController(tab vc: AppTabs) -> UIViewController? {
         
         guard let authManager = authManager,
@@ -257,26 +310,40 @@ class AppTabBarController: UITabBarController {
         else {
             return nil
         }
-        
-        guard let properties = vc.properties(
-            delegate: self,
-            authManager: authManager,
-            syncService: syncService,
-            networkService: networkService,
-            configService: configService,
-            patient: self.patient
-        )  else {
-            return nil
+        if Constants.deviceType == .iPad {
+            guard let splitVC = vc.iPadSplitVC(
+                delegate: self,
+                authManager: authManager,
+                syncService: syncService,
+                networkService: networkService,
+                configService: configService,
+                patient: self.patient
+            )  else {
+                return nil
+            }
+            return splitVC
+        } else {
+            guard let properties = vc.properties(
+                delegate: self,
+                authManager: authManager,
+                syncService: syncService,
+                networkService: networkService,
+                configService: configService,
+                patient: self.patient
+            )  else {
+                return nil
+            }
+            
+            let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
+    //        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+            tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansRegularWithSize(size: 10)], for: .normal)
+            let viewController = properties.baseViewController
+            viewController.tabBarItem = tabBarItem
+            viewController.title = properties.title
+            let navController = CustomNavigationController.init(rootViewController: viewController)
+            return navController
         }
         
-        let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
-//        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
-        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansRegularWithSize(size: 10)], for: .normal)
-        let viewController = properties.baseViewController
-        viewController.tabBarItem = tabBarItem
-        viewController.title = properties.title
-        let navController = CustomNavigationController.init(rootViewController: viewController)
-        return navController
     }
     
     func whenConnected() {
@@ -301,6 +368,9 @@ extension AppTabBarController: TabDelegate {
             availableTabs = unAuthenticatedTabs
         }
         self.selectedIndex = availableTabs.firstIndex(where: {$0 == tab}) ?? 0
+        guard Constants.deviceType == .iPad else { return }
+        let userInfo: [String: Int] = ["index": self.selectedIndex]
+        NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: userInfo as [AnyHashable : Any])
     }
     
     func showLogin() {

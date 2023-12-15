@@ -91,6 +91,14 @@ extension AppTabBarController {
     var unAuthenticatedTabs: [AppTabs] {
         return [.Home, .UnAuthenticatedRecords, .Services, .Dependents]
     }
+    
+    static var iPadAuthenticatedTabs: [AppTabs] {
+        return [.Home, .AuthenticatedRecords, .Services, .Dependents]
+    }
+    // CHANGE TABS FOR UNAUTHENTICATED USER
+    static var iPadUnauthenticatedTabs: [AppTabs] {
+        return [.Home, .UnAuthenticatedRecords, .Services, .Dependents]
+    }
 }
 
 extension HealthRecordConstants {

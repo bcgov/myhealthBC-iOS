@@ -85,6 +85,10 @@ extension UIViewController {
     func showLocalAuth(onSuccess: @escaping()->Void) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {return}
+            if Constants.deviceType == .iPad, let parent = self.tabBarController?.parent as? iPadParentSplitViewController {
+                parent.showLocalAuth(onSuccess: onSuccess)
+                return
+            }
             if let parent = self.parent as? CustomNavigationController {
                 parent.showLocalAuth(onSuccess: onSuccess)
                 return

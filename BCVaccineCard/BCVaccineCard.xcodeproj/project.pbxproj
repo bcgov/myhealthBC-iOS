@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -387,6 +387,9 @@
 		2D79E4372B0C35290075FFB3 /* iPadSideTabTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D79E4362B0C35290075FFB3 /* iPadSideTabTableViewController.swift */; };
 		2D79E4382B0C35290075FFB3 /* iPadSideTabTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D79E4362B0C35290075FFB3 /* iPadSideTabTableViewController.swift */; };
 		2D79E4392B0C35290075FFB3 /* iPadSideTabTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D79E4362B0C35290075FFB3 /* iPadSideTabTableViewController.swift */; };
+		2D79E4432B0D50570075FFB3 /* ReusableSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D79E4422B0D50570075FFB3 /* ReusableSplitViewController.swift */; };
+		2D79E4442B0D50570075FFB3 /* ReusableSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D79E4422B0D50570075FFB3 /* ReusableSplitViewController.swift */; };
+		2D79E4452B0D50570075FFB3 /* ReusableSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D79E4422B0D50570075FFB3 /* ReusableSplitViewController.swift */; };
 		2D81887B2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */; };
 		2D81887C2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */; };
 		2D81887D2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */; };
@@ -1745,6 +1748,7 @@
 		2D79E42E2B0C35090075FFB3 /* iPadSideTabTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadSideTabTableViewCell.swift; sourceTree = "<group>"; };
 		2D79E42F2B0C35090075FFB3 /* iPadSideTabTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = iPadSideTabTableViewCell.xib; sourceTree = "<group>"; };
 		2D79E4362B0C35290075FFB3 /* iPadSideTabTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadSideTabTableViewController.swift; sourceTree = "<group>"; };
+		2D79E4422B0D50570075FFB3 /* ReusableSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableSplitViewController.swift; sourceTree = "<group>"; };
 		2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageHomeScreenViewController.swift; sourceTree = "<group>"; };
 		2D81887E2A71226A00894756 /* ManageHomeScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageHomeScreenViewModel.swift; sourceTree = "<group>"; };
 		2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsService.swift; sourceTree = "<group>"; };
@@ -2848,8 +2852,8 @@
 		2D79E4272B0C347F0075FFB3 /* iPad */ = {
 			isa = PBXGroup;
 			children = (
+				2D79E4402B0D50330075FFB3 /* SplitViewControllers */,
 				2D79E42D2B0C34BA0075FFB3 /* iPadSideTabBar */,
-				2D79E4282B0C34860075FFB3 /* ParentSplitViewController */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -2878,6 +2882,23 @@
 				2D79E42F2B0C35090075FFB3 /* iPadSideTabTableViewCell.xib */,
 			);
 			path = TableViewCell;
+			sourceTree = "<group>";
+		};
+		2D79E4402B0D50330075FFB3 /* SplitViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2D79E4412B0D50400075FFB3 /* ReusableSplitViewController */,
+				2D79E4282B0C34860075FFB3 /* ParentSplitViewController */,
+			);
+			path = SplitViewControllers;
+			sourceTree = "<group>";
+		};
+		2D79E4412B0D50400075FFB3 /* ReusableSplitViewController */ = {
+			isa = PBXGroup;
+			children = (
+				2D79E4422B0D50570075FFB3 /* ReusableSplitViewController.swift */,
+			);
+			path = ReusableSplitViewController;
 			sourceTree = "<group>";
 		};
 		2D8188792A710F0E00894756 /* ManageHomeScreen */ = {
@@ -5244,6 +5265,7 @@
 				2D1C8D102A79F6E5005204B7 /* ManageQuickLinkTableViewCell.swift in Sources */,
 				2922C12F287E1018000FF4F7 /* StorageService+SpecialAuthorityMedication.swift in Sources */,
 				3EDC0D24296CBEB700603FED /* ClinicalDocumentDetailView.swift in Sources */,
+				2D79E4442B0D50570075FFB3 /* ReusableSplitViewController.swift in Sources */,
 				3E91C7B228B51B0B005AA34F /* Immunization+CoreDataProperties.swift in Sources */,
 				2941D7042847D76000EE98DE /* NetworkConnection.swift in Sources */,
 				79218AD2275576640063004E /* TextListModel.swift in Sources */,
@@ -5656,6 +5678,7 @@
 				2D1C8D112A79F6E5005204B7 /* ManageQuickLinkTableViewCell.swift in Sources */,
 				3E91C7B328B51B0B005AA34F /* Immunization+CoreDataProperties.swift in Sources */,
 				29788531279624E600FF912D /* SettingsAuthenticateTableViewCell.swift in Sources */,
+				2D79E4452B0D50570075FFB3 /* ReusableSplitViewController.swift in Sources */,
 				79218AB0275196040063004E /* HealthRecordsUserView.swift in Sources */,
 				2941D7052847D76000EE98DE /* NetworkConnection.swift in Sources */,
 				79A15B0A2808B27600F8330D /* CommentViewTableViewCell.swift in Sources */,
@@ -6045,6 +6068,7 @@
 				2D1C8D0F2A79F6E5005204B7 /* ManageQuickLinkTableViewCell.swift in Sources */,
 				798005552852C66E006E390F /* OnboardingCollectionViewCell.swift in Sources */,
 				3E6830FD2940D14100100402 /* PostComment.swift in Sources */,
+				2D79E4432B0D50570075FFB3 /* ReusableSplitViewController.swift in Sources */,
 				3EDC0D23296CBEB700603FED /* ClinicalDocumentDetailView.swift in Sources */,
 				3E91C7B128B51B0B005AA34F /* Immunization+CoreDataProperties.swift in Sources */,
 				798005572852C66E006E390F /* NetworkConnection.swift in Sources */,
@@ -6521,11 +6545,9 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -6536,7 +6558,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Health Gateway ADHOC";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -6557,11 +6578,9 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -6572,7 +6591,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Health Gateway ADHOC";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
