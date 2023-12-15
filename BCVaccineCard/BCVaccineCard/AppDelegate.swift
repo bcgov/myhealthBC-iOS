@@ -25,7 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var syncService: SyncService?
     var configService: MobileConfigService?
     
-    
     var coreDataContext: NSManagedObjectContext?
     
     fileprivate var dataLoadCount: Int = 0 
@@ -59,11 +58,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppStates.shared.listen()
         //use .Prod or .Test for different endpoints for keys
 #if PROD
-        BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: true)
+        BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
 #elseif TEST
-        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: true)
+        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
 #elseif DEV
-        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: true)
+        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
 #endif
         AnalyticsService.shared.setup()
         

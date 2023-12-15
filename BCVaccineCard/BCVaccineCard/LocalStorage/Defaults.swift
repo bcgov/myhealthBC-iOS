@@ -11,6 +11,7 @@ struct Defaults {
     enum Key: String {
         case initialOnboardingScreensSeen
         case rememberGatewayDetails
+        case enabledTypes
         case hasAppLaunchedBefore
         case loginProcessStatus
         case hasSeenFirstLogin
@@ -25,6 +26,15 @@ struct Defaults {
             return details
         }
         set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.rememberGatewayDetails.rawValue) }
+    }
+    
+    static var enabledTypes: EnabledTypes? {
+        get {
+            guard let data = UserDefaults.standard.value(forKey: self.Key.enabledTypes.rawValue) as? Data else { return nil }
+            let types = try? PropertyListDecoder().decode(EnabledTypes.self, from: data)
+            return types
+        }
+        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.enabledTypes.rawValue) }
     }
     
     static var hasAppLaunchedBefore: Bool {
@@ -116,6 +126,4 @@ struct Defaults {
             return
         }
     }
-    
-    
 }

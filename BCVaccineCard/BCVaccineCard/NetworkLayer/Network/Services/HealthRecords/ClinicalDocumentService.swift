@@ -20,7 +20,8 @@ struct ClinicalDocumentService {
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([ClinicalDocument]?)->Void) {
-        if !HealthRecordConstants.enabledTypes.contains(.clinicalDocument) {return completion([])}
+        let shouldFetch = patient.isDependent() ? (Defaults.enabledTypes?.contains(dependentDataset: .ClinicalDocument) == true) : (Defaults.enabledTypes?.contains(dataset: .ClinicalDocument) == true)
+        if !shouldFetch {return completion([])}
         Logger.log(string: "Fetching ClinicalDocument records for \(patient.name)", type: .Network)
         network.addLoader(message: .SyncingRecords, caller: .ClinicalDocumentService_fetchAndStore)
         fetch(for: patient) { result in

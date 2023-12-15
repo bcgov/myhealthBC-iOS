@@ -36,11 +36,12 @@ struct SyncService {
         SessionStorage.syncPerformedThisSession = true
         
         // API status
-        MobileConfigService(network: network).fetchConfig { config in
+        MobileConfigService(network: network).fetchConfig(forceNetworkRefetch: true) { config in
             guard let config = config, config.online else {
                 return completion(nil)
             }
             
+//            Defaults.enabledTypes = config.getEnabledTypes()
             // Submit comments before removing all records
             let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
             commentsService.submitUnsyncedComments {
@@ -75,16 +76,18 @@ struct SyncService {
             var hadFailures = false
             let group = DispatchGroup()
             
-            group.enter()
-            patientService.fetchAndStoreOrganDonorStatus(for: patient) { status in
-                if status == nil {
-                    hadFailures = true
+            if Defaults.enabledTypes?.contains(service: .OrganDonorRegistration) == true {
+                group.enter()
+                patientService.fetchAndStoreOrganDonorStatus(for: patient) { status in
+                    if status == nil {
+                        hadFailures = true
+                    }
+                    Logger.log(string: "\(String.fetchedDonorStatus) \(status != nil)", type: .Network)
+                    group.leave()
                 }
-                Logger.log(string: "\(String.fetchedDonorStatus) \(status != nil)", type: .Network)
-                group.leave()
             }
             
-            if HealthRecordConstants.diagnosticImagingEnabled {
+            if Defaults.enabledTypes?.contains(dataset: .DiagnosticImaging) == true {
                 group.enter()
                 patientService.fetchAndStoreDiagnosticImaging(for: patient) { imaging in
                     if imaging == nil {

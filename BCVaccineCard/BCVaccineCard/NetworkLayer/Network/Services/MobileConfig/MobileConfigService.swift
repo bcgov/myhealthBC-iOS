@@ -17,8 +17,8 @@ class MobileConfigService {
         self.network = network
     }
     
-    func fetchConfig(showToastOnError: Bool? = true, completion: @escaping (MobileConfigurationResponseObject?)->Void) {
-        if let cache = MobileConfigStorage.cachedConfig {
+    func fetchConfig(showToastOnError: Bool? = true, forceNetworkRefetch: Bool = false, completion: @escaping (MobileConfigurationResponseObject?)->Void) {
+        if let cache = MobileConfigStorage.cachedConfig, forceNetworkRefetch == false {
             let timeDiff = Date().timeIntervalSince(cache.datetime)
             if timeDiff <= cacheTimeout {
                 Logger.log(string: "MobileConfigService returning cached", type: .Network)
@@ -49,6 +49,7 @@ class MobileConfigService {
                 Logger.log(string: "MobileConfigService response received", type: .Network)
                 if let response = responseData {
                     MobileConfigStorage.store(config: response)
+                    Defaults.enabledTypes = response.getEnabledTypes()
                     if response.online == false, showToastOnError == true {
                         AppDelegate.sharedInstance?.showToast(message: .maintenanceMessage, style: .Warn)
                     }

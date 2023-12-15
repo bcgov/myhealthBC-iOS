@@ -321,7 +321,7 @@ extension UsersListOfRecordsViewController {
 extension UsersListOfRecordsViewController: SegmentedViewDelegate {
     
     private func setupSegmentedControl() {
-        if HealthRecordConstants.notesEnabled, viewModel?.userType != .Dependent {
+        if (Defaults.enabledTypes?.contains(dataset: .Note) == true), viewModel?.userType != .Dependent {
             listOfRecordsSegmentedView.isHidden = false
             listOfRecordsSegmentedView.configure(delegateOwner: self, dataSource: [.Timeline, .Notes])
         } else {
