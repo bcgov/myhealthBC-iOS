@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,24 +11,24 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="AuthenticationView" customModule="BCVaccineCard" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="AuthenticationView" customModule="HealthGateway" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="64" translatesAutoresizingMaskIntoConstraints="NO" id="YSG-jO-thH">
-                    <rect key="frame" x="24" y="79" width="366" height="386"/>
+                    <rect key="frame" x="24" y="385" width="976" height="396"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="zVS-Gn-Ohv">
-                            <rect key="frame" x="0.0" y="0.0" width="366" height="118"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="zVS-Gn-Ohv" userLabel="Stack View1">
+                            <rect key="frame" x="65" y="0.0" width="846.5" height="57"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in with your BC Services Card to access all health records" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="x7D-uH-HLP">
-                                    <rect key="frame" x="0.0" y="0.0" width="366" height="41"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="846.5" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The BC Services Card app is a secure way to prove who you are. Follow the instructions to get set up and log in." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="yzV-g2-YJ4">
-                                    <rect key="frame" x="0.0" y="57" width="366" height="61"/>
+                                    <rect key="frame" x="0.0" y="36.5" width="846.5" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -41,17 +41,37 @@
                                 <constraint firstAttribute="trailing" secondItem="x7D-uH-HLP" secondAttribute="trailing" id="UK1-A5-2PB"/>
                             </constraints>
                         </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="Pef-cy-8rS">
-                            <rect key="frame" x="6.5" y="182" width="353.5" height="204"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="Pef-cy-8rS" userLabel="Stack View2">
+                            <rect key="frame" x="393" y="121" width="190" height="275"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="authLogo" translatesAutoresizingMaskIntoConstraints="NO" id="IUh-Gg-vhZ">
-                                    <rect key="frame" x="0.0" y="0.0" width="353.5" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="190" height="137"/>
                                     <constraints>
+                                        <constraint firstAttribute="height" constant="137" id="6nB-hI-ssM"/>
+                                        <constraint firstAttribute="width" constant="190" id="EWY-5u-Dem"/>
                                         <constraint firstAttribute="height" constant="127" id="meX-gW-bZX"/>
                                     </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="6nB-hI-ssM"/>
+                                            <exclude reference="EWY-5u-Dem"/>
+                                            <exclude reference="meX-gW-bZX"/>
+                                        </mask>
+                                    </variation>
+                                    <variation key="widthClass=compact">
+                                        <mask key="constraints">
+                                            <include reference="meX-gW-bZX"/>
+                                        </mask>
+                                    </variation>
+                                    <variation key="heightClass=regular-widthClass=regular">
+                                        <mask key="constraints">
+                                            <include reference="6nB-hI-ssM"/>
+                                            <include reference="EWY-5u-Dem"/>
+                                        </mask>
+                                    </variation>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yDY-O4-kyu">
-                                    <rect key="frame" x="0.0" y="143" width="353.5" height="61"/>
+                                    <rect key="frame" x="0.0" y="153" width="190" height="122"/>
                                     <string key="text">You can complete this step any time. If you choose to skip it for now, you'll only be able to access your COVID-19 health records.</string>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
@@ -64,12 +84,24 @@
                         <constraint firstItem="zVS-Gn-Ohv" firstAttribute="leading" secondItem="YSG-jO-thH" secondAttribute="leading" id="Hr1-e0-M1H"/>
                         <constraint firstAttribute="trailing" secondItem="zVS-Gn-Ohv" secondAttribute="trailing" id="Ty0-BX-yn5"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="Hr1-e0-M1H"/>
+                            <exclude reference="Ty0-BX-yn5"/>
+                        </mask>
+                    </variation>
+                    <variation key="widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="Hr1-e0-M1H"/>
+                            <include reference="Ty0-BX-yn5"/>
+                        </mask>
+                    </variation>
                 </stackView>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fZu-At-NBK">
-                    <rect key="frame" x="24" y="652" width="366" height="178"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fZu-At-NBK">
+                    <rect key="frame" x="330.5" y="920" width="363.5" height="96"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FZH-by-C09">
-                            <rect key="frame" x="0.0" y="0.0" width="366" height="54"/>
+                            <rect key="frame" x="0.0" y="0.0" width="363.5" height="54"/>
                             <color key="backgroundColor" red="0.0" green="0.1960801482" blue="0.396075815" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="54" id="Myv-ao-Gd0"/>
@@ -82,53 +114,90 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u1Y-oU-mI9">
-                            <rect key="frame" x="0.0" y="62" width="366" height="54"/>
+                            <rect key="frame" x="0.0" y="62" width="363.5" height="34"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="Not now"/>
                             <connections>
                                 <action selector="cancelAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="KaQ-a3-btn"/>
                             </connections>
                         </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don’t have BC Service Card app, please download here. " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="DzU-Ht-4yU">
-                            <rect key="frame" x="0.0" y="124" width="366" height="54"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                     </subviews>
-                    <constraints>
-                        <constraint firstAttribute="trailing" secondItem="FZH-by-C09" secondAttribute="trailing" id="MAY-dd-l1K"/>
-                        <constraint firstItem="u1Y-oU-mI9" firstAttribute="height" secondItem="FZH-by-C09" secondAttribute="height" id="fm0-NE-Bew"/>
-                        <constraint firstAttribute="trailing" secondItem="u1Y-oU-mI9" secondAttribute="trailing" id="hJT-5m-S1v"/>
-                        <constraint firstItem="u1Y-oU-mI9" firstAttribute="leading" secondItem="fZu-At-NBK" secondAttribute="leading" id="o5s-K5-AxZ"/>
-                        <constraint firstItem="FZH-by-C09" firstAttribute="leading" secondItem="fZu-At-NBK" secondAttribute="leading" id="uQl-WW-tqO"/>
-                    </constraints>
                 </stackView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don’t have BC Service Card app, please download here. " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="DzU-Ht-4yU">
+                    <rect key="frame" x="330.5" y="1297" width="363.5" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="fZu-At-NBK" secondAttribute="bottom" constant="32" id="1zq-Dl-Hrq"/>
                 <constraint firstItem="YSG-jO-thH" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="35" id="I6y-iw-UWN"/>
+                <constraint firstItem="DzU-Ht-4yU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fZu-At-NBK" secondAttribute="leading" id="LNR-sH-aaJ"/>
+                <constraint firstItem="DzU-Ht-4yU" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="MyL-LK-SwI"/>
                 <constraint firstAttribute="trailing" secondItem="YSG-jO-thH" secondAttribute="trailing" constant="24" id="Qyp-x9-d3P"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="fZu-At-NBK" secondAttribute="bottom" constant="330" id="RrT-AC-dM4"/>
+                <constraint firstItem="YSG-jO-thH" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-100" id="RsJ-SG-1dn"/>
+                <constraint firstItem="DzU-Ht-4yU" firstAttribute="top" relation="greaterThanOrEqual" secondItem="fZu-At-NBK" secondAttribute="bottom" constant="8" id="SoT-HZ-kUr"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="fZu-At-NBK" secondAttribute="trailing" constant="24" id="UIp-pW-6uy"/>
+                <constraint firstItem="fZu-At-NBK" firstAttribute="top" relation="greaterThanOrEqual" secondItem="YSG-jO-thH" secondAttribute="bottom" constant="110" id="VRJ-Ng-vms"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="DzU-Ht-4yU" secondAttribute="bottom" constant="32" id="XiX-3y-msF"/>
                 <constraint firstItem="fZu-At-NBK" firstAttribute="top" relation="greaterThanOrEqual" secondItem="YSG-jO-thH" secondAttribute="bottom" constant="32" id="aHK-Q1-VoG"/>
+                <constraint firstItem="YSG-jO-thH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="24" id="bSY-7I-SLo"/>
                 <constraint firstItem="YSG-jO-thH" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="pyA-9f-Jzx"/>
+                <constraint firstItem="DzU-Ht-4yU" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fZu-At-NBK" secondAttribute="trailing" id="rpi-J9-59z"/>
                 <constraint firstItem="fZu-At-NBK" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="tBN-iN-CIH"/>
+                <constraint firstItem="DzU-Ht-4yU" firstAttribute="top" secondItem="fZu-At-NBK" secondAttribute="bottom" constant="8" id="zqy-VO-WH2"/>
             </constraints>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="RrT-AC-dM4"/>
+                    <exclude reference="UIp-pW-6uy"/>
+                    <exclude reference="I6y-iw-UWN"/>
+                    <exclude reference="RsJ-SG-1dn"/>
+                    <exclude reference="VRJ-Ng-vms"/>
+                    <exclude reference="aHK-Q1-VoG"/>
+                    <exclude reference="SoT-HZ-kUr"/>
+                    <exclude reference="zqy-VO-WH2"/>
+                </mask>
+            </variation>
+            <variation key="widthClass=compact">
+                <mask key="constraints">
+                    <include reference="UIp-pW-6uy"/>
+                    <include reference="I6y-iw-UWN"/>
+                    <include reference="aHK-Q1-VoG"/>
+                    <include reference="zqy-VO-WH2"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=regular">
+                <mask key="constraints">
+                    <include reference="RrT-AC-dM4"/>
+                    <include reference="RsJ-SG-1dn"/>
+                    <include reference="VRJ-Ng-vms"/>
+                    <include reference="SoT-HZ-kUr"/>
+                </mask>
+            </variation>
             <connections>
+                <outlet property="buttonsStackView" destination="fZu-At-NBK" id="2qC-PJ-EU1"/>
+                <outlet property="buttonsStackViewBottomConstraint" destination="RrT-AC-dM4" id="IxC-MF-CRA"/>
                 <outlet property="cancelButton" destination="u1Y-oU-mI9" id="eSk-be-bDe"/>
                 <outlet property="downloadBCSCLabel" destination="DzU-Ht-4yU" id="lr0-tZ-zXr"/>
+                <outlet property="imageStackView" destination="Pef-cy-8rS" id="BDG-3d-bxa"/>
                 <outlet property="loginButton" destination="FZH-by-C09" id="u9k-9X-W8U"/>
                 <outlet property="secondarySubtitle" destination="yDY-O4-kyu" id="zyx-iW-WDl"/>
+                <outlet property="stackViewLeadingSpaceConstraint" destination="bSY-7I-SLo" id="xWx-RG-NSm"/>
+                <outlet property="stackViewTrailingSpaceConstraint" destination="Qyp-x9-d3P" id="GkB-1h-pKs"/>
                 <outlet property="subtitleLabel" destination="yzV-g2-YJ4" id="hub-fv-0Hx"/>
+                <outlet property="textAndImageStackView" destination="YSG-jO-thH" id="Pa2-ps-8U7"/>
+                <outlet property="textStackView" destination="zVS-Gn-Ohv" id="1DP-rZ-TWB"/>
                 <outlet property="titleLabel" destination="x7D-uH-HLP" id="JeN-mF-4vT"/>
             </connections>
             <point key="canvasLocation" x="139" y="143"/>
         </view>
     </objects>
     <resources>
-        <image name="authLogo" width="190" height="133"/>
+        <image name="authLogo" width="184.5" height="133"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

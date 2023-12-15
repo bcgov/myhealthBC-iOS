@@ -43,6 +43,15 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
 //    var getPassesFlowType: PassesFlowVCs? {
 //        return nil
 //    }
+    
+    var getReusableSplitViewController: ReusableSplitViewController? {
+        if let nav = self.navigationController as? CustomNavigationController {
+            if let split = nav.parent as? ReusableSplitViewController {
+                return split
+            }
+        }
+        return nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,22 +72,24 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
                 hideTab = false
             }
         }
-        
+     
         if hideTab {
             self.parent?.tabBarController?.tabBar.isHidden = true
         } else {
-            self.parent?.tabBarController?.tabBar.isHidden = false
+            self.parent?.tabBarController?.tabBar.isHidden = Constants.deviceType == .iPad
         }
     }
     
     func listenToLocalAuthNotification() {
         Notification.Name.shouldPerformLocalAuth.onPost(object: nil, queue: .main) {[weak self] _ in
             guard let `self` = self, UIApplication.topViewController() == self else {return}
+//            guard Constants.deviceType != .iPad else { return }
             self.performLocalAuthIfNeeded()
         }
     }
     
     func performLocalAuthIfNeeded() {
+//        guard Constants.deviceType != .iPad else { return }
         if LocalAuthManager.shouldAuthenticate {
             // Dont show local auth if onboading should be shown
             let unseen = Defaults.unseenOnBoardingScreens()
@@ -162,9 +173,18 @@ extension BaseViewController {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         goToSettingsScreen()
     }
-    
+    // TODO: May have to adjust this to be in it's own view
     private func goToSettingsScreen() {
-        show(route: .Settings, withNavigation: true)
+        if UIDevice.current.orientation.isLandscape {
+            let vcTest = ProfileAndSettingsViewController()
+            if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vcTest) {
+                let vc = ProfileAndSettingsViewController.construct()
+                split.adjustFarRightVC(viewController: vc)
+            }
+        } else {
+            show(route: .Settings, withNavigation: true)
+        }
+        
     }
 }
 
@@ -175,3 +195,11 @@ extension BaseViewController {
     }
 }
 
+// MARK: This is to detect when a view controller rotates
+extension BaseViewController {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        guard Constants.deviceType == .iPad else { return }
+        NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
+    }
+}

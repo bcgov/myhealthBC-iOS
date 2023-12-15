@@ -15,7 +15,7 @@ class AuthenticationViewController: UIViewController {
             vc.initialView = viewModel.initialView
             vc.viewModel = viewModel
             if #available(iOS 13.0, *) {
-                vc.isModalInPresentation = true
+                vc.isModalInPresentation = Constants.deviceType == .iPad ? false : true
             }
             return vc
         }
@@ -177,3 +177,13 @@ class AuthenticationViewController: UIViewController {
 //        self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
 //    }
 //}
+
+// MARK: For iPad
+extension AuthenticationViewController {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        guard Constants.deviceType == .iPad else { return }
+        NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
+        self.view.layoutIfNeeded()
+    }
+}

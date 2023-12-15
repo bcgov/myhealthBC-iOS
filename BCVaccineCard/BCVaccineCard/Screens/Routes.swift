@@ -79,6 +79,9 @@ extension UIViewController {
         }
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = presentationStyle ?? .automatic
+            if Constants.deviceType == .iPad {
+                controller.modalPresentationStyle = .fullScreen
+            }
         }
         
         if let tabBar = self.tabBarController as? AppTabBarController {

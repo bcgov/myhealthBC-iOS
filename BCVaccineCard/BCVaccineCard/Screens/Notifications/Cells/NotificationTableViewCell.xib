@@ -91,12 +91,14 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="bottomMarginConstraint" destination="U8F-gI-C62" id="7GJ-fd-q3o"/>
                 <outlet property="detailsLabel" destination="jn2-a7-KsP" id="UkS-8h-5oC"/>
                 <outlet property="detailsLabelHeight" destination="ndd-Rn-mgG" id="Z7f-CI-4m6"/>
                 <outlet property="dismissButton" destination="Xc7-rQ-Sog" id="AgG-dd-wE4"/>
                 <outlet property="messageContainer" destination="WOr-MG-eKg" id="FEJ-cs-WLj"/>
                 <outlet property="messageLabel" destination="TQS-VJ-AKm" id="9Mj-Vq-kY5"/>
                 <outlet property="timeLabel" destination="mDd-nC-v3p" id="H7c-HD-w5X"/>
+                <outlet property="topMarginConstraint" destination="7eo-bk-HwY" id="MTe-Ob-SEn"/>
             </connections>
             <point key="canvasLocation" x="80.916030534351137" y="97.183098591549296"/>
         </tableViewCell>

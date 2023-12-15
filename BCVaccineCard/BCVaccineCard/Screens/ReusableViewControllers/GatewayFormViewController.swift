@@ -741,3 +741,13 @@ struct HGStorageModel {
     let phn: String
     let dob: String
 }
+
+// MARK: For iPad
+extension GatewayFormViewController {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        guard Constants.deviceType == .iPad else { return }
+        NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
+        // TODO: Make iPad adjustments here if necessary
+    }
+}

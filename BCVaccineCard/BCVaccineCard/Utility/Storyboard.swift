@@ -23,4 +23,6 @@ enum Storyboard {
     static var services: UIStoryboard { return UIStoryboard(name: "Services", bundle: nil) }
     static var notifications: UIStoryboard { return UIStoryboard(name: "Notifications", bundle: nil) }
     static var immunizationSchedule: UIStoryboard { return UIStoryboard(name: "ImmunizationSchedule", bundle: nil) }
+    // iPad
+    static var iPadHome: UIStoryboard { return UIStoryboard(name: "iPadHome", bundle: nil) }
 }

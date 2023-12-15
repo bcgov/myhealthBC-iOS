@@ -27,6 +27,18 @@ enum HomeScreenCellType {
         }
     }
     
+    var getIPadTitle: String {
+        switch self {
+        case .Records: return "Health Records"
+        case .Proofs: return "Proof of Vaccination"
+        case .Resources: return "Health Resources"
+        case .ImmunizationSchedule: return "Immunization Schedules"
+        case .Recommendations: return "Recommended Immunizations"
+        case .QuickLink(type: let type):
+            return type.name.getManageScreenDisplayableName
+        }
+    }
+    
     var getIcon: UIImage? {
         switch self {
         case .Records: return UIImage(named: "records-home-icon")
@@ -93,6 +105,7 @@ class HomeScreenRecordCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak private var buttonImageView: UIImageView!
     @IBOutlet weak private var rightCornerButton: UIButton!
 //    @IBOutlet weak private var titleHeight: NSLayoutConstraint!
+    @IBOutlet weak private var buttonWidthConstraint: NSLayoutConstraint!
     
     weak private var delegate: HomeScreenRecordCollectionViewCellDelegate?
     private var indexPath: IndexPath?
@@ -123,14 +136,18 @@ class HomeScreenRecordCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(forType type: HomeScreenCellType, delegateOwner: UIViewController, indexPath: IndexPath) {
+        let isIPad = Constants.deviceType == .iPad
         self.indexPath = indexPath
         iconImageView.image = type.getIcon
-        titleLabel.text = type.getTitle
+        titleLabel.text = isIPad ? type.getIPadTitle : type.getTitle
         rightCornerButton.isHidden = !type.hasRightCornerButton
         self.delegate = delegateOwner as? HomeScreenRecordCollectionViewCellDelegate
 //        descriptionLabel.text = type.getDescriptionText
 //        buttonImageView.image = type.getButtonImage(auth: auth)
 //        titleHeight.constant = type.getTitle.heightForView(font: UIFont.bcSansBoldWithSize(size: 17), width: titleLabel.bounds.width)
+        if isIPad {
+            buttonWidthConstraint.constant = UIDevice.current.orientation.isLandscape ? 32 : 24
+        }
     }
     
     @IBAction private func rightCornerButtonTapped(_ sender: UIButton) {

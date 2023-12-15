@@ -23,6 +23,13 @@ class AuthenticationInfoView: UIView, Theme {
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var continueButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak private var buttonsStackView: UIStackView!
+    @IBOutlet weak private var textImageParentStackView: UIStackView!
+    @IBOutlet weak private var textStackView: UIStackView!
+    @IBOutlet weak private var stackViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var stackViewTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var buttonStackViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var imageViewWidthConstraint: NSLayoutConstraint!
     
     private var completion: ((Result)->Void)?
     
@@ -50,6 +57,8 @@ class AuthenticationInfoView: UIView, Theme {
         self.completion = completion
         style()
         setupAccessibility()
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .deviceDidRotate, object: nil)
+        iPadUIAdjustments()
     }
     
     func style() {
@@ -80,8 +89,46 @@ class AuthenticationInfoView: UIView, Theme {
         navDivider.backgroundColor = .lightGray.withAlphaComponent(0.3)
     }
     
+    private func iPadUIAdjustments() {
+        // Image and Text
+        textImageParentStackView.removeArrangedSubview(titleLabel)
+        textStackView.removeArrangedSubview(messageLabel)
+        textStackView.addArrangedSubview(titleLabel)
+        textStackView.addArrangedSubview(messageLabel)
+        textStackView.alignment = .leading
+        imageViewWidthConstraint.constant = 60
+        navDivider.isHidden = true
+        navTitle.isHidden = true
+        navBackButton.isHidden = true
+
+        adjustUIForIPadOrientationChange()
+    }
+    
     func setupAccessibility() {
         navBackButton.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
         navTitle.accessibilityTraits = .header
+    }
+    
+    // Note: This is to be called when the view transitions during rotation
+    private func adjustUIForIPadOrientationChange() {
+        guard Constants.deviceType == .iPad else { return }
+        stackViewLeadingConstraint.constant = UIDevice.current.orientation.isLandscape ? 300 : 100
+        stackViewTrailingConstraint.constant = UIDevice.current.orientation.isLandscape ? 300 : 100
+        if UIDevice.current.orientation.isLandscape {
+            buttonsStackView.removeArrangedSubview(continueButton)
+            buttonsStackView.addArrangedSubview(continueButton)
+        } else {
+            buttonsStackView.removeArrangedSubview(cancelButton)
+            buttonsStackView.addArrangedSubview(cancelButton)
+        }
+        buttonsStackView.axis = UIDevice.current.orientation.isLandscape ? .horizontal : .vertical
+        buttonsStackView.distribution = UIDevice.current.orientation.isLandscape ? .fill : .fillEqually
+        buttonsStackView.spacing = UIDevice.current.orientation.isLandscape ? 22 : 10
+        buttonStackViewBottomConstraint.constant = UIDevice.current.orientation.isLandscape ? 144 : 330
+        self.layoutIfNeeded()
+    }
+    
+    @objc private func deviceDidRotate(_ notification: Notification) {
+        adjustUIForIPadOrientationChange()
     }
 }

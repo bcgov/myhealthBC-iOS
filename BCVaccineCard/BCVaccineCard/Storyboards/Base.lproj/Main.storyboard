@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YHi-sk-2JH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YHi-sk-2JH">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -28,22 +28,27 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Zf-dC-FaH" customClass="AppStyleButton" customModule="HealthGateway" customModuleProvider="target">
-                                <rect key="frame" x="154" y="716" width="106" height="54"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="54" id="iUH-2y-jJf"/>
-                                    <constraint firstAttribute="width" constant="106" id="khV-vE-u2V"/>
-                                </constraints>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rn7-SN-I9H">
-                                <rect key="frame" x="192" y="782" width="30" height="30"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="Skip"/>
-                                <connections>
-                                    <action selector="skipButtonTapped:" destination="iBs-fi-Wty" eventType="touchUpInside" id="0Eg-dK-8d6"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="CXu-wy-GKR">
+                                <rect key="frame" x="154" y="716" width="106" height="96"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Zf-dC-FaH" customClass="AppStyleButton" customModule="HealthGateway" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="106" height="54"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="54" id="iUH-2y-jJf"/>
+                                            <constraint firstAttribute="width" constant="106" id="khV-vE-u2V"/>
+                                        </constraints>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rn7-SN-I9H">
+                                        <rect key="frame" x="38" y="66" width="30" height="30"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Skip"/>
+                                        <connections>
+                                            <action selector="skipButtonTapped:" destination="iBs-fi-Wty" eventType="touchUpInside" id="0Eg-dK-8d6"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Xbi-Hw-j3U">
                                 <rect key="frame" x="177" y="670" width="60" height="10"/>
                                 <constraints>
@@ -55,23 +60,26 @@
                         <viewLayoutGuide key="safeArea" id="F7M-BB-aye"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="F7M-BB-aye" firstAttribute="bottom" secondItem="Rn7-SN-I9H" secondAttribute="bottom" constant="50" id="1ee-3c-ule"/>
                             <constraint firstItem="czn-wZ-y80" firstAttribute="leading" secondItem="F7M-BB-aye" secondAttribute="leading" id="75a-bb-6Sh"/>
+                            <constraint firstItem="CXu-wy-GKR" firstAttribute="top" secondItem="Xbi-Hw-j3U" secondAttribute="bottom" constant="36" id="Crx-Fw-Zpk"/>
                             <constraint firstItem="F7M-BB-aye" firstAttribute="trailing" secondItem="czn-wZ-y80" secondAttribute="trailing" id="E8X-eL-zgK"/>
-                            <constraint firstItem="Rn7-SN-I9H" firstAttribute="centerX" secondItem="TpP-ui-4I5" secondAttribute="centerX" id="I5A-fk-aWQ"/>
-                            <constraint firstItem="5Zf-dC-FaH" firstAttribute="centerX" secondItem="TpP-ui-4I5" secondAttribute="centerX" id="Kcm-D4-wse"/>
-                            <constraint firstItem="Rn7-SN-I9H" firstAttribute="top" secondItem="5Zf-dC-FaH" secondAttribute="bottom" constant="12" id="YCE-Wb-C50"/>
+                            <constraint firstItem="CXu-wy-GKR" firstAttribute="centerX" secondItem="TpP-ui-4I5" secondAttribute="centerX" id="P5B-l1-YRp"/>
                             <constraint firstItem="Xbi-Hw-j3U" firstAttribute="centerX" secondItem="TpP-ui-4I5" secondAttribute="centerX" id="bGp-lu-tam"/>
+                            <constraint firstItem="F7M-BB-aye" firstAttribute="bottom" secondItem="CXu-wy-GKR" secondAttribute="bottom" constant="50" id="oeK-th-Ehn"/>
                             <constraint firstItem="czn-wZ-y80" firstAttribute="top" secondItem="F7M-BB-aye" secondAttribute="top" id="rTJ-vr-3ex"/>
-                            <constraint firstItem="5Zf-dC-FaH" firstAttribute="top" secondItem="Xbi-Hw-j3U" secondAttribute="bottom" constant="36" id="tZd-QT-Spt"/>
                             <constraint firstItem="Xbi-Hw-j3U" firstAttribute="top" secondItem="czn-wZ-y80" secondAttribute="bottom" constant="40" id="uLW-55-A7X"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="bottomButton" destination="5Zf-dC-FaH" id="nOg-Mc-Ukg"/>
                         <outlet property="bottomButtonWidthConstraint" destination="khV-vE-u2V" id="xhZ-0p-WEy"/>
+                        <outlet property="buttonsStackView" destination="CXu-wy-GKR" id="RSC-aJ-3wd"/>
+                        <outlet property="buttonsStackViewBottomConstraint" destination="oeK-th-Ehn" id="34J-xr-Igt"/>
                         <outlet property="collectionView" destination="czn-wZ-y80" id="tct-uk-6Sc"/>
+                        <outlet property="collectionViewBottomConstraint" destination="uLW-55-A7X" id="KMW-U6-kNU"/>
+                        <outlet property="collectionViewTopConstraint" destination="rTJ-vr-3ex" id="35f-Hg-0ev"/>
                         <outlet property="progressStackView" destination="Xbi-Hw-j3U" id="p73-cC-QiD"/>
+                        <outlet property="progressStackViewBottomConstraint" destination="Crx-Fw-Zpk" id="YAT-Uf-pFx"/>
                         <outlet property="progressStackViewWidthConstraintToDelete" destination="cyl-qr-7bi" id="rlw-Jd-osP"/>
                         <outlet property="skipButton" destination="Rn7-SN-I9H" id="ip0-sA-plx"/>
                     </connections>

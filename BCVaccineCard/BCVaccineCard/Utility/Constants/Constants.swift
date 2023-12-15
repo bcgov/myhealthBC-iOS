@@ -137,8 +137,9 @@ struct Constants {
     }
     
     struct CommunicationBannerHeights {
-        static let expanded: Int = 150
-        static let collapsed: Int = 75
+        static let expanded: Int = Constants.deviceType == .iPad ? 169 : 150
+        static let collapsed: Int = Constants.deviceType == .iPad ? 75 : 75
+        
     }
     
     static let vaccineTable: [VaccineTable] = [
@@ -180,4 +181,20 @@ extension Constants {
 #elseif DEV
     static let authIssuer = "https://dev.oidc.gov.bc.ca/auth/realms/ff09qn3f"
 #endif
+}
+
+// MARK: Device Type
+extension Constants {
+    enum DeviceType {
+        case iPhone
+        case iPad
+    }
+    
+    static var deviceType: DeviceType {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return .iPad
+        } else {
+            return .iPhone
+        }
+    }
 }

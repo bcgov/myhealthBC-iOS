@@ -4,7 +4,6 @@
 //
 //  Created by Connor Ogilvie on 2021-10-11.
 //
-// TODO: 1.) Add in UI for OnboardingCollectionViewCell, and for this VC 2.) Remove old code from this VC, 3.) Test out
 
 import UIKit
 
@@ -28,11 +27,16 @@ class InitialOnboardingViewController: UIViewController {
     }
     
     @IBOutlet weak private var collectionView: UICollectionView!
+    @IBOutlet weak private var collectionViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var collectionViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var progressStackViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak private var progressStackView: UIStackView!
     @IBOutlet weak private var progressStackViewWidthConstraintToDelete: NSLayoutConstraint!
     @IBOutlet weak private var bottomButton: AppStyleButton!
     @IBOutlet weak private var bottomButtonWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak private var skipButton: UIButton!
+    @IBOutlet weak private var buttonsStackView: UIStackView!
+    @IBOutlet weak private var buttonsStackViewBottomConstraint: NSLayoutConstraint!
     
     private var viewModel: ViewModel?
     private var screensToShow: [OnboardingScreenType] = []
@@ -61,7 +65,33 @@ class InitialOnboardingViewController: UIViewController {
         skipButton.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 17)
         adjustBottomButton(screenNumber: screenNumber, screensToShow: screensToShow)
         skipButton.isHidden = screensToShow.count == 1
-        
+        iPadUISetup()
+        iPadUIAdjustments()
+    }
+    
+    private func iPadUISetup() {
+        guard Constants.deviceType == .iPad else { return }
+        progressStackViewBottomConstraint.constant = 90
+        collectionViewTopConstraint.constant = 150
+        collectionViewBottomConstraint.constant = 0
+        buttonsStackViewBottomConstraint.constant = 100
+    }
+    
+    private func iPadUIAdjustments() {
+        guard Constants.deviceType == .iPad else { return }
+        if UIDevice.current.orientation.isLandscape {
+            buttonsStackView.axis = .horizontal
+            buttonsStackView.removeArrangedSubview(bottomButton)
+            buttonsStackView.addArrangedSubview(bottomButton)
+            buttonsStackView.spacing = 100
+            
+        } else {
+            buttonsStackView.axis = .vertical
+            buttonsStackView.removeArrangedSubview(skipButton)
+            buttonsStackView.addArrangedSubview(skipButton)
+            buttonsStackView.spacing = 32
+        }
+        self.view.layoutIfNeeded()
     }
     
     @IBAction private func skipButtonTapped(_ sender: UIButton) {
@@ -134,7 +164,12 @@ extension InitialOnboardingViewController {
 // MARK: Collection View Delegate and Flow layout
 extension InitialOnboardingViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
     private func setupCollectionView() {
-        collectionView.register(UINib.init(nibName: OnboardingCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: OnboardingCollectionViewCell.getName)
+        if Constants.deviceType == .iPad {
+            collectionView.register(UINib.init(nibName: OnboardingiPadCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: OnboardingiPadCollectionViewCell.getName)
+        } else {
+            collectionView.register(UINib.init(nibName: OnboardingCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: OnboardingCollectionViewCell.getName)
+        }
+        
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize =  cellSize()
@@ -161,7 +196,12 @@ extension InitialOnboardingViewController: UICollectionViewDataSource, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OnboardingCollectionViewCell.getName, for: indexPath) as? OnboardingCollectionViewCell {
+        if Constants.deviceType == .iPad, let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OnboardingiPadCollectionViewCell.getName, for: indexPath) as? OnboardingiPadCollectionViewCell {
+            let screenType = screensToShow[indexPath.row]
+            cell.configure(screenType: screenType, newTextShown: newTextShown)
+            cell.layoutIfNeeded()
+            return cell
+        } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OnboardingCollectionViewCell.getName, for: indexPath) as? OnboardingCollectionViewCell {
             let screenType = screensToShow[indexPath.row]
             cell.configure(screenType: screenType, newTextShown: newTextShown)
             cell.layoutIfNeeded()
@@ -237,8 +277,15 @@ extension InitialOnboardingViewController {
                 accessibilityValue = AccessibilityLabels.Onboarding.buttonGetStartedTitle
                 accessibilityHint = AccessibilityLabels.Onboarding.buttonGetStartedHint
                 skipButton.alpha = 0
+                if Constants.deviceType == .iPad {
+                    skipButton.isHidden = true
+                }
+                
             } else {
                 skipButton.alpha = 1
+                if Constants.deviceType == .iPad {
+                    skipButton.isHidden = false
+                }
                 buttonType = .next
                 accessibilityValue = AccessibilityLabels.Onboarding.buttonNextTitle
                 accessibilityHint = AccessibilityLabels.Onboarding.buttonNextHint
@@ -306,4 +353,34 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
     }
 }
 
+// MARK: iPad orientation
+extension InitialOnboardingViewController {
+    // TODO: Play around with this more, for orientation changes during onboarding flow for iPad
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        guard Constants.deviceType == .iPad else { return }
+        NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
+        iPadUIAdjustments()
+//        guard let indexPath = findCenterIndex() else { return }
+//        if let newScreen = getNewScreenTypeAfterScrollingValuesChanged(indexPath: indexPath, screensToShow: self.screensToShow) {
+//            self.screenNumber = newScreen
+//            adjustUI()
+//        }
+        var indexPath: IndexPath?
+        if let row = screensToShow.firstIndex(of: screenNumber) {
+            indexPath = IndexPath(row: row, section: 0)
+        } else if let centerIndexPath = findCenterIndex() {
+            indexPath = centerIndexPath
+        }
+        guard let path = indexPath else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0) {
+            self.collectionView.scrollToItem(at: path, at: .centeredHorizontally, animated: true)
+        }
+    }
+}
 

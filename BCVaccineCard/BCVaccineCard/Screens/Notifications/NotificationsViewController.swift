@@ -33,10 +33,14 @@ class NotificationsViewController: BaseViewController {
     private let networkManager = AFNetwork()
     private var notifications: [GatewayNotification] = []
     private var viewModel: ViewModel? = nil
+    private var fromSplitVCiPad = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navSetup()
+        if Constants.deviceType == .iPad {
+            NotificationCenter.default.addObserver(self, selector: #selector(notificationsLoadedFromSplitVC), name: .notificationsLoadedFromSplitVC, object: nil)
+        }
         AppStates.shared.listenToNotificationChange { [weak self] in
             self?.fetchData()
         }
@@ -53,6 +57,11 @@ class NotificationsViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+    }
+    
+    @objc private func notificationsLoadedFromSplitVC(_ notification: Notification) {
+        fetchData()
+        
     }
     
     func fetchData() {
@@ -84,15 +93,20 @@ class NotificationsViewController: BaseViewController {
     
     func showUnavailable() {
         removeUnavailable()
-        let imageName = SessionStorage.notificationFethFilure ? "NotificationsFailed" : "NotificationsNotAvailable"
+        let imageName = SessionStorage.notificationFethFilure ? "NotificationsFailed" : (Constants.deviceType == .iPad ? "NotificationsNotAvailableIPad" : "NotificationsNotAvailable")
         let imageView = UIImageView(frame: tableView.bounds)
         tableView.addSubview(imageView)
         imageView.image = UIImage(named: imageName)
         imageView.contentMode = .scaleAspectFit
         imageView.tag = unavailableTag
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 64).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 32).isActive = true
+        if Constants.deviceType == .iPad {
+            imageView.heightAnchor.constraint(equalToConstant: 156).isActive = true
+            imageView.widthAnchor.constraint(equalToConstant: 192).isActive = true
+        } else {
+            imageView.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 64).isActive = true
+            imageView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 32).isActive = true
+        }
         imageView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
         imageView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
         

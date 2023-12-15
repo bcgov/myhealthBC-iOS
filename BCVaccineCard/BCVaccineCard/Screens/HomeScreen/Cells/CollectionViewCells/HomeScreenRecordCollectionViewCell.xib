@@ -94,6 +94,7 @@
             </constraints>
             <connections>
                 <outlet property="buttonImageView" destination="Uys-CW-JmQ" id="Od0-AB-DH8"/>
+                <outlet property="buttonWidthConstraint" destination="T9V-Bi-Elt" id="v0x-WH-hgB"/>
                 <outlet property="iconImageView" destination="QnH-Hm-3Hb" id="u72-rj-aCS"/>
                 <outlet property="rightCornerButton" destination="5vb-la-xg5" id="NBx-N2-wf4"/>
                 <outlet property="roundedView" destination="Yl8-wZ-vLY" id="GOt-6k-DsD"/>
