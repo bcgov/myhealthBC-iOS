@@ -317,8 +317,10 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
             var width: CGFloat
             var height: CGFloat
             if iPad {
+//                getReusableSplitViewController?.areTwoScreensShown()
                 if UIDevice.current.orientation.isLandscape {
-                    if authManager.isAuthenticated {
+//                    if authManager.isAuthenticated {
+                    if getReusableSplitViewController?.areTwoScreensShown() == true {
                         width = (cView.width / 2)
                         height = width * (105/280)
                     } else {

@@ -28,6 +28,8 @@ class ReusableSplitViewController: UISplitViewController {
     private var secondVC: UIViewController?
     private var tabType: AppTabs = .Home
     
+    private var isInTwoColumnMode = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -97,8 +99,10 @@ class ReusableSplitViewController: UISplitViewController {
         guard let rightVC = self.secondVC else { return }
         if #available(iOS 14.0, *) {
             setViewController(rightVC, for: .primary)
+            preferredDisplayMode = .oneBesideSecondary
         } else {
             self.viewControllers.insert(rightVC, at: 0)
+            preferredDisplayMode = .allVisible
         }
     }
     
@@ -139,6 +143,10 @@ class ReusableSplitViewController: UISplitViewController {
 //        case .Dependents:
 //            <#code#>
         }
+    }
+    
+    func areTwoScreensShown() -> Bool {
+        return self.viewControllers.count == 2
     }
     
 
