@@ -205,6 +205,7 @@ extension UsersListOfRecordsViewController {
                 let message: String = !hadFails ? "Records retrieved" : "Not all records were fetched successfully"
                 self?.showToast(message: message)
                 SessionStorage.dependentRecordsFetched.append(patient)
+                self?.setup()
                 self?.refreshControl.endRefreshing()
             }
         } else {
