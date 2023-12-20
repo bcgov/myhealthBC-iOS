@@ -37,6 +37,9 @@ class iPadAlertSplitVC: UISplitViewController {
     }
     
     private func configuration() {
+        // TODO: Need to add configuration here for the settings flow
+        // Note: Will have to add the view controller to the iPadAlertViewController using constraints on the view, as is displayed here:
+        // https://cocoacasts.com/managing-view-controllers-with-container-view-controllers
         
     }
     

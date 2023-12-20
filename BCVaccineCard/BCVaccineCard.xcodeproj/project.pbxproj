@@ -1076,9 +1076,9 @@
 		794B68172B2C64140089874E /* iPadAlertSplitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B68162B2C64140089874E /* iPadAlertSplitVC.swift */; };
 		794B68182B2C64140089874E /* iPadAlertSplitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B68162B2C64140089874E /* iPadAlertSplitVC.swift */; };
 		794B68192B2C64140089874E /* iPadAlertSplitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B68162B2C64140089874E /* iPadAlertSplitVC.swift */; };
-		794B681B2B2C64260089874E /* iPadAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertView.swift */; };
-		794B681C2B2C64260089874E /* iPadAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertView.swift */; };
-		794B681D2B2C64260089874E /* iPadAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertView.swift */; };
+		794B681B2B2C64260089874E /* iPadAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertViewController.swift */; };
+		794B681C2B2C64260089874E /* iPadAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertViewController.swift */; };
+		794B681D2B2C64260089874E /* iPadAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertViewController.swift */; };
 		794BD61C270235430084ADA8 /* AccessibilityLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD61B270235430084ADA8 /* AccessibilityLabels.swift */; };
 		794BD6272702E0E90084ADA8 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD6262702E0E90084ADA8 /* CustomNavigationController.swift */; };
 		794BD62F2702EEC00084ADA8 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75926F930E200EEF510 /* UIView+Ext.swift */; };
@@ -2044,7 +2044,7 @@
 		7944F71726F3B59B006B9444 /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
 		7944F71826F3B59B006B9444 /* TextTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextTableViewCell.xib; sourceTree = "<group>"; };
 		794B68162B2C64140089874E /* iPadAlertSplitVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadAlertSplitVC.swift; sourceTree = "<group>"; };
-		794B681A2B2C64260089874E /* iPadAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadAlertView.swift; sourceTree = "<group>"; };
+		794B681A2B2C64260089874E /* iPadAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadAlertViewController.swift; sourceTree = "<group>"; };
 		794BD61B270235430084ADA8 /* AccessibilityLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityLabels.swift; sourceTree = "<group>"; };
 		794BD6262702E0E90084ADA8 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		794BD66F2702EEC00084ADA8 /* HealthGateway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthGateway.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -4102,17 +4102,17 @@
 			isa = PBXGroup;
 			children = (
 				794B68152B2C63F00089874E /* iPadAlertSplitVC */,
-				794B68142B2C63E40089874E /* iPadAlertView */,
+				794B68142B2C63E40089874E /* iPadAlertViewController */,
 			);
 			path = AlertStyleUI;
 			sourceTree = "<group>";
 		};
-		794B68142B2C63E40089874E /* iPadAlertView */ = {
+		794B68142B2C63E40089874E /* iPadAlertViewController */ = {
 			isa = PBXGroup;
 			children = (
-				794B681A2B2C64260089874E /* iPadAlertView.swift */,
+				794B681A2B2C64260089874E /* iPadAlertViewController.swift */,
 			);
-			path = iPadAlertView;
+			path = iPadAlertViewController;
 			sourceTree = "<group>";
 		};
 		794B68152B2C63F00089874E /* iPadAlertSplitVC */ = {
@@ -5577,7 +5577,7 @@
 				3E87F4B529032092002F0A0E /* AppStates.swift in Sources */,
 				3EDC0CAD2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,
 				3E5924C1297086C900936CF1 /* EmptyTableViewCell.swift in Sources */,
-				794B681C2B2C64260089874E /* iPadAlertView.swift in Sources */,
+				794B681C2B2C64260089874E /* iPadAlertViewController.swift in Sources */,
 				3E81C4CA29B2A73F00C8F5C4 /* Routes.swift in Sources */,
 				291A0CB9282AC33B00035B0F /* Device.swift in Sources */,
 				2D9B39A02907171D00AE9FA1 /* HealthRecordsService.swift in Sources */,
@@ -5992,7 +5992,7 @@
 				79A15AFF27FC07D500F8330D /* OnboardingCollectionViewCell.swift in Sources */,
 				3E87F4B629032092002F0A0E /* AppStates.swift in Sources */,
 				3EDC0CAE2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,
-				794B681D2B2C64260089874E /* iPadAlertView.swift in Sources */,
+				794B681D2B2C64260089874E /* iPadAlertViewController.swift in Sources */,
 				3E5924C2297086C900936CF1 /* EmptyTableViewCell.swift in Sources */,
 				3E81C4CB29B2A74000C8F5C4 /* Routes.swift in Sources */,
 				794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */,
@@ -6384,7 +6384,7 @@
 				2D5218D92988881B00E07382 /* UpdateAddressViewController.swift in Sources */,
 				798005EB2852C66E006E390F /* HiddenRecordsTableViewCell.swift in Sources */,
 				3E87F4B429032092002F0A0E /* AppStates.swift in Sources */,
-				794B681B2B2C64260089874E /* iPadAlertView.swift in Sources */,
+				794B681B2B2C64260089874E /* iPadAlertViewController.swift in Sources */,
 				3EDC0CAC2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,
 				3E5924C0297086C900936CF1 /* EmptyTableViewCell.swift in Sources */,
 				2D9B399F2907171D00AE9FA1 /* HealthRecordsService.swift in Sources */,
