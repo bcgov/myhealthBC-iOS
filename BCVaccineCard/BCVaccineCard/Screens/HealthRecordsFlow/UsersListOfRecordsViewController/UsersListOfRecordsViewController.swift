@@ -116,7 +116,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         }
     }
     
-    private func setup() {
+    private func setup(refetchDataFromDB: Bool = false) {
         setupTableView()
         setupSearchBarView()
         updatePatientIfNecessary()
@@ -128,7 +128,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
         createNoteButton.isHidden = true
-        fetchDataSource()
+        fetchDataSource(refetchDataFromDB: refetchDataFromDB)
         if currentSegment == .Notes {
             // TODO: Update once we have folder structure built
             let patientRecords = fetchPatientRecords(for: .Notes)
@@ -205,7 +205,7 @@ extension UsersListOfRecordsViewController {
                 let message: String = !hadFails ? "Records retrieved" : "Not all records were fetched successfully"
                 self?.showToast(message: message)
                 SessionStorage.dependentRecordsFetched.append(patient)
-                self?.setup()
+                self?.setup(refetchDataFromDB: true)
                 self?.refreshControl.endRefreshing()
             }
         } else {
@@ -516,7 +516,7 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
 // MARK: Data Source Setup
 extension UsersListOfRecordsViewController {
     
-    private func fetchDataSource(initialProtectedMedFetch: Bool = false) {
+    private func fetchDataSource(initialProtectedMedFetch: Bool = false, refetchDataFromDB: Bool) {
         guard let vm = self.viewModel else {
             return
         }
@@ -527,7 +527,7 @@ extension UsersListOfRecordsViewController {
             listOfRecordsSegmentedView.isHidden = true
         case .authenticated:
             setupSegmentedControl()
-            guard self.dataSource.count == 0 else {
+            guard self.dataSource.count == 0 || refetchDataFromDB else {
                 show(records: self.dataSource, filter: currentFilter, searchText: searchText)
                 return
             }
