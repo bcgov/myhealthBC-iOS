@@ -10,7 +10,7 @@ import UIKit
 class iPadAlertViewController: UIViewController {
     
     class func construct(with splitVC: iPadAlertSplitVC) -> iPadAlertViewController {
-        var vc = iPadAlertViewController()
+        let vc = iPadAlertViewController()
         vc.splitVC = splitVC
         return vc
     }
@@ -29,6 +29,13 @@ class iPadAlertViewController: UIViewController {
     
     private func addSplitVCToSelf() {
         guard let splitVC = splitVC else { return }
+        addChild(splitVC)
         self.view.addSubview(splitVC.view)
+        splitVC.view.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+        splitVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        splitVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        splitVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        
+        splitVC.didMove(toParent: self)
     }
 }

@@ -37,9 +37,47 @@ class iPadAlertSplitVC: UISplitViewController {
     }
     
     private func configuration() {
-        // TODO: Need to add configuration here for the settings flow
-        // Note: Will have to add the view controller to the iPadAlertViewController using constraints on the view, as is displayed here:
-        // https://cocoacasts.com/managing-view-controllers-with-container-view-controllers
+        var leftVC: UIViewController
+        if let baseVC = baseVC {
+            leftVC = baseVC
+            preferredPrimaryColumnWidthFraction = 1.0
+            if #available(iOS 14.0, *) {
+                if UIDevice.current.orientation.isLandscape {
+                    preferredDisplayMode = .oneBesideSecondary
+                } else {
+                    preferredDisplayMode = .secondaryOnly
+                }
+                
+            } else {
+                preferredDisplayMode = .allVisible
+            }
+        } else {
+            leftVC = CustomNavigationController.init(rootViewController: UIViewController())
+            if #available(iOS 14.0, *) {
+                preferredDisplayMode = .secondaryOnly
+            } else {
+                preferredDisplayMode = .primaryHidden
+            }
+        }
+        
+        if #available(iOS 14.0, *) {
+            setViewController(leftVC, for: .primary)
+        } else {
+            self.viewControllers = [leftVC]
+        }
+        
+        // Setup Base VC
+        if let secondVC = secondVC {
+            if #available(iOS 14.0, *) {
+                setViewController(secondVC, for: .secondary)
+            } else {
+                self.viewControllers.append(secondVC)
+            }
+        }
+                
+        if #available(iOS 14.0, *) {
+            preferredSplitBehavior = .tile
+        }
         
     }
     
@@ -71,7 +109,7 @@ extension iPadAlertSplitVC {
         }
         
     }
-    
+    // TODO: Add in logic for settings flow for proper navigation
     @objc private func deviceDidRotate(_ notification: Notification) {
         if !UIDevice.current.orientation.isLandscape {
             if #available(iOS 14.0, *) {
