@@ -174,6 +174,10 @@ class ProfileDetailsViewController: BaseDependentViewController {
 // MARK: Nav setup
 extension ProfileDetailsViewController {
     private func navSetup() {
+//        guard Constants.deviceType != .iPad else {
+//            self.navigationController?.setNavigationBarHidden(true, animated: true)
+//            return
+//        }
         self.navDelegate?.setNavigationBarWith(title: .profile,
                                                leftNavButton: nil,
                                                rightNavButton: nil,

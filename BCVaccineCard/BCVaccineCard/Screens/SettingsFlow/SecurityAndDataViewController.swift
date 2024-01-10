@@ -148,6 +148,10 @@ class SecurityAndDataViewController: BaseViewController {
 // MARK: Navigation setup
 extension SecurityAndDataViewController {
     private func navSetup() {
+//        guard Constants.deviceType != .iPad else {
+//            self.navigationController?.setNavigationBarHidden(true, animated: true)
+//            return
+//        }
         self.navDelegate?.setNavigationBarWith(title: .securityAndData,
                                                leftNavButton: nil,
                                                rightNavButton: nil,

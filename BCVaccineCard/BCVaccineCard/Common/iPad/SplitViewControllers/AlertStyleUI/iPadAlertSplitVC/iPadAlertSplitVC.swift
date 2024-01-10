@@ -21,19 +21,65 @@ class iPadAlertSplitVC: UISplitViewController {
         return vc
     }
     
+    enum ViewControllerStackOptions: String {
+        case ProfileAndSettingsViewControllerString
+        case SecurityAndDataViewControllerString
+        case ProfileDetailsViewControllerString
+        case FeedbackViewControllerString
+        case PrivacyPolicyViewControllerString
+        
+        func instantiateViewController() -> UIViewController? {
+            var vc: UIViewController?
+            switch self {
+            case .ProfileAndSettingsViewControllerString:
+                vc = ProfileAndSettingsViewController.construct()
+            case .SecurityAndDataViewControllerString:
+                vc = SecurityAndDataViewController.construct()
+            case .ProfileDetailsViewControllerString:
+                guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return nil }
+                let vm = ProfileDetailsViewController.ViewModel(type: .PatientProfile(patient: patient))
+                vc = ProfileDetailsViewController.construct(viewModel: vm)
+            case .FeedbackViewControllerString:
+                vc = FeedbackViewController.construct()
+            case .PrivacyPolicyViewControllerString:
+                vc = PrivacyPolicyViewController.construct(with: Constants.PrivacyPolicy.urlString)
+            }
+            return vc
+        }
+    }
+    
     private var baseVC: UIViewController?
     private var secondVC: UIViewController?
+    
+    private var vcStack: [ViewControllerStackOptions] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         configuration()
+//        baseVC?.navigationController?.setNavigationBarHidden(true, animated: false)
+//        secondVC?.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     private func setup() {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .deviceDidRotate, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(iPadSettingsSelection), name: .iPadSettingsSelection, object: nil)
         delegate = self
         presentsWithGesture = false
+    }
+    
+    private func newConfiguration() {
+        // Configuration rules:
+        
+        // 1 - In Landscape view, have settings on left, and whatever was on the top of the stack on the right. Default is profile details
+        // 2 - When rotating - show whatever was last shown in portrait mode, if just one shown, then it's base settings screen - track nav stack with enum
+        // 3 - When unauthenticated, only show base screen, and navigation will work normally
+        
+        
+    }
+    
+    public func updateVCStack() {
+        
     }
     
     private func configuration() {
@@ -43,7 +89,7 @@ class iPadAlertSplitVC: UISplitViewController {
             preferredPrimaryColumnWidthFraction = 1.0
             if #available(iOS 14.0, *) {
                 if UIDevice.current.orientation.isLandscape {
-                    preferredDisplayMode = .oneBesideSecondary
+                    preferredDisplayMode = secondVC != nil ? .oneBesideSecondary : .secondaryOnly
                 } else {
                     preferredDisplayMode = .secondaryOnly
                 }
@@ -61,13 +107,14 @@ class iPadAlertSplitVC: UISplitViewController {
         }
         
         if #available(iOS 14.0, *) {
-            setViewController(leftVC, for: .primary)
+            let splitViewColumn: UISplitViewController.Column = secondVC == nil || !UIDevice.current.orientation.isLandscape ? .secondary : .primary
+            setViewController(leftVC, for: splitViewColumn)
         } else {
             self.viewControllers = [leftVC]
         }
         
         // Setup Base VC
-        if let secondVC = secondVC {
+        if let secondVC = secondVC, UIDevice.current.orientation.isLandscape {
             if #available(iOS 14.0, *) {
                 setViewController(secondVC, for: .secondary)
             } else {
@@ -120,6 +167,21 @@ extension iPadAlertSplitVC {
         } else {
 //            adjustLayoutForPortraitToLandscapeRotation()
         }
+    }
+}
+
+// MARK: Reconfigure nav stack
+extension iPadAlertSplitVC {
+    
+    @objc private func iPadSettingsSelection(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: String],
+              let screen = userInfo["screen"],
+              let type = ViewControllerStackOptions(rawValue: screen),
+              let vc = type.instantiateViewController() else { return }
+        let nav = CustomNavigationController(rootViewController: vc)
+        secondVC = nav
+        configuration()
+        
     }
 }
 

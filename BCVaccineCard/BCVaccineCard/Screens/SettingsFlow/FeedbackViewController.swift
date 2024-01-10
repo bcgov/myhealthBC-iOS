@@ -58,6 +58,10 @@ class FeedbackViewController: BaseViewController {
 extension FeedbackViewController {
     
     private func navSetup() {
+//        guard Constants.deviceType != .iPad else {
+//            self.navigationController?.setNavigationBarHidden(true, animated: true)
+//            return
+//        }
         self.navDelegate?.setNavigationBarWith(title: "Feedback",
                                                leftNavButton: nil,
                                                rightNavButton: nil,

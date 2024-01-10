@@ -48,4 +48,6 @@ extension Notification.Name {
     static let applyQuickLinkFilter = Notification.Name("applyQuickLinkFilter")
     static let refetchQuickLinksFromCoreData = Notification.Name("refetchQuickLinksFromCoreData")
     static let deviceDidRotate = Notification.Name("deviceDidRotate")
+    
+    static let iPadSettingsSelection = Notification.Name("iPadSettingsSelection")
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class iPadAlertViewController: UIViewController {
+class iPadAlertViewController: BaseViewController {
     
     class func construct(with splitVC: iPadAlertSplitVC) -> iPadAlertViewController {
         let vc = iPadAlertViewController()
@@ -23,18 +23,19 @@ class iPadAlertViewController: UIViewController {
     }
     
     private func setup() {
-        self.view.backgroundColor = AppColours.backgroundGray
+        self.view.backgroundColor = AppColours.disabledGray
         addSplitVCToSelf()
     }
     
     private func addSplitVCToSelf() {
         guard let splitVC = splitVC else { return }
+//        let navController = CustomNavigationController(rootViewController: splitVC)
         addChild(splitVC)
         self.view.addSubview(splitVC.view)
-        splitVC.view.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        splitVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        splitVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
-        splitVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        splitVC.view.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        splitVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 100).isActive = true
+        splitVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100).isActive = true
+        splitVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 100).isActive = true
         
         splitVC.didMove(toParent: self)
     }

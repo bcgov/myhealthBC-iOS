@@ -55,6 +55,10 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     // MARK: Routing
     func showProfile() {
+        guard Constants.deviceType != .iPad else {
+            showDetailsForiPad(type: .ProfileDetailsViewControllerString)
+            return
+        }
         guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
         let vm = ProfileDetailsViewController.ViewModel(type: .PatientProfile(patient: patient))
         show(route: .Profile, withNavigation: true, viewModel: vm)
@@ -65,21 +69,45 @@ class ProfileAndSettingsViewController: BaseViewController {
     }
     
     func showSecurityAndData() {
+        // TODO: Ipad check here, show in secondary view
+        guard Constants.deviceType != .iPad else {
+            showDetailsForiPad(type: .SecurityAndDataViewControllerString)
+            return
+        }
         show(route: .SecurityAndData, withNavigation: true)
     }
     
     func showPrivacyStatement() {
+        // FIXME: Figure out why I can't load this VC here
+//        guard Constants.deviceType != .iPad else {
+//            showDetailsForiPad(type: .PrivacyPolicyViewControllerString)
+//            return
+//        }
         openPrivacyPolicy()
     }
     
     func showFeedback() {
+        // TODO: Ipad check here, show in secondary view
+        guard Constants.deviceType != .iPad else {
+            showDetailsForiPad(type: .FeedbackViewControllerString)
+            return
+        }
         let vc = FeedbackViewController.construct()
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func showDetailsForiPad(type: iPadAlertSplitVC.ViewControllerStackOptions) {
+        let userInfo: [String: String] = ["screen": type.rawValue]
+        NotificationCenter.default.post(name: .iPadSettingsSelection, object: nil, userInfo: userInfo as [AnyHashable : Any])
     }
 }
 
 extension ProfileAndSettingsViewController {
     private func navSetup() {
+//        guard Constants.deviceType != .iPad else {
+//            self.navigationController?.setNavigationBarHidden(true, animated: true)
+//            return
+//        }
         self.navDelegate?.setNavigationBarWith(title: .profileAndSettings,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
