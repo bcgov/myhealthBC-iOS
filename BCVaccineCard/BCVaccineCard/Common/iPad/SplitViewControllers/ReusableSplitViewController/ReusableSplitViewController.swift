@@ -50,7 +50,7 @@ class ReusableSplitViewController: UISplitViewController {
             rightVC = secondVC
             preferredPrimaryColumnWidthFraction = 1.0
             if #available(iOS 14.0, *) {
-                if UIDevice.current.orientation.isLandscape {
+                if Constants.isIpadLandscape(vc: self) {
                     preferredDisplayMode = .oneBesideSecondary
                 } else {
                     preferredDisplayMode = .secondaryOnly
@@ -161,13 +161,13 @@ extension ReusableSplitViewController {
         super.viewWillTransition(to: size, with: coordinator)
         guard Constants.deviceType == .iPad else { return }
         NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
-        if UIDevice.current.orientation.isLandscape {
+        if Constants.isIpadLandscape(vc: self) {
             adjustLayoutForPortraitToLandscapeRotation()
         }
         // TODO: Make more reusable
         
         if #available(iOS 14.0, *) {
-            if UIDevice.current.orientation.isLandscape {
+            if Constants.isIpadLandscape(vc: self) {
                 if let _ = secondVC {
                     preferredDisplayMode = .oneBesideSecondary
                 } else {
@@ -184,7 +184,7 @@ extension ReusableSplitViewController {
     }
     
     @objc private func deviceDidRotate(_ notification: Notification) {
-        if !UIDevice.current.orientation.isLandscape {
+        if !Constants.isIpadLandscape(vc: self) {
             if #available(iOS 14.0, *) {
                 hide(.primary)
             } else {

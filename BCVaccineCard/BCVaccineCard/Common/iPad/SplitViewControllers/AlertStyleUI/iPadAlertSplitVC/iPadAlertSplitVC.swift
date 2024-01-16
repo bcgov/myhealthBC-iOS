@@ -95,7 +95,8 @@ class iPadAlertSplitVC: UISplitViewController {
             leftVC = baseVC
             preferredPrimaryColumnWidthFraction = 1.0
             if #available(iOS 14.0, *) {
-                if UIDevice.current.orientation.isLandscape {
+//                if Constants.isIpadLandscape(vc: self) {
+                if Constants.isIpadLandscape(vc: self) {
                     preferredDisplayMode = secondVC != nil ? .oneBesideSecondary : .secondaryOnly
                 } else {
                     preferredDisplayMode = .secondaryOnly
@@ -114,14 +115,14 @@ class iPadAlertSplitVC: UISplitViewController {
         }
         
         if #available(iOS 14.0, *) {
-            let splitViewColumn: UISplitViewController.Column = secondVC == nil || !UIDevice.current.orientation.isLandscape ? .secondary : .primary
+            let splitViewColumn: UISplitViewController.Column = secondVC == nil || !Constants.isIpadLandscape(vc: self) ? .secondary : .primary
             setViewController(leftVC, for: splitViewColumn)
         } else {
             self.viewControllers = [leftVC]
         }
         
         // Setup Base VC
-        if let secondVC = secondVC, UIDevice.current.orientation.isLandscape {
+        if let secondVC = secondVC, Constants.isIpadLandscape(vc: self) {
             if #available(iOS 14.0, *) {
                 setViewController(secondVC, for: .secondary)
             } else {
@@ -142,14 +143,14 @@ extension iPadAlertSplitVC {
         super.viewWillTransition(to: size, with: coordinator)
         guard Constants.deviceType == .iPad else { return }
         NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
-        if UIDevice.current.orientation.isLandscape {
+        if Constants.isIpadLandscape(vc: self) {
 //            adjustLayoutForPortraitToLandscapeRotation()
             updateVCStack()
         }
         
         configuration()
 //        if #available(iOS 14.0, *) {
-//            if UIDevice.current.orientation.isLandscape {
+//            if Constants.isIpadLandscape(vc: self) {
 //                if let _ = secondVC {
 //                    preferredDisplayMode = .oneBesideSecondary
 //                } else {
@@ -166,7 +167,7 @@ extension iPadAlertSplitVC {
     }
     // TODO: Add in logic for settings flow for proper navigation
     @objc private func deviceDidRotate(_ notification: Notification) {
-        if !UIDevice.current.orientation.isLandscape {
+        if !Constants.isIpadLandscape(vc: self) {
             if #available(iOS 14.0, *) {
                 hide(.primary)
             } else {

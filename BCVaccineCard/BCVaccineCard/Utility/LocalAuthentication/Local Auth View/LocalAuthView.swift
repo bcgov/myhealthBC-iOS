@@ -269,9 +269,9 @@ class LocalAuthView: UIView, Theme {
 // 125 spacing portrait, 300 spacing landscape
 extension LocalAuthView {
     private func adjustForiPad() {
-        guard Constants.deviceType == .iPad else { return }
+        guard Constants.deviceType == .iPad, let parent = self.parent else { return }
         let width = self.frame.width
-        let constant: CGFloat = UIDevice.current.orientation.isLandscape ? width * 0.25 : width * 0.15
+        let constant: CGFloat = Constants.isIpadLandscape(vc: parent) ? width * 0.25 : width * 0.15
         leftLeadingConstraint.constant = constant
         rightLeadingTitleConstraint.constant = constant
         rightLeadingSubtitleConstraint.constant = constant

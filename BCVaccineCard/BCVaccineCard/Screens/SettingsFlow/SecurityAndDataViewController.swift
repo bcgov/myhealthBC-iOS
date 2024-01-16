@@ -160,7 +160,7 @@ extension SecurityAndDataViewController {
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: .profileAndSettings)
-        let hideBackButton = UIDevice.current.orientation.isLandscape
+        let hideBackButton = Constants.isIpadLandscape(vc: self)
         self.navigationItem.setHidesBackButton(hideBackButton, animated: false)
         
     }
@@ -318,7 +318,7 @@ extension SecurityAndDataViewController {
     
     @objc private func deviceDidRotate(_ notification: Notification) {
         guard Constants.deviceType == .iPad else { return }
-        let backButtonShown = UIDevice.current.orientation.isLandscape
+        let backButtonShown = Constants.isIpadLandscape(vc: self)
         self.navigationItem.setHidesBackButton(backButtonShown, animated: true)
     }
  

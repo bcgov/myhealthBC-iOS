@@ -70,7 +70,7 @@ extension FeedbackViewController {
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
-        let hideBackButton = UIDevice.current.orientation.isLandscape
+        let hideBackButton = Constants.isIpadLandscape(vc: self)
         self.navigationItem.setHidesBackButton(hideBackButton, animated: false)
     }
 }
@@ -225,7 +225,7 @@ extension FeedbackViewController {
     
     @objc private func deviceDidRotate(_ notification: Notification) {
         guard Constants.deviceType == .iPad else { return }
-        let backButtonShown = UIDevice.current.orientation.isLandscape
+        let backButtonShown = Constants.isIpadLandscape(vc: self)
         self.navigationItem.setHidesBackButton(backButtonShown, animated: true)
     }
  

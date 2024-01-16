@@ -55,7 +55,7 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     // MARK: Routing
     func showProfile() {
-        guard !UIDevice.current.orientation.isLandscape else {
+        guard !Constants.isIpadLandscape(vc: self) else {
             showDetailsForiPad(type: .ProfileDetailsViewControllerString)
             return
         }
@@ -70,7 +70,7 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     func showSecurityAndData() {
         // TODO: Ipad check here, show in secondary view
-        guard !UIDevice.current.orientation.isLandscape else {
+        guard !Constants.isIpadLandscape(vc: self) else {
             showDetailsForiPad(type: .SecurityAndDataViewControllerString)
             return
         }
@@ -79,7 +79,7 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     func showPrivacyStatement() {
         // FIXME: Figure out why I can't load this VC here
-//        guard !UIDevice.current.orientation.isLandscape else {
+//        guard !Constants.isIpadLandscape(vc: self) else {
 //            showDetailsForiPad(type: .PrivacyPolicyViewControllerString)
 //            return
 //        }
@@ -88,7 +88,7 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     func showFeedback() {
         // TODO: Ipad check here, show in secondary view
-        guard !UIDevice.current.orientation.isLandscape else {
+        guard !Constants.isIpadLandscape(vc: self) else {
             showDetailsForiPad(type: .FeedbackViewControllerString)
             return
         }

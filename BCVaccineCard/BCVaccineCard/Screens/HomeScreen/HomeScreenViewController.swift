@@ -222,7 +222,7 @@ extension HomeScreenViewController {
             return
         }
         // TODO: Check if iPad, if in landscape, and notifications screen already showing.
-        if UIDevice.current.orientation.isLandscape {
+        if Constants.isIpadLandscape(vc: self) {
             let vcTest = NotificationsViewController()
             if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vcTest) {
                 service.fetchAndStore(for: patient, loadingStyle: .empty) { results in
@@ -240,7 +240,7 @@ extension HomeScreenViewController {
     }
 }
 
-//if UIDevice.current.orientation.isLandscape {
+//if Constants.isIpadLandscape(vc: self) {
 //    let vcTest = ProfileAndSettingsViewController()
 //    if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vcTest) {
 //        let vc = ProfileAndSettingsViewController.construct()
@@ -318,8 +318,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
             var height: CGFloat
             if iPad {
 //                getReusableSplitViewController?.areTwoScreensShown()
-//                self.interfaceOrientation.isLandscape
-                if UIDevice.current.orientation.isLandscape {
+                if Constants.isIpadLandscape(vc: self) {
 //                    if authManager.isAuthenticated {
                     if getReusableSplitViewController?.areTwoScreensShown() == true {
                         width = (cView.width / 2)
@@ -480,7 +479,7 @@ extension HomeScreenViewController: QuickAccessCollectionReusableViewDelegate {
         var vm = ManageHomeScreenViewController.ViewModel()
         vm.createDataSourceForManageScreen()
         
-        if UIDevice.current.orientation.isLandscape {
+        if Constants.isIpadLandscape(vc: self) {
             let vc = ManageHomeScreenViewController.construct(viewModel: vm)
             if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vc) {
                 split.adjustFarRightVC(viewController: vc)

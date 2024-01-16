@@ -168,7 +168,7 @@ extension ManageHomeScreenViewController {
             self.view.endLoadingIndicator()
             self.alert(title: "Success", message: "Preferences updated") {
                 NotificationCenter.default.post(name: .refetchQuickLinksFromCoreData, object: nil, userInfo: nil)
-                guard !UIDevice.current.orientation.isLandscape else {
+                guard !Constants.isIpadLandscape(vc: self) else {
                     self.initialDataSource = self.viewModel?.dataSource
                     self.navSetup()
                     return

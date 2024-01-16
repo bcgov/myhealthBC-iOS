@@ -184,7 +184,7 @@ extension BaseViewController {
     }
     // TODO: May have to adjust this to be in it's own view
     private func goToSettingsScreen() {
-//        if UIDevice.current.orientation.isLandscape {
+//        if Constants.isIpadLandscape(vc: self) {
 //            let vcTest = ProfileAndSettingsViewController()
 //            if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vcTest) {
 //                let vc = ProfileAndSettingsViewController.construct()

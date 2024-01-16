@@ -26,7 +26,7 @@ class iPadAlertViewController: BaseViewController {
         self.view.backgroundColor = AppColours.disabledGray
         addSplitVCToSelf()
     }
-    
+    // Note: As of now, just using native from iPad, so this isn't doing anything constraint-wise
     private func addSplitVCToSelf() {
         guard let splitVC = splitVC else { return }
 //        let navController = CustomNavigationController(rootViewController: splitVC)

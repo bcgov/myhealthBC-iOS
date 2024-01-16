@@ -29,6 +29,7 @@ class AuthenticationView: UIView, Theme {
    
     
     private var completion: ((Result)->Void)?
+    private var parentVC: UIViewController?
     
     @IBAction func loginAction(_ sender: Any) {
         guard let completion = self.completion else {return}
@@ -40,10 +41,11 @@ class AuthenticationView: UIView, Theme {
         completion(.Cancel)
     }
     
-    func setup(in view: UIView, completion: @escaping (Result)->Void) {
+    func setup(in view: UIView, parentVC: UIViewController, completion: @escaping (Result)->Void) {
         self.frame = .zero
         view.addSubview(self)
         self.addEqualSizeContraints(to: view)
+        self.parentVC = parentVC
         self.completion = completion
         style()
         fillText()
@@ -96,13 +98,13 @@ class AuthenticationView: UIView, Theme {
         textAndImageStackView.distribution = .fill
         textAndImageStackView.spacing = 12
         
-//        stackViewTrailingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 300 : 150
-//        stackViewLeadingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 300 : 150
+//        stackViewTrailingSpaceConstraint.constant = Constants.isIpadLandscape(vc: self) ? 300 : 150
+//        stackViewLeadingSpaceConstraint.constant = Constants.isIpadLandscape(vc: self) ? 300 : 150
         
         loginButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         cancelButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-//        buttonsStackView.axis = UIDevice.current.orientation.isLandscape ? .horizontal : .vertical
-//        buttonsStackView.distribution = UIDevice.current.orientation.isLandscape ? .fill : .fillEqually
+//        buttonsStackView.axis = Constants.isIpadLandscape(vc: self) ? .horizontal : .vertical
+//        buttonsStackView.distribution = Constants.isIpadLandscape(vc: self) ? .fill : .fillEqually
         adjustUIForIPadOrientationChange()
     }
     
@@ -130,20 +132,21 @@ class AuthenticationView: UIView, Theme {
     
     // Note: This is to be called when the view transitions during rotation
     private func adjustUIForIPadOrientationChange() {
-        guard Constants.deviceType == .iPad else { return }
-        stackViewTrailingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 200 : 90
-        stackViewLeadingSpaceConstraint.constant = UIDevice.current.orientation.isLandscape ? 200 : 90
-        buttonsStackViewBottomConstraint.constant = UIDevice.current.orientation.isLandscape ? 144 : 200
-        if UIDevice.current.orientation.isLandscape {
+        guard Constants.deviceType == .iPad, let parentVC = self.parentVC else { return }
+        let isLandscape = Constants.isIpadLandscape(vc: parentVC)
+        stackViewTrailingSpaceConstraint.constant = isLandscape ? 200 : 90
+        stackViewLeadingSpaceConstraint.constant = isLandscape ? 200 : 90
+        buttonsStackViewBottomConstraint.constant = isLandscape ? 144 : 200
+        if isLandscape {
             buttonsStackView.removeArrangedSubview(loginButton)
             buttonsStackView.addArrangedSubview(loginButton)
         } else {
             buttonsStackView.removeArrangedSubview(cancelButton)
             buttonsStackView.addArrangedSubview(cancelButton)
         }
-        buttonsStackView.axis = UIDevice.current.orientation.isLandscape ? .horizontal : .vertical
-        buttonsStackView.distribution = UIDevice.current.orientation.isLandscape ? .fill : .fillEqually
-        buttonsStackView.spacing = UIDevice.current.orientation.isLandscape ? 22 : 10
+        buttonsStackView.axis = isLandscape ? .horizontal : .vertical
+        buttonsStackView.distribution = isLandscape ? .fill : .fillEqually
+        buttonsStackView.spacing = isLandscape ? 22 : 10
         self.layoutIfNeeded()
     }
     
