@@ -44,6 +44,7 @@ class SecurityAndDataViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .deviceDidRotate, object: nil)
         setup()
     }
     
@@ -159,6 +160,9 @@ extension SecurityAndDataViewController {
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: .profileAndSettings)
+        let hideBackButton = UIDevice.current.orientation.isLandscape
+        self.navigationItem.setHidesBackButton(hideBackButton, animated: false)
+        
     }
 }
 
@@ -307,4 +311,15 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
         view.accessibilityLabel = label
         view.accessibilityTraits = .header
     }
+}
+
+// MARK: Device did rotate
+extension SecurityAndDataViewController {
+    
+    @objc private func deviceDidRotate(_ notification: Notification) {
+        guard Constants.deviceType == .iPad else { return }
+        let backButtonShown = UIDevice.current.orientation.isLandscape
+        self.navigationItem.setHidesBackButton(backButtonShown, animated: true)
+    }
+ 
 }

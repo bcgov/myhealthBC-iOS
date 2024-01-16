@@ -78,7 +78,14 @@ class iPadAlertSplitVC: UISplitViewController {
         
     }
     
-    public func updateVCStack() {
+    private func updateVCStack() {
+        // Here we want to see if there is another VC ontop of baseVC stack, and if so, set it to the top-most VC of secondVCStack
+        guard let topMostVC = (baseVC as? CustomNavigationController)?.topViewController, !(topMostVC is ProfileAndSettingsViewController) else { return }
+        if let newVC = (baseVC as? CustomNavigationController)?.popViewController(animated: false) {
+            (secondVC as? CustomNavigationController)?.popToRootViewController(animated: false)
+            (secondVC as? CustomNavigationController)?.pushViewController(newVC, animated: false)
+        }
+        
         
     }
     
@@ -137,23 +144,24 @@ extension iPadAlertSplitVC {
         NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
         if UIDevice.current.orientation.isLandscape {
 //            adjustLayoutForPortraitToLandscapeRotation()
+            updateVCStack()
         }
-        // TODO: Make more reusable
         
-        if #available(iOS 14.0, *) {
-            if UIDevice.current.orientation.isLandscape {
-                if let _ = secondVC {
-                    preferredDisplayMode = .oneBesideSecondary
-                } else {
-                    preferredDisplayMode = .secondaryOnly
-                }
-            } else {
-                preferredDisplayMode = .secondaryOnly
-            }
-            
-        } else {
-            preferredDisplayMode = .allVisible
-        }
+        configuration()
+//        if #available(iOS 14.0, *) {
+//            if UIDevice.current.orientation.isLandscape {
+//                if let _ = secondVC {
+//                    preferredDisplayMode = .oneBesideSecondary
+//                } else {
+//                    preferredDisplayMode = .secondaryOnly
+//                }
+//            } else {
+//                preferredDisplayMode = .secondaryOnly
+//            }
+//            
+//        } else {
+//            preferredDisplayMode = .allVisible
+//        }
         
     }
     // TODO: Add in logic for settings flow for proper navigation
@@ -178,7 +186,15 @@ extension iPadAlertSplitVC {
               let screen = userInfo["screen"],
               let type = ViewControllerStackOptions(rawValue: screen),
               let vc = type.instantiateViewController() else { return }
-        let nav = CustomNavigationController(rootViewController: vc)
+        let baseVC = ProfileAndSettingsViewController.construct()
+        var nav: CustomNavigationController
+        if vc is ProfileAndSettingsViewController {
+            nav = CustomNavigationController(rootViewController: vc)
+        } else {
+            nav = CustomNavigationController(rootViewController: baseVC)
+            nav.pushViewController(vc, animated: false)
+        }
+//        nav = CustomNavigationController(rootViewController: vc)
         secondVC = nav
         configuration()
         

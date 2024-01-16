@@ -195,13 +195,16 @@ extension BaseViewController {
             let settingsVC = ProfileAndSettingsViewController.construct()
             let baseVC = CustomNavigationController(rootViewController: settingsVC)
             var secondVC: CustomNavigationController?
+            let rootSettingsVC = ProfileAndSettingsViewController.construct()
             if let patient = StorageService.shared.fetchAuthenticatedPatient(), AuthManager().isAuthenticated {
                 let vm = ProfileDetailsViewController.ViewModel(type: .PatientProfile(patient: patient))
                 let profileVC = ProfileDetailsViewController.construct(viewModel: vm)
-                secondVC = CustomNavigationController(rootViewController: profileVC)
+                secondVC = CustomNavigationController(rootViewController: rootSettingsVC)
+                secondVC?.pushViewController(profileVC, animated: false)
             } else {
                 let securityVC = SecurityAndDataViewController.construct()
-                secondVC = CustomNavigationController(rootViewController: securityVC)
+                secondVC = CustomNavigationController(rootViewController: rootSettingsVC)
+                secondVC?.pushViewController(securityVC, animated: false)
             }
             let splitVC = iPadAlertSplitVC.construct(baseVC: baseVC, secondVC: secondVC)
             let vc = iPadAlertViewController.construct(with: splitVC)

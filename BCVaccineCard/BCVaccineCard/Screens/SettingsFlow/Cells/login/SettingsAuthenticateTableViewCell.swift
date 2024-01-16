@@ -13,6 +13,8 @@ class SettingsAuthenticateTableViewCell: UITableViewCell, Theme {
     
     // MARK: Outlets
     @IBOutlet weak var button: UIButton!
+    @IBOutlet weak private var leadingSpace: NSLayoutConstraint!
+    @IBOutlet weak private var trailingSpace: NSLayoutConstraint!
     
     // MARK: Outlet Actions
     @IBAction func buttonTapped(_ sender: Any) {
@@ -36,5 +38,10 @@ class SettingsAuthenticateTableViewCell: UITableViewCell, Theme {
     // MARK: Style
     fileprivate func style() {
         style(button: button, style: .Fill, title: .bcscLogin, image: nil, bold: true)
+        if Constants.deviceType == .iPad {
+            // This is a spacing hack
+            leadingSpace.constant = 0
+            trailingSpace.constant = 0
+        }
     }
 }
