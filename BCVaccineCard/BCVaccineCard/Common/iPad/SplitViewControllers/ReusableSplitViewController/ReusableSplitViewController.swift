@@ -106,6 +106,10 @@ class ReusableSplitViewController: UISplitViewController {
         }
     }
     
+//    func popManageVC() {
+//        
+//    }
+    
     private func adjustLayoutForPortraitToLandscapeRotation() {
         switch self.tabType {
         case .Home:

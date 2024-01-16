@@ -139,3 +139,9 @@ struct QuickLinksPreferences: Codable {
 struct LocalDictionaryQuickLinksPreferences: Codable {
     var storedPreferences: [String: [QuickLinksPreferences]]
 }
+
+extension QuickLinksPreferences: Equatable {
+//    static func ==(lhs: QuickLinksPreferences, rhs: QuickLinksPreferences) -> Bool {
+//        return lhs.name == rhs.name && lhs.enabled == rhs.enabled
+//    }
+}

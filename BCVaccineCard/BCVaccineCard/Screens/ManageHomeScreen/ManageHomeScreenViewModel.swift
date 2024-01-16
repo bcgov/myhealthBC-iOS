@@ -95,7 +95,18 @@ extension ManageHomeScreenViewController {
         }
     }
     
-    enum DataSource {
+    enum DataSource: Equatable {
+        static func == (lhs: ManageHomeScreenViewController.DataSource, rhs: ManageHomeScreenViewController.DataSource) -> Bool {
+            switch (lhs, rhs) {
+            case (.introText, .introText): return true
+            case (.healthRecord(let lhsPreferences), .healthRecord(let rhsPreferences)):
+                return lhsPreferences == rhsPreferences
+            case (.service(let lhsPreferences), .service(let rhsPreferences)):
+                return lhsPreferences == rhsPreferences
+            default: return false
+            }
+        }
+        
         case introText
         case healthRecord(types: [QuickLinksPreferences])
         case service(types: [QuickLinksPreferences])

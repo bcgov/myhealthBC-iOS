@@ -318,6 +318,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
             var height: CGFloat
             if iPad {
 //                getReusableSplitViewController?.areTwoScreensShown()
+//                self.interfaceOrientation.isLandscape
                 if UIDevice.current.orientation.isLandscape {
 //                    if authManager.isAuthenticated {
                     if getReusableSplitViewController?.areTwoScreensShown() == true {
