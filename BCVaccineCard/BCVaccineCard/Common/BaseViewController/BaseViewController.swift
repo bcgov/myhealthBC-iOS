@@ -210,7 +210,7 @@ extension BaseViewController {
             let vc = iPadAlertViewController.construct(with: splitVC)
 //            let nav = CustomNavigationController(rootViewController: vc)
             let presentingVC: UIViewController = getIPadParentSplitVC ?? self
-//            vc.modalPresentationStyle = .overCurrentContext
+            vc.modalPresentationStyle = .pageSheet
             presentingVC.present(vc, animated: true)
         } else {
             show(route: .Settings, withNavigation: true)

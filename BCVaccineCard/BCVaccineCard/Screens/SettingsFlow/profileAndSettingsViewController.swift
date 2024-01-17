@@ -257,7 +257,10 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
     // MARK: Helpers
     private func deleteRecordsForAuthenticatedUserAndLogout() {
         LocalAuthManager.block = true
-        performLogout(completion: {_ in })
+//        performLogout(completion: {_ in })
+        performLogout { success in
+            self.presentingViewController?.dismiss(animated: true)
+        }
     }
     
     private func performLogout(completion: @escaping(_ success: Bool)-> Void) {
@@ -272,7 +275,12 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
                 // Regardless of the result of the async logout, clear tokens.
                 // because user may be offline
                 self.tableView.reloadData()
-                completion(success)
+                if Constants.deviceType == .iPad {
+                    completion(success)
+                } else {
+                    completion(success)
+                }
+                
             })
         }
     }
