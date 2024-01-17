@@ -50,4 +50,5 @@ extension Notification.Name {
     static let deviceDidRotate = Notification.Name("deviceDidRotate")
     
     static let iPadSettingsSelection = Notification.Name("iPadSettingsSelection")
+    static let quickLinkRemovedFromAlert = Notification.Name("quickLinkRemovedFromAlert")
 }

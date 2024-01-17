@@ -29,6 +29,7 @@ class ManageHomeScreenViewController: BaseViewController {
     }
     
     private func setup() {
+        NotificationCenter.default.addObserver(self, selector: #selector(quickLinkRemovedFromAlert), name: .quickLinkRemovedFromAlert, object: nil)
         navSetup()
         setupTableView()
     }
@@ -60,6 +61,16 @@ extension ManageHomeScreenViewController {
         return viewModel?.dataSource != initialDataSource
     }
     
+}
+
+// MARK: Reload data source from quick links managed in ipad landscape
+extension ManageHomeScreenViewController {
+    @objc private func quickLinkRemovedFromAlert(_ notification: Notification) {
+        guard Constants.deviceType == .iPad else { return }
+        viewModel?.createDataSourceForManageScreen()
+        initialDataSource = viewModel?.dataSource
+        self.tableView.reloadData()
+    }
 }
 
 // MARK: Table view logic

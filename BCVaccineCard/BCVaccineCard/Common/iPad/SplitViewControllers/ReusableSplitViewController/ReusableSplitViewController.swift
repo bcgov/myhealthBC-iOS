@@ -27,6 +27,7 @@ class ReusableSplitViewController: UISplitViewController {
     private var baseVC: UIViewController?
     private var secondVC: UIViewController?
     private var tabType: AppTabs = .Home
+    private var visibleVCs = 1
     
     private var isInTwoColumnMode = false
     
@@ -52,19 +53,24 @@ class ReusableSplitViewController: UISplitViewController {
             if #available(iOS 14.0, *) {
                 if Constants.isIpadLandscape(vc: self) {
                     preferredDisplayMode = .oneBesideSecondary
+                    visibleVCs = 2
                 } else {
                     preferredDisplayMode = .secondaryOnly
+                    visibleVCs = 1
                 }
                 
             } else {
                 preferredDisplayMode = .allVisible
+                visibleVCs = 2
             }
         } else {
             rightVC = CustomNavigationController.init(rootViewController: UIViewController())
             if #available(iOS 14.0, *) {
                 preferredDisplayMode = .secondaryOnly
+                visibleVCs = 1
             } else {
                 preferredDisplayMode = .primaryHidden
+                visibleVCs = 1
             }
         }
         
@@ -100,9 +106,11 @@ class ReusableSplitViewController: UISplitViewController {
         if #available(iOS 14.0, *) {
             setViewController(rightVC, for: .primary)
             preferredDisplayMode = .oneBesideSecondary
+            visibleVCs = 2
         } else {
             self.viewControllers.insert(rightVC, at: 0)
             preferredDisplayMode = .allVisible
+            visibleVCs = 2
         }
     }
     
@@ -150,7 +158,7 @@ class ReusableSplitViewController: UISplitViewController {
     }
     
     func areTwoScreensShown() -> Bool {
-        return self.viewControllers.count == 2
+        return self.visibleVCs == 2
     }
     
 
@@ -170,15 +178,19 @@ extension ReusableSplitViewController {
             if Constants.isIpadLandscape(vc: self) {
                 if let _ = secondVC {
                     preferredDisplayMode = .oneBesideSecondary
+                    visibleVCs = 2
                 } else {
                     preferredDisplayMode = .secondaryOnly
+                    visibleVCs = 1
                 }
             } else {
                 preferredDisplayMode = .secondaryOnly
+                visibleVCs = 1
             }
             
         } else {
             preferredDisplayMode = .allVisible
+            visibleVCs = 2
         }
         
     }
@@ -187,6 +199,7 @@ extension ReusableSplitViewController {
         if !Constants.isIpadLandscape(vc: self) {
             if #available(iOS 14.0, *) {
                 hide(.primary)
+                visibleVCs = 1
             } else {
                 
             }
