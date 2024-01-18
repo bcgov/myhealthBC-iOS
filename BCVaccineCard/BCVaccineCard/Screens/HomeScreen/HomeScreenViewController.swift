@@ -222,7 +222,7 @@ extension HomeScreenViewController {
             return
         }
         // TODO: Check if iPad, if in landscape, and notifications screen already showing.
-        if UIDevice.current.orientation.isLandscape {
+        if Constants.isIpadLandscape(vc: self) {
             let vcTest = NotificationsViewController()
             if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vcTest) {
                 service.fetchAndStore(for: patient, loadingStyle: .empty) { results in
@@ -240,7 +240,7 @@ extension HomeScreenViewController {
     }
 }
 
-//if UIDevice.current.orientation.isLandscape {
+//if Constants.isIpadLandscape(vc: self) {
 //    let vcTest = ProfileAndSettingsViewController()
 //    if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vcTest) {
 //        let vc = ProfileAndSettingsViewController.construct()
@@ -317,8 +317,10 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
             var width: CGFloat
             var height: CGFloat
             if iPad {
-                if UIDevice.current.orientation.isLandscape {
-                    if authManager.isAuthenticated {
+//                getReusableSplitViewController?.areTwoScreensShown()
+                if Constants.isIpadLandscape(vc: self) {
+//                    if authManager.isAuthenticated {
+                    if getReusableSplitViewController?.areTwoScreensShown() == true {
                         width = (cView.width / 2)
                         height = width * (105/280)
                     } else {
@@ -477,7 +479,7 @@ extension HomeScreenViewController: QuickAccessCollectionReusableViewDelegate {
         var vm = ManageHomeScreenViewController.ViewModel()
         vm.createDataSourceForManageScreen()
         
-        if UIDevice.current.orientation.isLandscape {
+        if Constants.isIpadLandscape(vc: self) {
             let vc = ManageHomeScreenViewController.construct(viewModel: vm)
             if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vc) {
                 split.adjustFarRightVC(viewController: vc)
@@ -587,6 +589,7 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
             Defaults.updateStoredPreferences(phn: phn, newPreferences: storedPrefences)
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            NotificationCenter.default.post(name: .quickLinkRemovedFromAlert, object: nil, userInfo: nil)
             completion()
         }
     }
@@ -614,12 +617,23 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
         }))
         
         guard let actionSheetController = actionSheetController else { return }
+        if Constants.deviceType == .iPad {
+            actionSheetController.popoverPresentationController?.sourceView = self.view
+            let initialRect = self.collectionView.cellForItem(at: indexPath)?.frame
+            let x = initialRect?.origin.x ?? self.view.frame.origin.x
+            let y = initialRect?.origin.y ?? self.view.frame.origin.y
+            let width = initialRect?.width ?? self.view.frame.width
+            let height = initialRect?.height ?? self.view.frame.height
+            let rect = CGRect(x: x, y: y + 160, width: width, height: height)
+            actionSheetController.popoverPresentationController?.sourceRect = rect
+        }
         self.present(actionSheetController, animated: true) {
             actionSheetController.view.superview?.isUserInteractionEnabled = true
             let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissActionSheetTouchOutside))
             guard let views = actionSheetController.view.superview?.subviews, views.count > 0 else { return }
             views[0].addGestureRecognizer(tap)
         }
+        
     }
 
     private func dismissActionSheet() {

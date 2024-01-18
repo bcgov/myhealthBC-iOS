@@ -12,6 +12,7 @@ class ManageHomeScreenViewController: BaseViewController {
     class func construct(viewModel: ViewModel) -> ManageHomeScreenViewController {
         if let vc = Storyboard.home.instantiateViewController(withIdentifier: String(describing: ManageHomeScreenViewController.self)) as? ManageHomeScreenViewController {
             vc.viewModel = viewModel 
+            vc.initialDataSource = viewModel.dataSource
             return vc
         }
         return ManageHomeScreenViewController()
@@ -20,6 +21,7 @@ class ManageHomeScreenViewController: BaseViewController {
     @IBOutlet private weak var tableView: UITableView!
     
     var viewModel: ViewModel?
+    var initialDataSource: [DataSource]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +29,7 @@ class ManageHomeScreenViewController: BaseViewController {
     }
     
     private func setup() {
+        NotificationCenter.default.addObserver(self, selector: #selector(quickLinkRemovedFromAlert), name: .quickLinkRemovedFromAlert, object: nil)
         navSetup()
         setupTableView()
     }
@@ -38,9 +41,11 @@ extension ManageHomeScreenViewController {
     private func navSetup() {
         let navButton = NavButton(image: UIImage(named: "quick_checkmark"), action: #selector(self.saveButtonTapped), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
         
+        let rightNavButton: NavButton? = didDataSourceChange() ? navButton : nil
+        
         self.navDelegate?.setNavigationBarWith(title: "Manage",
                                                leftNavButton: nil,
-                                               rightNavButton: navButton,
+                                               rightNavButton: rightNavButton,
                                                navStyle: .small,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
@@ -51,6 +56,21 @@ extension ManageHomeScreenViewController {
         savePreferences()
     }
     
+    private func didDataSourceChange() -> Bool {
+        guard Constants.deviceType == .iPad else { return true }
+        return viewModel?.dataSource != initialDataSource
+    }
+    
+}
+
+// MARK: Reload data source from quick links managed in ipad landscape
+extension ManageHomeScreenViewController {
+    @objc private func quickLinkRemovedFromAlert(_ notification: Notification) {
+        guard Constants.deviceType == .iPad else { return }
+        viewModel?.createDataSourceForManageScreen()
+        initialDataSource = viewModel?.dataSource
+        self.tableView.reloadData()
+    }
 }
 
 // MARK: Table view logic
@@ -125,6 +145,7 @@ extension ManageHomeScreenViewController: UITableViewDelegate, UITableViewDataSo
 extension ManageHomeScreenViewController: ManageQuickLinkTableViewCellDelegate {
     func checkboxTapped(enabled: Bool, indexPath: IndexPath) {
         updateDataSource(at: indexPath, enabled: enabled)
+        navSetup()
     }
     
     private func updateDataSource(at indexPath: IndexPath, enabled: Bool) {
@@ -158,7 +179,9 @@ extension ManageHomeScreenViewController {
             self.view.endLoadingIndicator()
             self.alert(title: "Success", message: "Preferences updated") {
                 NotificationCenter.default.post(name: .refetchQuickLinksFromCoreData, object: nil, userInfo: nil)
-                guard !UIDevice.current.orientation.isLandscape else {
+                guard !Constants.isIpadLandscape(vc: self) else {
+                    self.initialDataSource = self.viewModel?.dataSource
+                    self.navSetup()
                     return
                 }
                 self.navigationController?.popViewController(animated: true)

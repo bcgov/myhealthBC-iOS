@@ -197,4 +197,12 @@ extension Constants {
             return .iPhone
         }
     }
+    
+    static func isIpadLandscape(vc: UIViewController) -> Bool {
+        if UIDevice.current.orientation.isFlat {
+            return vc.interfaceOrientation.isLandscape
+        } else {
+            return UIDevice.current.orientation.isLandscape
+        }
+    }
 }

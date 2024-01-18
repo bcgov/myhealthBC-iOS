@@ -36,6 +36,7 @@ class FeedbackViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .deviceDidRotate, object: nil)
         setup()
     }
     
@@ -58,6 +59,10 @@ class FeedbackViewController: BaseViewController {
 extension FeedbackViewController {
     
     private func navSetup() {
+//        guard Constants.deviceType != .iPad else {
+//            self.navigationController?.setNavigationBarHidden(true, animated: true)
+//            return
+//        }
         self.navDelegate?.setNavigationBarWith(title: "Feedback",
                                                leftNavButton: nil,
                                                rightNavButton: nil,
@@ -65,6 +70,8 @@ extension FeedbackViewController {
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
+        let hideBackButton = Constants.isIpadLandscape(vc: self)
+        self.navigationItem.setHidesBackButton(hideBackButton, animated: false)
     }
 }
 
@@ -211,4 +218,15 @@ extension FeedbackViewController: AppStyleButtonDelegate {
             }
         })
     }
+}
+
+// MARK: Device did rotate
+extension FeedbackViewController {
+    
+    @objc private func deviceDidRotate(_ notification: Notification) {
+        guard Constants.deviceType == .iPad else { return }
+        let backButtonShown = Constants.isIpadLandscape(vc: self)
+        self.navigationItem.setHidesBackButton(backButtonShown, animated: true)
+    }
+ 
 }

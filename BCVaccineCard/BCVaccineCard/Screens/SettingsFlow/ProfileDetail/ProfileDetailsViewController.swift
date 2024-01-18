@@ -128,6 +128,7 @@ class ProfileDetailsViewController: BaseDependentViewController {
     // MARK: Class funcs
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .deviceDidRotate, object: nil)
         profileService = PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
         initializeDataSource(for: self.type)
         navSetup()
@@ -174,6 +175,10 @@ class ProfileDetailsViewController: BaseDependentViewController {
 // MARK: Nav setup
 extension ProfileDetailsViewController {
     private func navSetup() {
+//        guard Constants.deviceType != .iPad else {
+//            self.navigationController?.setNavigationBarHidden(true, animated: true)
+//            return
+//        }
         self.navDelegate?.setNavigationBarWith(title: .profile,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
@@ -181,6 +186,8 @@ extension ProfileDetailsViewController {
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
+        let hideBackButton = Constants.isIpadLandscape(vc: self)
+        self.navigationItem.setHidesBackButton(hideBackButton, animated: false)
     }
 }
 
@@ -348,4 +355,15 @@ struct CommunicationPreferences {
     let emailVerified: Bool
     let phone: String?
     let phoneVerified: Bool
+}
+
+// MARK: Device did rotate
+extension ProfileDetailsViewController {
+    
+    @objc private func deviceDidRotate(_ notification: Notification) {
+        guard Constants.deviceType == .iPad else { return }
+        let backButtonShown = Constants.isIpadLandscape(vc: self)
+        self.navigationItem.setHidesBackButton(backButtonShown, animated: true)
+    }
+ 
 }

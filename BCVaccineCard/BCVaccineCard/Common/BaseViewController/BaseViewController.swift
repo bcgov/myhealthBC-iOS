@@ -52,6 +52,15 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
         }
         return nil
     }
+    
+    var getIPadParentSplitVC: iPadParentSplitViewController? {
+        if let tabBar = self.tabBarController as? AppTabBarController {
+            if let split = tabBar.parent as? iPadParentSplitViewController {
+                return split
+            }
+        }
+        return nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -175,12 +184,34 @@ extension BaseViewController {
     }
     // TODO: May have to adjust this to be in it's own view
     private func goToSettingsScreen() {
-        if UIDevice.current.orientation.isLandscape {
-            let vcTest = ProfileAndSettingsViewController()
-            if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vcTest) {
-                let vc = ProfileAndSettingsViewController.construct()
-                split.adjustFarRightVC(viewController: vc)
+//        if Constants.isIpadLandscape(vc: self) {
+//            let vcTest = ProfileAndSettingsViewController()
+//            if let split = self.getReusableSplitViewController, !split.isVCAlreadyShown(viewController: vcTest) {
+//                let vc = ProfileAndSettingsViewController.construct()
+//                split.adjustFarRightVC(viewController: vc)
+//            }
+//        } 
+        if Constants.deviceType == .iPad {
+            let settingsVC = ProfileAndSettingsViewController.construct()
+            let baseVC = CustomNavigationController(rootViewController: settingsVC)
+            var secondVC: CustomNavigationController?
+            let rootSettingsVC = ProfileAndSettingsViewController.construct()
+            if let patient = StorageService.shared.fetchAuthenticatedPatient(), AuthManager().isAuthenticated {
+                let vm = ProfileDetailsViewController.ViewModel(type: .PatientProfile(patient: patient))
+                let profileVC = ProfileDetailsViewController.construct(viewModel: vm)
+                secondVC = CustomNavigationController(rootViewController: rootSettingsVC)
+                secondVC?.pushViewController(profileVC, animated: false)
+            } else {
+                let securityVC = SecurityAndDataViewController.construct()
+                secondVC = CustomNavigationController(rootViewController: rootSettingsVC)
+                secondVC?.pushViewController(securityVC, animated: false)
             }
+            let splitVC = iPadAlertSplitVC.construct(baseVC: baseVC, secondVC: secondVC)
+            let vc = iPadAlertViewController.construct(with: splitVC)
+//            let nav = CustomNavigationController(rootViewController: vc)
+            let presentingVC: UIViewController = getIPadParentSplitVC ?? self
+            vc.modalPresentationStyle = .pageSheet
+            presentingVC.present(vc, animated: true)
         } else {
             show(route: .Settings, withNavigation: true)
         }

@@ -53,7 +53,7 @@ class AuthenticationViewController: UIViewController {
         removeChild()
         let authView: AuthenticationView = AuthenticationView.fromNib()
         authView.tag = childTag
-        authView.setup(in: self.view) { [weak self] result in
+        authView.setup(in: self.view, parentVC: self) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .Login:
@@ -68,7 +68,7 @@ class AuthenticationViewController: UIViewController {
         removeChild()
         let authInfoView: AuthenticationInfoView = AuthenticationInfoView.fromNib()
         authInfoView.tag = childTag
-        authInfoView.setup(in: self.view) { [weak self] result in
+        authInfoView.setup(in: self.view, parentVC: self) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .Continue:

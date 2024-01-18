@@ -27,6 +27,9 @@ class ReusableSplitViewController: UISplitViewController {
     private var baseVC: UIViewController?
     private var secondVC: UIViewController?
     private var tabType: AppTabs = .Home
+    private var visibleVCs = 1
+    
+    private var isInTwoColumnMode = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,21 +51,26 @@ class ReusableSplitViewController: UISplitViewController {
             rightVC = secondVC
             preferredPrimaryColumnWidthFraction = 1.0
             if #available(iOS 14.0, *) {
-                if UIDevice.current.orientation.isLandscape {
+                if Constants.isIpadLandscape(vc: self) {
                     preferredDisplayMode = .oneBesideSecondary
+                    visibleVCs = 2
                 } else {
                     preferredDisplayMode = .secondaryOnly
+                    visibleVCs = 1
                 }
                 
             } else {
                 preferredDisplayMode = .allVisible
+                visibleVCs = 2
             }
         } else {
             rightVC = CustomNavigationController.init(rootViewController: UIViewController())
             if #available(iOS 14.0, *) {
                 preferredDisplayMode = .secondaryOnly
+                visibleVCs = 1
             } else {
                 preferredDisplayMode = .primaryHidden
+                visibleVCs = 1
             }
         }
         
@@ -97,10 +105,18 @@ class ReusableSplitViewController: UISplitViewController {
         guard let rightVC = self.secondVC else { return }
         if #available(iOS 14.0, *) {
             setViewController(rightVC, for: .primary)
+            preferredDisplayMode = .oneBesideSecondary
+            visibleVCs = 2
         } else {
             self.viewControllers.insert(rightVC, at: 0)
+            preferredDisplayMode = .allVisible
+            visibleVCs = 2
         }
     }
+    
+//    func popManageVC() {
+//        
+//    }
     
     private func adjustLayoutForPortraitToLandscapeRotation() {
         switch self.tabType {
@@ -141,6 +157,10 @@ class ReusableSplitViewController: UISplitViewController {
         }
     }
     
+    func areTwoScreensShown() -> Bool {
+        return self.visibleVCs == 2
+    }
+    
 
 }
 
@@ -149,32 +169,37 @@ extension ReusableSplitViewController {
         super.viewWillTransition(to: size, with: coordinator)
         guard Constants.deviceType == .iPad else { return }
         NotificationCenter.default.post(name: .deviceDidRotate, object: nil)
-        if UIDevice.current.orientation.isLandscape {
+        if Constants.isIpadLandscape(vc: self) {
             adjustLayoutForPortraitToLandscapeRotation()
         }
         // TODO: Make more reusable
         
         if #available(iOS 14.0, *) {
-            if UIDevice.current.orientation.isLandscape {
+            if Constants.isIpadLandscape(vc: self) {
                 if let _ = secondVC {
                     preferredDisplayMode = .oneBesideSecondary
+                    visibleVCs = 2
                 } else {
                     preferredDisplayMode = .secondaryOnly
+                    visibleVCs = 1
                 }
             } else {
                 preferredDisplayMode = .secondaryOnly
+                visibleVCs = 1
             }
             
         } else {
             preferredDisplayMode = .allVisible
+            visibleVCs = 2
         }
         
     }
     
     @objc private func deviceDidRotate(_ notification: Notification) {
-        if !UIDevice.current.orientation.isLandscape {
+        if !Constants.isIpadLandscape(vc: self) {
             if #available(iOS 14.0, *) {
                 hide(.primary)
+                visibleVCs = 1
             } else {
                 
             }

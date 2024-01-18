@@ -32,6 +32,7 @@ class AuthenticationInfoView: UIView, Theme {
     @IBOutlet weak private var imageViewWidthConstraint: NSLayoutConstraint!
     
     private var completion: ((Result)->Void)?
+    private var parentVC: UIViewController?
     
     @IBAction func continueAction(_ sender: Any) {
         guard let completion = self.completion else {return}
@@ -50,10 +51,11 @@ class AuthenticationInfoView: UIView, Theme {
         completion(.Back)
     }
     
-    func setup(in view: UIView, completion: @escaping (Result)->Void) {
+    func setup(in view: UIView, parentVC: UIViewController, completion: @escaping (Result)->Void) {
         self.frame = .zero
         view.addSubview(self)
         self.addEqualSizeContraints(to: view)
+        self.parentVC = parentVC
         self.completion = completion
         style()
         setupAccessibility()
@@ -111,20 +113,21 @@ class AuthenticationInfoView: UIView, Theme {
     
     // Note: This is to be called when the view transitions during rotation
     private func adjustUIForIPadOrientationChange() {
-        guard Constants.deviceType == .iPad else { return }
-        stackViewLeadingConstraint.constant = UIDevice.current.orientation.isLandscape ? 300 : 100
-        stackViewTrailingConstraint.constant = UIDevice.current.orientation.isLandscape ? 300 : 100
-        if UIDevice.current.orientation.isLandscape {
+        guard Constants.deviceType == .iPad, let parentVC = self.parentVC else { return }
+        let isLandscape = Constants.isIpadLandscape(vc: parentVC)
+        stackViewLeadingConstraint.constant = isLandscape ? 300 : 100
+        stackViewTrailingConstraint.constant = isLandscape ? 300 : 100
+        if isLandscape {
             buttonsStackView.removeArrangedSubview(continueButton)
             buttonsStackView.addArrangedSubview(continueButton)
         } else {
             buttonsStackView.removeArrangedSubview(cancelButton)
             buttonsStackView.addArrangedSubview(cancelButton)
         }
-        buttonsStackView.axis = UIDevice.current.orientation.isLandscape ? .horizontal : .vertical
-        buttonsStackView.distribution = UIDevice.current.orientation.isLandscape ? .fill : .fillEqually
-        buttonsStackView.spacing = UIDevice.current.orientation.isLandscape ? 22 : 10
-        buttonStackViewBottomConstraint.constant = UIDevice.current.orientation.isLandscape ? 144 : 330
+        buttonsStackView.axis = isLandscape ? .horizontal : .vertical
+        buttonsStackView.distribution = isLandscape ? .fill : .fillEqually
+        buttonsStackView.spacing = isLandscape ? 22 : 10
+        buttonStackViewBottomConstraint.constant = isLandscape ? 144 : 330
         self.layoutIfNeeded()
     }
     

@@ -1042,6 +1042,9 @@
 		7928346B27311C6A00EE2710 /* DropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928346927311C6A00EE2710 /* DropDownView.swift */; };
 		7928346D27311C9000EE2710 /* DropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7928346C27311C9000EE2710 /* DropDownView.xib */; };
 		7928346E27311C9000EE2710 /* DropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7928346C27311C9000EE2710 /* DropDownView.xib */; };
+		7944E13B2B4F1DD60017FE72 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944E13A2B4F1DD60017FE72 /* PrivacyPolicyViewController.swift */; };
+		7944E13C2B4F1DD60017FE72 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944E13A2B4F1DD60017FE72 /* PrivacyPolicyViewController.swift */; };
+		7944E13D2B4F1DD60017FE72 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944E13A2B4F1DD60017FE72 /* PrivacyPolicyViewController.swift */; };
 		7944F67926F12613006B9444 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67826F12613006B9444 /* AppDelegate.swift */; };
 		7944F68026F12613006B9444 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
 		7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */; };
@@ -1073,6 +1076,12 @@
 		7944F71526F3A26D006B9444 /* QRSelectionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F71326F3A26D006B9444 /* QRSelectionTableViewCell.xib */; };
 		7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F71726F3B59B006B9444 /* TextTableViewCell.swift */; };
 		7944F71A26F3B59C006B9444 /* TextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F71826F3B59B006B9444 /* TextTableViewCell.xib */; };
+		794B68172B2C64140089874E /* iPadAlertSplitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B68162B2C64140089874E /* iPadAlertSplitVC.swift */; };
+		794B68182B2C64140089874E /* iPadAlertSplitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B68162B2C64140089874E /* iPadAlertSplitVC.swift */; };
+		794B68192B2C64140089874E /* iPadAlertSplitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B68162B2C64140089874E /* iPadAlertSplitVC.swift */; };
+		794B681B2B2C64260089874E /* iPadAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertViewController.swift */; };
+		794B681C2B2C64260089874E /* iPadAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertViewController.swift */; };
+		794B681D2B2C64260089874E /* iPadAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794B681A2B2C64260089874E /* iPadAlertViewController.swift */; };
 		794BD61C270235430084ADA8 /* AccessibilityLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD61B270235430084ADA8 /* AccessibilityLabels.swift */; };
 		794BD6272702E0E90084ADA8 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD6262702E0E90084ADA8 /* CustomNavigationController.swift */; };
 		794BD62F2702EEC00084ADA8 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75926F930E200EEF510 /* UIView+Ext.swift */; };
@@ -2000,6 +2009,7 @@
 		792834632731016500EE2710 /* CheckboxTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CheckboxTableViewCell.xib; sourceTree = "<group>"; };
 		7928346927311C6A00EE2710 /* DropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownView.swift; sourceTree = "<group>"; };
 		7928346C27311C9000EE2710 /* DropDownView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DropDownView.xib; sourceTree = "<group>"; };
+		7944E13A2B4F1DD60017FE72 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		7944F67526F12613006B9444 /* HealthGatewayDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthGatewayDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7944F67826F12613006B9444 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7944F67F26F12613006B9444 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -2037,6 +2047,8 @@
 		7944F71326F3A26D006B9444 /* QRSelectionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QRSelectionTableViewCell.xib; sourceTree = "<group>"; };
 		7944F71726F3B59B006B9444 /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
 		7944F71826F3B59B006B9444 /* TextTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextTableViewCell.xib; sourceTree = "<group>"; };
+		794B68162B2C64140089874E /* iPadAlertSplitVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadAlertSplitVC.swift; sourceTree = "<group>"; };
+		794B681A2B2C64260089874E /* iPadAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadAlertViewController.swift; sourceTree = "<group>"; };
 		794BD61B270235430084ADA8 /* AccessibilityLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityLabels.swift; sourceTree = "<group>"; };
 		794BD6262702E0E90084ADA8 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		794BD66F2702EEC00084ADA8 /* HealthGateway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthGateway.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2887,6 +2899,7 @@
 		2D79E4402B0D50330075FFB3 /* SplitViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				794B68132B2C63D80089874E /* AlertStyleUI */,
 				2D79E4412B0D50400075FFB3 /* ReusableSplitViewController */,
 				2D79E4282B0C34860075FFB3 /* ParentSplitViewController */,
 			);
@@ -3706,6 +3719,14 @@
 			path = ReusableViewControllers;
 			sourceTree = "<group>";
 		};
+		7944E1392B4F1DBF0017FE72 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				7944E13A2B4F1DD60017FE72 /* PrivacyPolicyViewController.swift */,
+			);
+			path = iPad;
+			sourceTree = "<group>";
+		};
 		7944F66C26F12613006B9444 = {
 			isa = PBXGroup;
 			children = (
@@ -4053,6 +4074,7 @@
 		7944F70726F390E4006B9444 /* SettingsFlow */ = {
 			isa = PBXGroup;
 			children = (
+				7944E1392B4F1DBF0017FE72 /* iPad */,
 				2978851B2795F14100FF912D /* Cells */,
 				2920AC1D278E3DA300F7CAE7 /* SecurityAndDataViewController.swift */,
 				2920AC1F278E626500F7CAE7 /* ProfileAndSettingsViewController.swift */,
@@ -4087,6 +4109,31 @@
 				7944F71826F3B59B006B9444 /* TextTableViewCell.xib */,
 			);
 			path = TextTableViewCell;
+			sourceTree = "<group>";
+		};
+		794B68132B2C63D80089874E /* AlertStyleUI */ = {
+			isa = PBXGroup;
+			children = (
+				794B68152B2C63F00089874E /* iPadAlertSplitVC */,
+				794B68142B2C63E40089874E /* iPadAlertViewController */,
+			);
+			path = AlertStyleUI;
+			sourceTree = "<group>";
+		};
+		794B68142B2C63E40089874E /* iPadAlertViewController */ = {
+			isa = PBXGroup;
+			children = (
+				794B681A2B2C64260089874E /* iPadAlertViewController.swift */,
+			);
+			path = iPadAlertViewController;
+			sourceTree = "<group>";
+		};
+		794B68152B2C63F00089874E /* iPadAlertSplitVC */ = {
+			isa = PBXGroup;
+			children = (
+				794B68162B2C64140089874E /* iPadAlertSplitVC.swift */,
+			);
+			path = iPadAlertSplitVC;
 			sourceTree = "<group>";
 		};
 		794BD6252702E0CC0084ADA8 /* CustomNavigationController */ = {
@@ -5391,6 +5438,7 @@
 				795AA77F2715FC9B00E59FF1 /* ParseXMLData.swift in Sources */,
 				3E473780291090BC00B5BBA0 /* CovidTestsService.swift in Sources */,
 				2922C0DB286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.swift in Sources */,
+				7944E13C2B4F1DD60017FE72 /* PrivacyPolicyViewController.swift in Sources */,
 				29547E5727A2EC5200562958 /* LocalAuthView.swift in Sources */,
 				3E81C4D329B2A99F00C8F5C4 /* UsersListOfRecordsViewModel.swift in Sources */,
 				293B32CC27D814EB0064BAAA /* CommentViewTableViewCell.swift in Sources */,
@@ -5456,6 +5504,7 @@
 				3EDC0CF52967DCA100603FED /* HospitalVisit+CoreDataClass.swift in Sources */,
 				2DF665942A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */,
 				3EDC0CB12967D12D00603FED /* AuthenticatedClinicalDocumentResponseObject.swift in Sources */,
+				794B68182B2C64140089874E /* iPadAlertSplitVC.swift in Sources */,
 				2D043C192AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */,
 				1E046E2E2ACE002A008E621B /* DiagnosticImagingInfoTableViewCell.swift in Sources */,
 				3EF199E92A2860EA00B8C5D8 /* NotificationTableViewCell.swift in Sources */,
@@ -5542,6 +5591,7 @@
 				3E87F4B529032092002F0A0E /* AppStates.swift in Sources */,
 				3EDC0CAD2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,
 				3E5924C1297086C900936CF1 /* EmptyTableViewCell.swift in Sources */,
+				794B681C2B2C64260089874E /* iPadAlertViewController.swift in Sources */,
 				3E81C4CA29B2A73F00C8F5C4 /* Routes.swift in Sources */,
 				291A0CB9282AC33B00035B0F /* Device.swift in Sources */,
 				2D9B39A02907171D00AE9FA1 /* HealthRecordsService.swift in Sources */,
@@ -5804,6 +5854,7 @@
 				3E473781291090BC00B5BBA0 /* CovidTestsService.swift in Sources */,
 				797BB95E2764084300CD1645 /* StorageService+Patient.swift in Sources */,
 				2922C0DC286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.swift in Sources */,
+				7944E13D2B4F1DD60017FE72 /* PrivacyPolicyViewController.swift in Sources */,
 				29788535279624F000FF912D /* ProfileAndSettingsViewController.swift in Sources */,
 				3E81C4D429B2A99F00C8F5C4 /* UsersListOfRecordsViewModel.swift in Sources */,
 				791C27CA27192D7C001A6E12 /* String+Localizable.swift in Sources */,
@@ -5869,6 +5920,7 @@
 				3EDC0CB22967D12D00603FED /* AuthenticatedClinicalDocumentResponseObject.swift in Sources */,
 				2DF665952A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */,
 				79590D9A2811EA20006EB59F /* CommentsTableViewCell.swift in Sources */,
+				794B68192B2C64140089874E /* iPadAlertSplitVC.swift in Sources */,
 				2D043C1A2AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */,
 				1E046E2F2ACE002A008E621B /* DiagnosticImagingInfoTableViewCell.swift in Sources */,
 				3EF199EB2A2860EA00B8C5D8 /* NotificationTableViewCell.swift in Sources */,
@@ -5955,6 +6007,7 @@
 				79A15AFF27FC07D500F8330D /* OnboardingCollectionViewCell.swift in Sources */,
 				3E87F4B629032092002F0A0E /* AppStates.swift in Sources */,
 				3EDC0CAE2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,
+				794B681D2B2C64260089874E /* iPadAlertViewController.swift in Sources */,
 				3E5924C2297086C900936CF1 /* EmptyTableViewCell.swift in Sources */,
 				3E81C4CB29B2A74000C8F5C4 /* Routes.swift in Sources */,
 				794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */,
@@ -6194,6 +6247,7 @@
 				798005A12852C66E006E390F /* FormTableViewCell.swift in Sources */,
 				798005A22852C66E006E390F /* ButtonTableViewCell.swift in Sources */,
 				3E47377F291090BC00B5BBA0 /* CovidTestsService.swift in Sources */,
+				7944E13B2B4F1DD60017FE72 /* PrivacyPolicyViewController.swift in Sources */,
 				2922C0DA286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.swift in Sources */,
 				3E81C4D229B2A99F00C8F5C4 /* UsersListOfRecordsViewModel.swift in Sources */,
 				798005A52852C66E006E390F /* ParseXMLData.swift in Sources */,
@@ -6259,6 +6313,7 @@
 				798005C12852C66E006E390F /* InitialOnboardingView.swift in Sources */,
 				2DF665932A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */,
 				3EDC0CF42967DCA100603FED /* HospitalVisit+CoreDataClass.swift in Sources */,
+				794B68172B2C64140089874E /* iPadAlertSplitVC.swift in Sources */,
 				2D043C182AE730600004974A /* PharmacistAssessmentDetailView.swift in Sources */,
 				1E046E2D2ACE002A008E621B /* DiagnosticImagingInfoTableViewCell.swift in Sources */,
 				3EF199E72A28608800B8C5D8 /* NotificationTableViewCell.swift in Sources */,
@@ -6345,6 +6400,7 @@
 				2D5218D92988881B00E07382 /* UpdateAddressViewController.swift in Sources */,
 				798005EB2852C66E006E390F /* HiddenRecordsTableViewCell.swift in Sources */,
 				3E87F4B429032092002F0A0E /* AppStates.swift in Sources */,
+				794B681B2B2C64260089874E /* iPadAlertViewController.swift in Sources */,
 				3EDC0CAC2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,
 				3E5924C0297086C900936CF1 /* EmptyTableViewCell.swift in Sources */,
 				2D9B399F2907171D00AE9FA1 /* HealthRecordsService.swift in Sources */,
@@ -6544,10 +6600,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -6557,7 +6615,8 @@
 				MARKETING_VERSION = 1.9.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-DEV-AppStore";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "ClientVaccineCard-DEV-AppStore";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -6577,10 +6636,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -6590,7 +6651,8 @@
 				MARKETING_VERSION = 1.9.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-DEV-AppStore";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "ClientVaccineCard-DEV-AppStore";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

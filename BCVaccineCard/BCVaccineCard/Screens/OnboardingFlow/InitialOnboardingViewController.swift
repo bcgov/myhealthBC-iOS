@@ -79,7 +79,7 @@ class InitialOnboardingViewController: UIViewController {
     
     private func iPadUIAdjustments() {
         guard Constants.deviceType == .iPad else { return }
-        if UIDevice.current.orientation.isLandscape {
+        if Constants.isIpadLandscape(vc: self) {
             buttonsStackView.axis = .horizontal
             buttonsStackView.removeArrangedSubview(bottomButton)
             buttonsStackView.addArrangedSubview(bottomButton)

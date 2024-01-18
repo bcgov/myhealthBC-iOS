@@ -146,7 +146,7 @@ class HomeScreenRecordCollectionViewCell: UICollectionViewCell {
 //        buttonImageView.image = type.getButtonImage(auth: auth)
 //        titleHeight.constant = type.getTitle.heightForView(font: UIFont.bcSansBoldWithSize(size: 17), width: titleLabel.bounds.width)
         if isIPad {
-            buttonWidthConstraint.constant = UIDevice.current.orientation.isLandscape ? 32 : 24
+            buttonWidthConstraint.constant = Constants.isIpadLandscape(vc: delegateOwner) ? 32 : 24
         }
     }
     
