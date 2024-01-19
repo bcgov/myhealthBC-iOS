@@ -41,12 +41,18 @@ class ServicesViewController: BaseViewController {
     // MARK: Setup
     func setup() {
         navSetup()
+        self.contentContainer.isHidden = false
+        self.descriptiveLabel.isHidden = false
         guard let state = viewModel?.currentState else {
             showUnAuthenticated()
             return
         }
         switch state {
         case .Authenticated:
+            guard Defaults.enabledTypes?.contains(service: .OrganDonorRegistration) == true && StorageService.shared.fetchAuthenticatedPatient()?.organDonorStatus != nil else {
+                showUnavailable()
+                return
+            }
             showList()
         case .AuthenticationExpired:
             showAuthExpired()
@@ -104,6 +110,21 @@ class ServicesViewController: BaseViewController {
         }
         
         view.layoutIfNeeded()
+    }
+    
+    private func showUnavailable() {
+        contentContainer.isHidden = true
+        descriptiveLabel.isHidden = true
+        let image = UIImage(named: "services_empty_state")
+        let imageView = UIImageView(image: image)
+        self.view.addSubview(imageView)
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 251/295).isActive = true
+        imageView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 24).isActive = true
+        imageView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -24).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: 0).isActive = true
+        
     }
 
 }
