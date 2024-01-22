@@ -49,7 +49,7 @@ class ServicesViewController: BaseViewController {
         }
         switch state {
         case .Authenticated:
-            guard Defaults.enabledTypes?.contains(service: .OrganDonorRegistration) == true && StorageService.shared.fetchAuthenticatedPatient()?.organDonorStatus != nil else {
+            guard Defaults.enabledTypes?.contains(service: .OrganDonorRegistration) == true else {
                 showUnavailable()
                 return
             }
