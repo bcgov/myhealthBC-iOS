@@ -171,6 +171,7 @@ extension ServicesViewController: OrganDonorDelegate, AuthViewDelegate, UIDocume
         service.fetchAndStoreOrganDonorStatus(for: patient) {[weak self] result in
             let successful = result != nil
             let message: String = successful ? "Status retrieved" : .fetchRecordError
+            // TODO: Connor check with this here
             self?.showToast(message: message, style: successful ? .Default : .Warn)
             self?.setup()
         }

@@ -149,7 +149,9 @@ extension VaccineCardService {
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: .fetchRecordError, style: .Warn)
+                    // Note: Commenting this out due to client request
+//                    network.showToast(message: .fetchRecordError, style: .Warn)
+                    print("Do Nothing")
                 default:
                     break
                 }
@@ -193,7 +195,9 @@ extension VaccineCardService {
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: .fetchRecordError, style: .Warn)
+                    // Note: Commenting this out due to client request
+//                    network.showToast(message: .fetchRecordError, style: .Warn)
+                    print("Do Nothing")
                 default:
                     break
                 }

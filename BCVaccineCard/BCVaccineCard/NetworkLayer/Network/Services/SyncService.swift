@@ -64,7 +64,8 @@ struct SyncService {
         let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
         let notificationService = NotificationService(network: network, authManager: authManager, configService: configService)
         if showToast {
-            network.showToast(message: .retrievingRecords)
+            // Note: Commenting this out due to client request
+//            network.showToast(message: .retrievingRecords)
         }
         AppDelegate.sharedInstance?.cachedCommunicationPreferences = nil
         patientService.fetchAndStoreDetails { patient in
@@ -133,10 +134,11 @@ struct SyncService {
             group.notify(queue: .main) {
                 let message: String = !hadFailures ? .recordsRetrieved : .fetchRecordError
                 
+                // Note: Commenting this out due to client request
                 if showToast {
-                    network.showToast(message: message)
+//                    network.showToast(message: message)
                 } else if hadFailures {
-                    network.showToast(message: message, style: .Warn)
+//                    network.showToast(message: message, style: .Warn)
                 }
                 
                 return completion(patient)

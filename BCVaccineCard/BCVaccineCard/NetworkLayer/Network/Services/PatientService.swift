@@ -205,6 +205,7 @@ extension PatientService {
                     return completion(nil, .invalidResponse)
                 }
             } onError: { error in
+                // TODO: Connor check with this here
                 network.showToast(error: error)
             }
             
@@ -241,6 +242,7 @@ extension PatientService {
             { result in
                 return completion(result)
             } onError: { error in
+                // TODO: Connor check with this here
                 network.showToast(error: error)
             }
             
@@ -278,6 +280,7 @@ extension PatientService {
                 completion: { responseData in
                     return completion(responseData)
                 }, onError: { error in
+                    // TODO: Connor check with this here
                     network.showToast(error: error)
                 })
             network.request(with: request)
@@ -308,7 +311,8 @@ extension PatientService {
             { result in
                 return completion(result)
             } onError: { error in
-                network.showToast(error: error)
+                // Note: Commenting this out due to client request
+//                network.showToast(error: error)
                 
             }
             
@@ -341,7 +345,8 @@ extension PatientService {
             { result in
                 return completion(result)
             } onError: { error in
-                network.showToast(error: error)
+                // Note: Commenting this out due to client request
+//                network.showToast(error: error)
                 
             }
             

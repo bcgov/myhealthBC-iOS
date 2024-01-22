@@ -203,7 +203,8 @@ extension UsersListOfRecordsViewController {
             guard let dependent = patient.dependencyInfo else { return }
             HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records, hadFails in
                 let message: String = !hadFails ? "Records retrieved" : "Not all records were fetched successfully"
-                self?.showToast(message: message)
+                // Note: Commenting this out due to client request
+//                self?.showToast(message: message)
                 SessionStorage.dependentRecordsFetched.append(patient)
                 self?.refreshControl.endRefreshing()
             }
