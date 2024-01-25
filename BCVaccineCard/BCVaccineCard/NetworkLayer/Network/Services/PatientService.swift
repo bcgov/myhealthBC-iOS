@@ -10,6 +10,7 @@ import Foundation
 typealias PatientDetailResponse = AuthenticatedPatientDetailsResponseObject
 typealias OrganDonorStatusResponse = AuthenticatedOrganDonorStatusResponseModel.Item
 typealias DiagnosticImagingResponse = AuthenticatedDiagnosticImagingResponseModel.Item
+typealias CancerScreeningResponse = AuthenticatedCancerScreeningResponseModel.Item
 //typealias QuickLinksPreferencesResponse = AuthenticatedUserProfileResponseObject.QuickLinks
 
 struct PatientService {
@@ -87,6 +88,30 @@ struct PatientService {
     
     private func store(diagnosticImagingArray: [DiagnosticImagingResponse],for patient: Patient, completion: @escaping ([DiagnosticImaging]?)->Void) {
         let storedObject = StorageService.shared.store(diagnosticImagingArray: diagnosticImagingArray, for: patient)
+        return completion(storedObject)
+    }
+    
+    // MARK: Cancer Screening
+    public func fetchAndStoreCancerScreening(for patient: Patient, completion: @escaping ([CancerScreening]?)->Void) {
+        guard let hdid = patient.hdid else {
+            return completion(nil)
+        }
+        network.addLoader(message: .SyncingRecords, caller: .PatientService_fetchAndStoreCancerScreening)
+        fetchPatientDataCancer(type: .cancerScreening, hdid: hdid) { result in
+            // TODO: Look into error handling logic here, might be a flaw, need to test out
+            guard let result = result, let data = result.items, data.count > 0 else {
+                network.removeLoader(caller: .PatientService_fetchAndStoreCancerScreening)
+                return completion(nil)
+            }
+            store(cancerScreeningArray: data, for: patient) {storedData in
+                network.removeLoader(caller: .PatientService_fetchAndStoreCancerScreening)
+                return completion(storedData)
+            }
+        }
+    }
+    
+    private func store(cancerScreeningArray: [CancerScreeningResponse],for patient: Patient, completion: @escaping ([CancerScreening]?)->Void) {
+        let storedObject = StorageService.shared.store(cancerScreeningArray: cancerScreeningArray, for: patient)
         return completion(storedObject)
     }
 
@@ -353,12 +378,47 @@ extension PatientService {
             network.request(with: requestModel)
         }
     }
+    
+    // TODO: Make this reusable with function above - for now, keeping it separate due to completion handler
+    private func fetchPatientDataCancer(type: PatientDataType, hdid: String, completion: @escaping(AuthenticatedCancerScreeningResponseModel?)-> Void) {
+        guard let token = authManager.authToken,
+              NetworkConnection.shared.hasConnection
+        else { return completion(nil)}
+        
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
+            
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
+            ]
+            
+            let parameters: PatientDataParams = PatientDataParams(patientDataTypes: type.rawValue, apiVersion: "2")
+            
+            let requestModel = NetworkRequest<PatientDataParams, AuthenticatedCancerScreeningResponseModel>(url: endpoints.patientData(base: baseURL, hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+            { result in
+                return completion(result)
+            } onError: { error in
+                // Note: Commenting this out due to client request
+//                network.showToast(error: error)
+                
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
 }
 
 
 enum PatientDataType: String {
     case organDonorRegistrationStatus = "OrganDonorRegistrationStatus"
     case diagnosticImaging = "DiagnosticImaging"
+    case cancerScreening = "BcCancerScreening"
 }
 
 struct PatientDataParams: Codable {

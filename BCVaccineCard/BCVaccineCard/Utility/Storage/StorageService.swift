@@ -37,6 +37,7 @@ extension StorageService {
         case Dependent
         case OrganDonorStatus
         case DiagnosticImaging
+        case CancerScreening
         case Notes
         case QuickLinkPreference
     }

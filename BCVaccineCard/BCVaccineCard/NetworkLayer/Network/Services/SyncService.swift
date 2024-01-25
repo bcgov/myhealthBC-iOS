@@ -99,6 +99,17 @@ struct SyncService {
                 }
             }
             
+            if Defaults.enabledTypes?.contains(dataset: .BcCancerScreening) == true {
+                group.enter()
+                patientService.fetchAndStoreCancerScreening(for: patient) { cancerScreening in
+                    if cancerScreening == nil {
+                        hadFailures = true
+                    }
+                    Logger.log(string: "\(String.fetchedCancerScreening) \(cancerScreening?.count)", type: .Network)
+                    group.leave()
+                }
+            }
+            
             group.enter()
             dependentService.fetchDependents(for: patient) { dependents in
                 if dependents == nil {
