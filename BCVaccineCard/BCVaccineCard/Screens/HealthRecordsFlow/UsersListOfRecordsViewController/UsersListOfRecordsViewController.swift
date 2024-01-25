@@ -594,6 +594,8 @@ extension UsersListOfRecordsViewController {
                         showItem = filter.recordTypes.contains(.ClinicalDocuments)
                     case .diagnosticImaging:
                         showItem = filter.recordTypes.contains(.DiagnosticImaging)
+                    case .cancerScreening:
+                        showItem = filter.recordTypes.contains(.CancerScreening)
                     case .note:
                         showItem = filter.recordTypes.contains(.Notes)
                     }

@@ -20,6 +20,7 @@ struct HealthRecordsDetailDataSource {
             case hospitalVisit(model: HospitalVisit)
             case clinicalDocument(model: ClinicalDocument)
             case diagnosticImaging(model: DiagnosticImaging)
+            case cancerScreening(model: CancerScreening)
             case note(model: Note)
         }
         let id: String
@@ -52,6 +53,8 @@ struct HealthRecordsDetailDataSource {
                 return model.commentsArray
             case .diagnosticImaging(model: let model):
                 return model.commentsArray
+            case .cancerScreening(model: let model):
+                return []
             case .note(model: let model):
                 return []
             }
@@ -60,7 +63,7 @@ struct HealthRecordsDetailDataSource {
         var includesSeparatorUI: Bool {
             switch self.type {
             case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder, .immunization: return true
-            case .medication, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging, .note: return false
+            case .medication, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging, .cancerScreening, .note: return false
             }
         }
     }
@@ -76,6 +79,7 @@ struct HealthRecordsDetailDataSource {
         case hospitalVisit(model: HospitalVisit)
         case clinicalDocument(model:ClinicalDocument)
         case diagnosticImaging(model: DiagnosticImaging)
+        case cancerScreening(model: CancerScreening)
         case note(model: Note)
     }
     
@@ -118,6 +122,8 @@ struct HealthRecordsDetailDataSource {
             return records.first
         case .diagnosticImaging(model: let model):
             return records.first
+        case .cancerScreening(model: let model):
+            return records.first
         case .note:
             return records.first
         }
@@ -146,6 +152,8 @@ struct HealthRecordsDetailDataSource {
         case .diagnosticImaging(model: let model):
             // Pretty sure we can't get diagnostic reports without being authenticated
             return true
+        case .cancerScreening(model: let model):
+            return true
         case .note(model: let model):
             return true
         }
@@ -163,6 +171,7 @@ struct HealthRecordsDetailDataSource {
                 .hospitalVisit,
                 .clinicalDocument,
                 .diagnosticImaging,
+                .cancerScreening,
                 .note:
             return false
         case .medication:
@@ -266,6 +275,16 @@ struct HealthRecordsDetailDataSource {
             
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
+        case .cancerScreening(model: let model):
+            // TODO: Connor confirm CS here
+            id = model.id
+            title = model.type ?? "-"
+            detailNavTitle = model.type ?? "_"
+            name = model.patient?.name ?? "-"
+            image = UIImage(named: "blue-bg-cancer-screening-icon")
+            
+            deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
+            deleteAlertMessage = "Should not see this" // Showing for testing purposes
         case .note(model: let model):
             id = model.id
             title = model.title ?? "-"
@@ -316,6 +335,9 @@ extension HealthRecordsDetailDataSource {
             return result
         case .diagnosticImaging(model: let model):
             result.append(genRecord(diagnosticImaging: model))
+            return result
+        case .cancerScreening(model: let model):
+            result.append(genRecord(cancerScreening: model))
             return result
         case . note(model: let model):
             result.append(genRecord(note: model))
@@ -423,6 +445,18 @@ extension HealthRecordsDetailDataSource {
             status = "Updated"
         }
         return Record(id: diagnosticImaging.id ?? UUID().uuidString, name: diagnosticImaging.modality ?? "", type: .diagnosticImaging(model: diagnosticImaging), status: status, date: dateString, listStatus: status, commentID: diagnosticImaging.id)
+    }
+    
+    // MARK: Cancer Screening
+    // TODO: Connor confirm CS here
+    private static func genRecord(cancerScreening: CancerScreening) -> Record {
+        let dateString = cancerScreening.resultDateTime?.monthDayYearString
+        // TODO: confirm data
+        var status = ""
+//        if diagnosticImaging.isObjectUpdated == true {
+//            status = "Updated"
+//        }
+        return Record(id: cancerScreening.id ?? UUID().uuidString, name: cancerScreening.itemType ?? "", type: .cancerScreening(model: cancerScreening), status: status, date: dateString, listStatus: status, commentID: cancerScreening.id)
     }
     
     // MARK: Note

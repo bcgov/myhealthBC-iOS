@@ -115,6 +115,9 @@ extension StorageService {
         case .DiagnosticImaging(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .DiagnosticImaging, object: object))
+        case .CancerScreening(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .CancerScreening, object: object))
         case .Note(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .Notes, object: object))

@@ -48,6 +48,8 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
             recordView = ClinicalDocumentRecordDetailView(frame: .zero)
         case .diagnosticImaging:
             recordView = DiagnosticImagingDetailView(frame: .zero)
+        case .cancerScreening:
+            recordView = CancerScreeningDetailView(frame: .zero)
         case .note:
             // We won't get here
             recordView = BaseHealthRecordsDetailView(frame: .zero)
