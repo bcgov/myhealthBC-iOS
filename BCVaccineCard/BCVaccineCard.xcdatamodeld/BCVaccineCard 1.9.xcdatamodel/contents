@@ -7,7 +7,7 @@
         <attribute name="state" optional="YES" attributeType="String"/>
         <attribute name="streetLines" optional="YES" attributeType="Transformable" customClassName="[String]"/>
     </entity>
-    <entity name="CancerScreening" representedClassName="CancerScreening" syncable="YES" codeGenerationType="class">
+    <entity name="CancerScreening" representedClassName="CancerScreening" syncable="YES">
         <attribute name="eventDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="eventType" optional="YES" attributeType="String"/>
         <attribute name="fileID" optional="YES" attributeType="String"/>
@@ -16,6 +16,7 @@
         <attribute name="programName" optional="YES" attributeType="String"/>
         <attribute name="resultDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="comments" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Comment" inverseName="cancerScreening" inverseEntity="Comment"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="cancerScreening" inverseEntity="Patient"/>
     </entity>
     <entity name="ClinicalDocument" representedClassName="ClinicalDocument" syncable="YES">
@@ -43,6 +44,7 @@
         <attribute name="updatedDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="userProfileID" optional="YES" attributeType="String"/>
         <attribute name="version" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="cancerScreening" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CancerScreening" inverseName="comments" inverseEntity="CancerScreening"/>
         <relationship name="clinicalDocument" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ClinicalDocument" inverseName="comments" inverseEntity="ClinicalDocument"/>
         <relationship name="covidLabTestResult" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CovidLabTestResult" inverseName="comments" inverseEntity="CovidLabTestResult"/>
         <relationship name="diagnosticImaging" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DiagnosticImaging" inverseName="comments" inverseEntity="DiagnosticImaging"/>

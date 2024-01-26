@@ -1176,6 +1176,18 @@
 		7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75526F9155700EEF510 /* UIFont+Ext.swift */; };
 		7967E75A26F930E200EEF510 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75926F930E200EEF510 /* UIView+Ext.swift */; };
 		7967E75E26FBDD3900EEF510 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7967E75D26FBDD3900EEF510 /* GoogleService-Info.plist */; };
+		797A4F742B644CD8007E4122 /* CancerScreening+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A4F722B644CD8007E4122 /* CancerScreening+CoreDataClass.swift */; };
+		797A4F752B644CD8007E4122 /* CancerScreening+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A4F722B644CD8007E4122 /* CancerScreening+CoreDataClass.swift */; };
+		797A4F762B644CD8007E4122 /* CancerScreening+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A4F722B644CD8007E4122 /* CancerScreening+CoreDataClass.swift */; };
+		797A4F772B644CD8007E4122 /* CancerScreening+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A4F732B644CD8007E4122 /* CancerScreening+CoreDataProperties.swift */; };
+		797A4F782B644CD8007E4122 /* CancerScreening+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A4F732B644CD8007E4122 /* CancerScreening+CoreDataProperties.swift */; };
+		797A4F792B644CD8007E4122 /* CancerScreening+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A4F732B644CD8007E4122 /* CancerScreening+CoreDataProperties.swift */; };
+		797A4F7C2B64535F007E4122 /* CancerScreeningLinkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A4F7A2B64535F007E4122 /* CancerScreeningLinkTableViewCell.swift */; };
+		797A4F7D2B64535F007E4122 /* CancerScreeningLinkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A4F7A2B64535F007E4122 /* CancerScreeningLinkTableViewCell.swift */; };
+		797A4F7E2B64535F007E4122 /* CancerScreeningLinkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A4F7A2B64535F007E4122 /* CancerScreeningLinkTableViewCell.swift */; };
+		797A4F7F2B64535F007E4122 /* CancerScreeningLinkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 797A4F7B2B64535F007E4122 /* CancerScreeningLinkTableViewCell.xib */; };
+		797A4F802B64535F007E4122 /* CancerScreeningLinkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 797A4F7B2B64535F007E4122 /* CancerScreeningLinkTableViewCell.xib */; };
+		797A4F812B64535F007E4122 /* CancerScreeningLinkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 797A4F7B2B64535F007E4122 /* CancerScreeningLinkTableViewCell.xib */; };
 		797BB95E2764084300CD1645 /* StorageService+Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE0275AA10D00532BC4 /* StorageService+Patient.swift */; };
 		797BB95F276408B800CD1645 /* StorageService+VaccineCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCDE275A9D2C00532BC4 /* StorageService+VaccineCard.swift */; };
 		797BB96A2767E85D00CD1645 /* SettingsTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291D43BA275FE0EC005F5B94 /* SettingsTextTableViewCell.swift */; };
@@ -1500,12 +1512,6 @@
 		79BB14622B61A9FC00AB0C31 /* AuthenticatedCancerScreeningResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BB14612B61A9FC00AB0C31 /* AuthenticatedCancerScreeningResponseModel.swift */; };
 		79BB14632B61A9FC00AB0C31 /* AuthenticatedCancerScreeningResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BB14612B61A9FC00AB0C31 /* AuthenticatedCancerScreeningResponseModel.swift */; };
 		79BB14642B61A9FC00AB0C31 /* AuthenticatedCancerScreeningResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BB14612B61A9FC00AB0C31 /* AuthenticatedCancerScreeningResponseModel.swift */; };
-		79BB146D2B63098600AB0C31 /* CancerScreeningTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BB146B2B63098600AB0C31 /* CancerScreeningTableViewCell.swift */; };
-		79BB146E2B63098600AB0C31 /* CancerScreeningTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BB146B2B63098600AB0C31 /* CancerScreeningTableViewCell.swift */; };
-		79BB146F2B63098600AB0C31 /* CancerScreeningTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BB146B2B63098600AB0C31 /* CancerScreeningTableViewCell.swift */; };
-		79BB14702B63098600AB0C31 /* CancerScreeningTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79BB146C2B63098600AB0C31 /* CancerScreeningTableViewCell.xib */; };
-		79BB14712B63098600AB0C31 /* CancerScreeningTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79BB146C2B63098600AB0C31 /* CancerScreeningTableViewCell.xib */; };
-		79BB14722B63098600AB0C31 /* CancerScreeningTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79BB146C2B63098600AB0C31 /* CancerScreeningTableViewCell.xib */; };
 		79BB14742B63099D00AB0C31 /* CancerScreeningDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BB14732B63099D00AB0C31 /* CancerScreeningDetailView.swift */; };
 		79BB14752B63099D00AB0C31 /* CancerScreeningDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BB14732B63099D00AB0C31 /* CancerScreeningDetailView.swift */; };
 		79BB14762B63099D00AB0C31 /* CancerScreeningDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BB14732B63099D00AB0C31 /* CancerScreeningDetailView.swift */; };
@@ -2057,6 +2063,10 @@
 		7967E75526F9155700EEF510 /* UIFont+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Ext.swift"; sourceTree = "<group>"; };
 		7967E75926F930E200EEF510 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		7967E75D26FBDD3900EEF510 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		797A4F722B644CD8007E4122 /* CancerScreening+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CancerScreening+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		797A4F732B644CD8007E4122 /* CancerScreening+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CancerScreening+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		797A4F7A2B64535F007E4122 /* CancerScreeningLinkTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancerScreeningLinkTableViewCell.swift; sourceTree = "<group>"; };
+		797A4F7B2B64535F007E4122 /* CancerScreeningLinkTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CancerScreeningLinkTableViewCell.xib; sourceTree = "<group>"; };
 		797DE3C127D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedPDFResponseObject.swift; sourceTree = "<group>"; };
 		7980064B2852C66E006E390F /* HealthGatewayTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthGatewayTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7980064C2852C66E006E390F /* TEST Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TEST Info.plist"; sourceTree = "<group>"; };
@@ -2089,8 +2099,6 @@
 		79B9D01627E2950000987D9F /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		79B9D01927E31D7100987D9F /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		79BB14612B61A9FC00AB0C31 /* AuthenticatedCancerScreeningResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedCancerScreeningResponseModel.swift; sourceTree = "<group>"; };
-		79BB146B2B63098600AB0C31 /* CancerScreeningTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancerScreeningTableViewCell.swift; sourceTree = "<group>"; };
-		79BB146C2B63098600AB0C31 /* CancerScreeningTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CancerScreeningTableViewCell.xib; sourceTree = "<group>"; };
 		79BB14732B63099D00AB0C31 /* CancerScreeningDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancerScreeningDetailView.swift; sourceTree = "<group>"; };
 		79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HealthPass.storyboard; sourceTree = "<group>"; };
 		79BDA071270CB71D00FF30AB /* Records.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Records.storyboard; sourceTree = "<group>"; };
@@ -2343,6 +2351,8 @@
 		2940A352272840C200132D7D /* CoreDataClass */ = {
 			isa = PBXGroup;
 			children = (
+				797A4F722B644CD8007E4122 /* CancerScreening+CoreDataClass.swift */,
+				797A4F732B644CD8007E4122 /* CancerScreening+CoreDataProperties.swift */,
 				2DF665672A304BEB0009D8F0 /* Note+CoreDataClass.swift */,
 				2DF665682A304BEB0009D8F0 /* Note+CoreDataProperties.swift */,
 				3E6F93902A27C18900EB82C5 /* GatewayNotification+CoreDataClass copy.swift */,
@@ -4258,8 +4268,8 @@
 		79BB146A2B63096200AB0C31 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				79BB146B2B63098600AB0C31 /* CancerScreeningTableViewCell.swift */,
-				79BB146C2B63098600AB0C31 /* CancerScreeningTableViewCell.xib */,
+				797A4F7A2B64535F007E4122 /* CancerScreeningLinkTableViewCell.swift */,
+				797A4F7B2B64535F007E4122 /* CancerScreeningLinkTableViewCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -4586,7 +4596,6 @@
 				29719547288212F600CA824A /* HealthVisitRecordDetailTableViewCell.xib in Resources */,
 				79218A9E275141800063004E /* GetARecordTableViewCell.xib in Resources */,
 				3E32322728B5FEB80067040C /* Recommendations.storyboard in Resources */,
-				79BB14712B63098600AB0C31 /* CancerScreeningTableViewCell.xib in Resources */,
 				29547E5B27A2EC7700562958 /* LocalAuthView.xib in Resources */,
 				3E23ADD529DDE51D001BC9CC /* Services.storyboard in Resources */,
 				79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */,
@@ -4623,6 +4632,7 @@
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
 				2D6DF35A29F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */,
 				79218ACF27556AA50063004E /* StatusBannerView.xib in Resources */,
+				797A4F802B64535F007E4122 /* CancerScreeningLinkTableViewCell.xib in Resources */,
 				2DF2102928DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */,
 				799050C7273C8567006CD726 /* UserRecordListView.xib in Resources */,
 				2971956B28871B1A00CA824A /* SectionDescriptionTableViewCell.xib in Resources */,
@@ -4697,6 +4707,7 @@
 				294BD3D527B1D60B00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
 				79CF236C2825789600510489 /* HealthRecordsHomeView.xib in Resources */,
 				794BD65F2702EEC00084ADA8 /* SettingsTableViewCell.xib in Resources */,
+				797A4F812B64535F007E4122 /* CancerScreeningLinkTableViewCell.xib in Resources */,
 				1E046E322ACE002A008E621B /* DiagnosticImagingInfoTableViewCell.xib in Resources */,
 				3E10300E29BA7AFB001E85EC /* AppTabBar.storyboard in Resources */,
 				79218ABB27519E790063004E /* HealthRecordsUserCollectionViewCell.xib in Resources */,
@@ -4775,7 +4786,6 @@
 				794BD6692702EEC00084ADA8 /* FormTextFieldView.xib in Resources */,
 				2DF3180D29E5372C0077EA87 /* EditCommentTableViewCell.xib in Resources */,
 				79218A9F275141800063004E /* GetARecordTableViewCell.xib in Resources */,
-				79BB14722B63098600AB0C31 /* CancerScreeningTableViewCell.xib in Resources */,
 				2DD8C0C72A5E4F3400CC9DA3 /* HomeScreenRecordCollectionViewCell.xib in Resources */,
 				2DD8C0CF2A5EA47000CC9DA3 /* HomeScreenAuthCollectionViewCell.xib in Resources */,
 				79B9D01527E2869D00987D9F /* HomeScreenTableViewCell.xib in Resources */,
@@ -4867,7 +4877,6 @@
 				29719546288212F600CA824A /* HealthVisitRecordDetailTableViewCell.xib in Resources */,
 				7980062A2852C66E006E390F /* GetARecordTableViewCell.xib in Resources */,
 				3E32322628B5FEB80067040C /* Recommendations.storyboard in Resources */,
-				79BB14702B63098600AB0C31 /* CancerScreeningTableViewCell.xib in Resources */,
 				7980062B2852C66E006E390F /* LocalAuthView.xib in Resources */,
 				3E23ADD229DDD8B0001BC9CC /* Services.storyboard in Resources */,
 				7980062C2852C66E006E390F /* HealthPass.storyboard in Resources */,
@@ -4904,6 +4913,7 @@
 				7980063C2852C66E006E390F /* FormTextFieldView.xib in Resources */,
 				2D6DF35929F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */,
 				7980063D2852C66E006E390F /* StatusBannerView.xib in Resources */,
+				797A4F7F2B64535F007E4122 /* CancerScreeningLinkTableViewCell.xib in Resources */,
 				2DF2102828DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */,
 				7980063E2852C66E006E390F /* UserRecordListView.xib in Resources */,
 				2971956A28871B1A00CA824A /* SectionDescriptionTableViewCell.xib in Resources */,
@@ -5208,7 +5218,6 @@
 				2DF317F029CD6F9D0077EA87 /* FeedbackViewController.swift in Sources */,
 				794BD6762703A3DB0084ADA8 /* ImageTableViewCell.swift in Sources */,
 				7944F6BB26F12BC3006B9444 /* UIButton+EXT.swift in Sources */,
-				79BB146E2B63098600AB0C31 /* CancerScreeningTableViewCell.swift in Sources */,
 				7967E73A26F517F600EEF510 /* FormDataSource.swift in Sources */,
 				3E048CC4291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */,
 				796653E427A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift in Sources */,
@@ -5316,6 +5325,7 @@
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
 				3E5E6E9C28D239BE00724EDD /* CommunicationService.swift in Sources */,
 				2971956828871B1A00CA824A /* SectionDescriptionTableViewCell.swift in Sources */,
+				797A4F7D2B64535F007E4122 /* CancerScreeningLinkTableViewCell.swift in Sources */,
 				2DF6656D2A304BEB0009D8F0 /* Note+CoreDataProperties.swift in Sources */,
 				3EDC0CE12967D63E00603FED /* StorageService+ClinicalDocuments.swift in Sources */,
 				3E81C4D729B2AAB800C8F5C4 /* HealthPassViewModel.swift in Sources */,
@@ -5369,6 +5379,7 @@
 				3EDC0C84296785DB00603FED /* BaseGatewayResponse.swift in Sources */,
 				2D38FBE02A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift in Sources */,
 				2DF6657E2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */,
+				797A4F782B644CD8007E4122 /* CancerScreening+CoreDataProperties.swift in Sources */,
 				3E68313B2940D77600100402 /* CommentsViewController.swift in Sources */,
 				3E5E6EA628D23BB200724EDD /* AFNetwork.swift in Sources */,
 				79B1A0F62874CEBE009B3EFB /* CovidImmunizationRecord+CoreDataClass.swift in Sources */,
@@ -5435,6 +5446,7 @@
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
 				29736A482788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift in Sources */,
 				7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */,
+				797A4F752B644CD8007E4122 /* CancerScreening+CoreDataClass.swift in Sources */,
 				79B9D00D27E2788100987D9F /* HomeScreenViewController.swift in Sources */,
 				3EDC0C802967406000603FED /* AuthenticatedHospitalVisitsResponseObject.swift in Sources */,
 				2D2B48EE2A1D30B500E04254 /* AuthenticatedDiagnosticImagingResponseModel.swift in Sources */,
@@ -5618,7 +5630,6 @@
 				3E048CC5291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */,
 				2DF317F129CD6F9D0077EA87 /* FeedbackViewController.swift in Sources */,
 				29128F18272AF41F00358014 /* Array+EXT.swift in Sources */,
-				79BB146F2B63098600AB0C31 /* CancerScreeningTableViewCell.swift in Sources */,
 				2932DCE8275ECC8F00532BC4 /* CoreDataEncryptionKeyManager.swift in Sources */,
 				794BD6412702EEC00084ADA8 /* FormDataSource.swift in Sources */,
 				2D5218BD29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */,
@@ -5726,6 +5737,7 @@
 				7918A8C827482E0C00D19D1C /* TextListView.swift in Sources */,
 				3E5E6EB428D2747800724EDD /* CommunicationResponse.swift in Sources */,
 				3EDC0CE22967D63E00603FED /* StorageService+ClinicalDocuments.swift in Sources */,
+				797A4F7E2B64535F007E4122 /* CancerScreeningLinkTableViewCell.swift in Sources */,
 				2DF6656E2A304BEB0009D8F0 /* Note+CoreDataProperties.swift in Sources */,
 				3E81C4D829B2AAB800C8F5C4 /* HealthPassViewModel.swift in Sources */,
 				795AA75D27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */,
@@ -5779,6 +5791,7 @@
 				3EDC0C85296785DB00603FED /* BaseGatewayResponse.swift in Sources */,
 				2D38FBE12A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift in Sources */,
 				2DF6657F2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */,
+				797A4F792B644CD8007E4122 /* CancerScreening+CoreDataProperties.swift in Sources */,
 				3E68313C2940D77600100402 /* CommentsViewController.swift in Sources */,
 				3E5E6EA728D23BB200724EDD /* AFNetwork.swift in Sources */,
 				293B32BF27D262F70064BAAA /* CommentsViewTableViewCell.swift in Sources */,
@@ -5845,6 +5858,7 @@
 				2D9B39A12907171D00AE9FA1 /* HealthRecordsService.swift in Sources */,
 				794BD6542702EEC00084ADA8 /* AppColours.swift in Sources */,
 				294BD3D427B1D60B00BD8D46 /* HiddenRecordsTableViewCell.swift in Sources */,
+				797A4F762B644CD8007E4122 /* CancerScreening+CoreDataClass.swift in Sources */,
 				794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */,
 				3EDC0C812967406000603FED /* AuthenticatedHospitalVisitsResponseObject.swift in Sources */,
 				2D2B48EF2A1D30B500E04254 /* AuthenticatedDiagnosticImagingResponseModel.swift in Sources */,
@@ -6005,7 +6019,6 @@
 				2DF317EF29CD6F9D0077EA87 /* FeedbackViewController.swift in Sources */,
 				2922C0FF28774111000FF4F7 /* ImmunizationRecordDetailView.swift in Sources */,
 				798005792852C66E006E390F /* UIViewController+EXT.swift in Sources */,
-				79BB146D2B63098600AB0C31 /* CancerScreeningTableViewCell.swift in Sources */,
 				7980057A2852C66E006E390F /* ImageTableViewCell.swift in Sources */,
 				7980057B2852C66E006E390F /* UIButton+EXT.swift in Sources */,
 				3E048CC3291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */,
@@ -6113,6 +6126,7 @@
 				798005B52852C66E006E390F /* NotificationName+Ext.swift in Sources */,
 				798005B62852C66E006E390F /* ZoomedInPopUpVC.swift in Sources */,
 				3E5E6E9B28D239BE00724EDD /* CommunicationService.swift in Sources */,
+				797A4F7C2B64535F007E4122 /* CancerScreeningLinkTableViewCell.swift in Sources */,
 				2DF6656C2A304BEB0009D8F0 /* Note+CoreDataProperties.swift in Sources */,
 				2971956728871B1A00CA824A /* SectionDescriptionTableViewCell.swift in Sources */,
 				3E81C4D629B2AAB800C8F5C4 /* HealthPassViewModel.swift in Sources */,
@@ -6166,6 +6180,7 @@
 				3E91C7AE28B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */,
 				2D38FBDF2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift in Sources */,
 				2DF6657D2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */,
+				797A4F772B644CD8007E4122 /* CancerScreening+CoreDataProperties.swift in Sources */,
 				3EDC0C83296785DB00603FED /* BaseGatewayResponse.swift in Sources */,
 				3E68313A2940D77600100402 /* CommentsViewController.swift in Sources */,
 				3E5E6EA528D23BB200724EDD /* AFNetwork.swift in Sources */,
@@ -6232,6 +6247,7 @@
 				798005ED2852C66E006E390F /* Device.swift in Sources */,
 				798005EE2852C66E006E390F /* AppColours.swift in Sources */,
 				798005EF2852C66E006E390F /* TestResult+CoreDataProperties.swift in Sources */,
+				797A4F742B644CD8007E4122 /* CancerScreening+CoreDataClass.swift in Sources */,
 				798005F02852C66E006E390F /* GatewayFormViewController.swift in Sources */,
 				3EDC0C7F2967406000603FED /* AuthenticatedHospitalVisitsResponseObject.swift in Sources */,
 				2D2B48ED2A1D30B500E04254 /* AuthenticatedDiagnosticImagingResponseModel.swift in Sources */,

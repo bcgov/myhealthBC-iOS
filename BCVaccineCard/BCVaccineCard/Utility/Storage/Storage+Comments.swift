@@ -155,8 +155,7 @@ extension StorageService: StorageCommentManager {
             case .DiagnosticImaging(let diagnosticImaging):
                 diagnosticImaging.addToComments(comment)
             case .CancerScreening(let cancerScreening):
-                // TODO: Add logic for comments to work
-                break
+                cancerScreening.addToComments(comment)
             case .Note(let note):
                 break
             }
@@ -376,8 +375,8 @@ extension StorageService: StorageCommentManager {
                 diagnostiImaging.removeFromComments(oldComment)
                 diagnostiImaging.addToComments(newComment)
             case .CancerScreening(let cancerScreening):
-                // TODO: Add logic for comments to work
-                break
+                cancerScreening.removeFromComments(oldComment)
+                cancerScreening.addToComments(newComment)
             case .Note(let note):
                 break
             }
@@ -420,8 +419,7 @@ extension StorageService: StorageCommentManager {
             case .DiagnosticImaging(let diagnosticImaging):
                 diagnosticImaging.removeFromComments(comment)
             case .CancerScreening(let cancerScreening):
-                // TODO: Add logic for comments to work
-                break
+                cancerScreening.removeFromComments(comment)
             case .Note(let note):
                 break
             }

@@ -198,7 +198,7 @@ struct RecordsFilter {
         case SpecialAuthorityDrugs = "Special Authority"
         case HospitalVisits = "Hospital Visits"
         case DiagnosticImaging = "Imaging reports"
-        case CancerScreening = "Cancer Screening"
+        case CancerScreening = "BC Cancer Screening"
         case Notes = "Notes"
     }
     
