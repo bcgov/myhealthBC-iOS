@@ -96,6 +96,13 @@ extension Patient {
         }
     }
     
+    public var cancerScreeningArray: [CancerScreening] {
+        let set = cancerScreening as? Set<CancerScreening> ?? []
+        return set.sorted {
+            $0.resultDateTime ?? Date() > $1.resultDateTime ?? Date()
+        }
+    }
+    
 //    public var notesArray: [Note] {
 //        let set = notes as? Set<Note> ?? []
 //        return set.sorted {

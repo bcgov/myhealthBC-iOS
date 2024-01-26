@@ -104,6 +104,7 @@ extension HealthRecordConstants {
         case hospitalVisit
         case clinicalDocument
         case diagnosticImaging
+        case cancerScreening
         case notes
     }
 }
@@ -121,6 +122,7 @@ extension StorageService {
         case HospitalVisit
         case ClinicalDocument
         case DiagnosticImaging
+        case CancerScreening
         case Notes
     }
 }
@@ -148,6 +150,8 @@ extension HealthRecordConstants.RecordType {
             return .ClinicalDocuments
         case .diagnosticImaging:
             return .DiagnosticImaging
+        case .cancerScreening:
+            return .CancerScreening
         case .notes:
             return .Notes
         }
@@ -175,6 +179,8 @@ extension HealthRecordConstants.RecordType {
             return .ClinicalDocument
         case .diagnosticImaging:
             return .DiagnosticImaging
+        case .cancerScreening:
+            return .CancerScreening
         case .notes:
             return .Notes
         }
@@ -216,6 +222,7 @@ enum NotificationCategory: String {
     case Medication = "Medications"
     case HospitalVisits = "HospitalVisit"
     case DiagnosticImaging = "DiExam"
+    case CancerScreening = "CancerScreening" //TODO: Connor check this out
 }
 
 extension NotificationCategory {
@@ -241,6 +248,8 @@ extension NotificationCategory {
             return RecordsFilter.RecordType.HospitalVisits
         case .DiagnosticImaging:
             return RecordsFilter.RecordType.DiagnosticImaging
+        case .CancerScreening:
+            return RecordsFilter.RecordType.CancerScreening
         }
     }
 }

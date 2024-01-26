@@ -178,6 +178,10 @@ extension StorageService {
                 let objects = patient.diagnosticImagingArray
                 toDelete.append(contentsOf: objects)
                 notify(event: StorageEvent(event: .Delete, entity: .DiagnosticImaging, object: objects))
+            case .CancerScreening:
+                let objects = patient.cancerScreeningArray
+                toDelete.append(contentsOf: objects)
+                notify(event: StorageEvent(event: .Delete, entity: .CancerScreening, object: objects))
             case .Notes:
                 if let objects = notesArray(for: patient)?.filter({ $0.addedToTimeline == true }) {
                     toDelete.append(contentsOf: objects)
@@ -226,6 +230,9 @@ extension StorageService {
             case .DiagnosticImaging:
                 let diagnosticImaging = fetchDiagnosticImaging()
                 deleteAllRecords(in: diagnosticImaging)
+            case .CancerScreening:
+                let cancerScreening = fetchCancerScreening()
+                deleteAllRecords(in: cancerScreening)
             case .Notes:
                 let notes = fetchNotes().filter { $0.addedToTimeline == true }
                 deleteAllRecords(in: notes)
@@ -280,6 +287,10 @@ extension StorageService {
             case .DiagnosticImaging:
                 if let diagnosticImaging = dependent.info?.diagnosticImagingArray {
                     deleteAllRecords(in: diagnosticImaging)
+                }
+            case .CancerScreening:
+                if let cancerScreening = dependent.info?.cancerScreeningArray {
+                    deleteAllRecords(in: cancerScreening)
                 }
             case .Notes:
                 if let notes = notesArray(for: dependent.info)?.filter({ $0.addedToTimeline == true }) {

@@ -148,6 +148,9 @@ struct HealthRecordsService {
             case .DiagnosticImaging:
                 // Note: Shouldn't get here, as diagnostic imaging comes from patient service
                 dispatchGroup.leave()
+            case .CancerScreening:
+                // Note: Shouldn't get here, as cancer screening comes from patient service
+                dispatchGroup.leave()
                 
             case .Notes:
                 let notesService = NotesService(network: network, authManager: authManager, configService: configService)
