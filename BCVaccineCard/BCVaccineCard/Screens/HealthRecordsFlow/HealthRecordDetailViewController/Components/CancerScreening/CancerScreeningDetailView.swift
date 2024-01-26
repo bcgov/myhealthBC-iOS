@@ -7,6 +7,17 @@
 // TODO: Complete this
 import UIKit
 
+extension HealthRecordsDetailDataSource.Record {
+    fileprivate func cancerScreen() -> CancerScreening? {
+        switch self.type {
+        case .cancerScreening(let model):
+            return model
+        default:
+            return nil
+        }
+    }
+}
+
 class CancerScreeningDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
     
     enum Section: Int, CaseIterable {
@@ -72,7 +83,8 @@ class CancerScreeningDetailView: BaseHealthRecordsDetailView, UITableViewDelegat
         switch section {
         case .ViewPDF:
             guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
-            cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance, style: .viewPDF)
+            let type: AppStyleButton.ButtonType = self.model?.cancerScreen()?.eventType == "Result" ? .viewResults : .viewLetter
+            cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance, style: type)
             return cell
         }
     }
