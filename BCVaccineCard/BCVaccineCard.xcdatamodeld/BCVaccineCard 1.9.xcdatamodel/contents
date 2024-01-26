@@ -16,7 +16,7 @@
         <attribute name="programName" optional="YES" attributeType="String"/>
         <attribute name="resultDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="type" optional="YES" attributeType="String"/>
-        <relationship name="comments" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Comment" inverseName="cancerScreening" inverseEntity="Comment"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="cancerScreening" inverseEntity="Comment"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="cancerScreening" inverseEntity="Patient"/>
     </entity>
     <entity name="ClinicalDocument" representedClassName="ClinicalDocument" syncable="YES">

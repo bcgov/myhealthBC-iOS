@@ -287,7 +287,7 @@ extension CommentService {
         case hospitalVisit = "Hos"
         case clinicalDocument = "CDO"
         case diagnosticImaging = "DIA"
-        case cancerScreening = "TODO" // TODO: Connor confirm CS here
+        case cancerScreening = "CNS" 
         case note = "NO" // Not needed, just need to satisfy switch
     }
     

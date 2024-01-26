@@ -33,11 +33,11 @@ class CancerScreeningLinkTableViewCell: UITableViewCell {
         return attr
     }
     
-    func configure(text: String, urlString: String, delegateOwner: UIViewController) {
+    func configure(text: String, urlString: String, delegate: CancerScreeningLinkTableViewCellDelegate) {
         let attrString = NSMutableAttributedString(string: text, attributes: configureButtonAttr())
         linkButton.setAttributedTitle(attrString, for: .normal)
         self.urlString = urlString
-        self.delegate = delegateOwner as? CancerScreeningLinkTableViewCellDelegate
+        self.delegate = delegate
     }
     
     @IBAction private func linkTapped(_ sender: UIButton) {

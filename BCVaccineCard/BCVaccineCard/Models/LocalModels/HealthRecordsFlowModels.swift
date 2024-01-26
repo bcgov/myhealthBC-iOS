@@ -255,8 +255,7 @@ extension Array where Element == HealthRecord {
             case .diagnosticImaging(model: let model):
                 firstDate = model.examDate
             case .cancerScreening(model: let model):
-                // TODO: Connor confirm CS here
-                firstDate = model.resultDateTime
+                firstDate = model.eventType == "Result" ? model.resultDateTime : model.eventDateTime
             case .note(model: let model):
                 firstDate = model.journalDate
             }
@@ -282,8 +281,7 @@ extension Array where Element == HealthRecord {
             case .diagnosticImaging(model: let model):
                 secondDate = model.examDate
             case .cancerScreening(model: let model):
-                // TODO: Connor confirm CS here
-                secondDate = model.resultDateTime
+                secondDate = model.eventType == "Result" ? model.resultDateTime : model.eventDateTime
             case .note(model: let model):
                 secondDate = model.journalDate
             }

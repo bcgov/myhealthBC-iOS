@@ -115,7 +115,7 @@ class CancerScreeningDetailView: BaseHealthRecordsDetailView, UITableViewDelegat
             guard let cell = cancerLinkCell(indexPath: indexPath, tableView: tableView) else {
                 return UITableViewCell()
             }
-            cell.configure(text: links[indexPath.row].text, urlString: links[indexPath.row].urlString, delegateOwner: self)
+            cell.configure(text: links[indexPath.row].text, urlString: links[indexPath.row].urlString, delegate: self)
             return cell
         }
     }

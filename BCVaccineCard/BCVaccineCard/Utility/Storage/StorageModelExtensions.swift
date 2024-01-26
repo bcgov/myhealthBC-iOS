@@ -368,6 +368,16 @@ extension DiagnosticImaging {
     }
 }
 
+// MARK: DiagnosticImaging
+extension CancerScreening {
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
+}
+
 // MARK: Comment
 extension Comment {
     public var prescriptions: [Perscription] {

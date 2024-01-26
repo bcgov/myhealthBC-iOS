@@ -75,7 +75,7 @@ extension HealthRecordsDetailDataSource.Record {
     var commentsEnabled: Bool {
         if !HealthRecordConstants.commentsEnabled { return false}
         switch self.type {
-        case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging : return true
+        case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging, .cancerScreening : return true
             default: return false
         }
     }

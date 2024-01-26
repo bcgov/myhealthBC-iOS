@@ -54,7 +54,7 @@ struct HealthRecordsDetailDataSource {
             case .diagnosticImaging(model: let model):
                 return model.commentsArray
             case .cancerScreening(model: let model):
-                return []
+                return model.commentsArray
             case .note(model: let model):
                 return []
             }
@@ -276,7 +276,6 @@ struct HealthRecordsDetailDataSource {
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
         case .cancerScreening(model: let model):
-            // TODO: Connor confirm CS here
             id = model.id
             let text = model.eventType == "Result" ? "BC Cancer Result" : "BC Cancer Screening"
             title = text
@@ -440,7 +439,6 @@ extension HealthRecordsDetailDataSource {
     // MARK: Diagnostic Imaging
     private static func genRecord(diagnosticImaging: DiagnosticImaging) -> Record {
         let dateString = diagnosticImaging.examDate?.monthDayYearString
-        // TODO: confirm data
         var status = ""
         if diagnosticImaging.isObjectUpdated == true {
             status = "Updated"
@@ -449,14 +447,10 @@ extension HealthRecordsDetailDataSource {
     }
     
     // MARK: Cancer Screening
-    // TODO: Connor confirm CS here
     private static func genRecord(cancerScreening: CancerScreening) -> Record {
         let dateString = cancerScreening.eventType == "Result" ? cancerScreening.resultDateTime?.monthDayYearString : cancerScreening.eventDateTime?.monthDayYearString
-        // TODO: confirm data
         var status = cancerScreening.programName ?? ""
-//        if diagnosticImaging.isObjectUpdated == true {
-//            status = "Updated"
-//        }
+
         return Record(id: cancerScreening.id ?? UUID().uuidString, name: cancerScreening.itemType ?? "", type: .cancerScreening(model: cancerScreening), status: status, date: dateString, listStatus: status, commentID: cancerScreening.id)
     }
     

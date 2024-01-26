@@ -24,7 +24,7 @@ extension CancerScreening {
     @NSManaged public var programName: String?
     @NSManaged public var resultDateTime: Date?
     @NSManaged public var type: String?
-    @NSManaged public var comments: Comment?
+    @NSManaged public var comments: NSSet?
     @NSManaged public var patient: Patient?
 
 }
