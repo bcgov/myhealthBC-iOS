@@ -164,9 +164,7 @@ extension CancerScreeningDetailView {
         case .cancerScreening(model: let model):
            
             let firstText = model.eventType == "Result" ? "For more information about your screening results, please contact:" : "Cervix screening (Pap test) can stop at ago 69 if your results have always been normal. Ask your health care provider if you should still be tested. To book your next Pap test, contact your health care provider or a medical clinic.\n\nRelated information"
-            
-            let firstLinkText = model.eventType == "Result" ? "" : ""
-            
+                        
             let fields: [TextListModel] = [
                 TextListModel(
                     header: TextProperties(text: firstText, bolded: false, fontSize: 15),
