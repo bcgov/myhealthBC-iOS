@@ -202,7 +202,7 @@ extension HealthRecordDetailViewController {
 extension HealthRecordDetailViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         switch type {
-        case .viewPDF, .downloadFullReport:
+        case .viewPDF, .downloadFullReport, .viewLetter, .viewResults:
             showPDF()
         default:
             break
