@@ -20,12 +20,13 @@ extension StorageService {
         let hospitalVisits = patient.hospitalVisitsArray.map({HealthRecord(type: .HospitalVisit($0))})
         let clinicalDocs = patient.clinicalDocumentsArray.map({HealthRecord(type: .ClinicalDocument($0))})
         let diagnosticImaging = patient.diagnosticImagingArray.map({HealthRecord(type: .DiagnosticImaging($0))})
+        let cancerScreening = patient.cancerScreeningArray.map({HealthRecord(type: .CancerScreening($0))})
         var notesRecords: [HealthRecord] = []
         if let notes = notesArray(for: patient) {
             notesRecords = notes.map({HealthRecord(type: .Note($0))})
         }
         
-        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging + notesRecords
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging + cancerScreening + notesRecords
     }
     
     func getHeathRecords() -> [HealthRecord] {
@@ -40,9 +41,10 @@ extension StorageService {
         let hospitalVisits = fetchHospitalVisits().map({HealthRecord(type: .HospitalVisit($0))})
         let clinicalDocs = fetchClinicalDocuments().map({HealthRecord(type: .ClinicalDocument($0))})
         let diagnosticImaging = fetchDiagnosticImaging().map({HealthRecord(type: .DiagnosticImaging($0))})
+        let cancerScreening = fetchCancerScreening().map({HealthRecord(type: .CancerScreening($0))})
         let notes = fetchNotes().map({HealthRecord(type: .Note($0))})
         
-        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging + notes
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging + cancerScreening + notes
     }
     
     func getRecords(forDependent dependent: Patient) -> [HealthRecord] {

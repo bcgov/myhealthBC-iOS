@@ -278,8 +278,9 @@ struct HealthRecordsDetailDataSource {
         case .cancerScreening(model: let model):
             // TODO: Connor confirm CS here
             id = model.id
-            title = model.type ?? "-"
-            detailNavTitle = model.type ?? "_"
+            let text = model.eventType == "Result" ? "BC Cancer Result" : "BC Cancer Screening"
+            title = text
+            detailNavTitle = text
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-cancer-screening-icon")
             
@@ -450,9 +451,9 @@ extension HealthRecordsDetailDataSource {
     // MARK: Cancer Screening
     // TODO: Connor confirm CS here
     private static func genRecord(cancerScreening: CancerScreening) -> Record {
-        let dateString = cancerScreening.resultDateTime?.monthDayYearString
+        let dateString = cancerScreening.eventType == "Result" ? cancerScreening.resultDateTime?.monthDayYearString : cancerScreening.eventDateTime?.monthDayYearString
         // TODO: confirm data
-        var status = ""
+        var status = cancerScreening.programName ?? ""
 //        if diagnosticImaging.isObjectUpdated == true {
 //            status = "Updated"
 //        }

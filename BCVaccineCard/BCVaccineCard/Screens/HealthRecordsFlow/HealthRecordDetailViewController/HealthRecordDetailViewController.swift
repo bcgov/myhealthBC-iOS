@@ -240,6 +240,18 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
                     self.showPDFUnavailableAlert()
                 }
             })
+        case .cancerScreening(model: let model):
+            PDFService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchPDFCancer(cancerScreening: model, patient: patient, completion: { [weak self] result, online in
+                guard let `self` = self else {return}
+                if let pdf = result {
+                    self.pdfData = pdf
+                    self.showPDFDocument(pdf: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                } else if online == false {
+                    // Show nothing, as there will be a toast
+                } else {
+                    self.showPDFUnavailableAlert()
+                }
+            })
         default:
             PDFService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchPDF(record: dataSource, patient: patient, completion: { [weak self] result in
                 guard let `self` = self else {return}

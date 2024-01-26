@@ -357,6 +357,7 @@ enum LoaderCaller {
     case PDFService_fetchPDF
     case PDFService_DonorStatus
     case PDFService_DiagnosticImaging
+    case PDFService_CancerScreening
     case CommentService_submitUnsyncedComments
     case CommentService_fetchAndStore
     case LabOrderService_fetchAndStore
