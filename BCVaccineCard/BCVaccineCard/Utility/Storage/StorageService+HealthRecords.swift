@@ -25,7 +25,7 @@ extension StorageService {
         if let notes = notesArray(for: patient) {
             notesRecords = notes.map({HealthRecord(type: .Note($0))})
         }
-        
+        // TODO: Log record count here for each type
         return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging + cancerScreening + notesRecords
     }
     
