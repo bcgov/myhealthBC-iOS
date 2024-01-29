@@ -58,11 +58,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppStates.shared.listen()
         //use .Prod or .Test for different endpoints for keys
 #if PROD
-        BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
+        BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: true)
 #elseif TEST
-        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
+        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: true)
 #elseif DEV
-        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
+        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: true)
 #endif
         AnalyticsService.shared.setup()
         
