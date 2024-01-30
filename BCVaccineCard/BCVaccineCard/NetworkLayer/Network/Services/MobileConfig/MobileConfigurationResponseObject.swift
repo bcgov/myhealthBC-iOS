@@ -65,7 +65,7 @@ struct EnabledTypes: Codable {
             case .Medication: return .Prescription
             case .Note: return .Notes
             case .SpecialAuthorityRequest: return .SpecialAuthorityDrug
-            case .BcCancerScreening: return nil
+            case .BcCancerScreening: return .CancerScreening
             case .UnknownValue: return nil
             }
         }
@@ -82,7 +82,7 @@ struct EnabledTypes: Codable {
             case .Medication: return .Medication
             case .Note: return .Notes
             case .SpecialAuthorityRequest: return .SpecialAuthorityDrugs
-            case .BcCancerScreening: return nil
+            case .BcCancerScreening: return .CancerScreening
             case .UnknownValue: return nil
             }
         }

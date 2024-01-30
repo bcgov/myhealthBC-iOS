@@ -69,6 +69,27 @@ struct PDFService {
         })
     }
     
+    public func fetchPDFCancer(cancerScreening: CancerScreening, patient: Patient, completion: @escaping (Data?, Bool?)->Void) {
+        guard let fileID = cancerScreening.fileID else {
+            return completion(nil, nil)
+        }
+        if fileID.isEmpty {
+            print("NO FILE ID!!!!")
+        }
+        network.addLoader(message: .empty, caller: .PDFService_CancerScreening)
+        fetchPDFV2(fileID: (!fileID.isEmpty ? fileID : cancerScreening.id) ?? "", type: .CancerScreening, isCovid: false, patient: patient, completion: {response, online in
+            network.removeLoader(caller: .PDFService_CancerScreening)
+            guard let response = response,
+                  let content = response.content
+            else {
+                return completion(nil, online)
+            }
+            let uint = content.map({UInt8($0)})
+            let data = Data(uint)
+            return completion(data, online)
+        })
+    }
+    
     func toUint(signed: Int) -> UInt8 {
         return UInt8(signed)
     }
@@ -83,6 +104,8 @@ struct PDFService {
             return covidTestOrder.orderId
         case .diagnosticImaging(model: let diagnosticImaging):
             return diagnosticImaging.fileID
+        case .cancerScreening(model: let cancerScreening):
+            return cancerScreening.fileID
         default:
             return nil
         }
@@ -99,6 +122,8 @@ struct PDFService {
         case .OrganDonor:
             return endpoints.patientDataPDF(base: baseURL, hdid: hdid, fileID: fileID)
         case .DiagnosticImaging:
+            return endpoints.patientDataPDF(base: baseURL, hdid: hdid, fileID: fileID)
+        case .CancerScreening:
             return endpoints.patientDataPDF(base: baseURL, hdid: hdid, fileID: fileID)
         }
     }
@@ -181,6 +206,7 @@ extension PDFService {
         case Covid19
         case OrganDonor
         case DiagnosticImaging
+        case CancerScreening
     }
 }
 
@@ -195,6 +221,8 @@ extension HealthRecordsDetailDataSource {
             return .Covid19
         case .diagnosticImaging:
             return .DiagnosticImaging
+        case .cancerScreening:
+            return .CancerScreening
         default:
             return nil
         }

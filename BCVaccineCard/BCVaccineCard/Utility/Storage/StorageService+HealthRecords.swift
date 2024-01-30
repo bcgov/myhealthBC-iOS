@@ -20,12 +20,13 @@ extension StorageService {
         let hospitalVisits = patient.hospitalVisitsArray.map({HealthRecord(type: .HospitalVisit($0))})
         let clinicalDocs = patient.clinicalDocumentsArray.map({HealthRecord(type: .ClinicalDocument($0))})
         let diagnosticImaging = patient.diagnosticImagingArray.map({HealthRecord(type: .DiagnosticImaging($0))})
+        let cancerScreening = patient.cancerScreeningArray.map({HealthRecord(type: .CancerScreening($0))})
         var notesRecords: [HealthRecord] = []
         if let notes = notesArray(for: patient) {
             notesRecords = notes.map({HealthRecord(type: .Note($0))})
         }
-        
-        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging + notesRecords
+        // TODO: Log record count here for each type
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging + cancerScreening + notesRecords
     }
     
     func getHeathRecords() -> [HealthRecord] {
@@ -40,9 +41,10 @@ extension StorageService {
         let hospitalVisits = fetchHospitalVisits().map({HealthRecord(type: .HospitalVisit($0))})
         let clinicalDocs = fetchClinicalDocuments().map({HealthRecord(type: .ClinicalDocument($0))})
         let diagnosticImaging = fetchDiagnosticImaging().map({HealthRecord(type: .DiagnosticImaging($0))})
+        let cancerScreening = fetchCancerScreening().map({HealthRecord(type: .CancerScreening($0))})
         let notes = fetchNotes().map({HealthRecord(type: .Note($0))})
         
-        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging + notes
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging + cancerScreening + notes
     }
     
     func getRecords(forDependent dependent: Patient) -> [HealthRecord] {
@@ -115,6 +117,9 @@ extension StorageService {
         case .DiagnosticImaging(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .DiagnosticImaging, object: object))
+        case .CancerScreening(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .CancerScreening, object: object))
         case .Note(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .Notes, object: object))
@@ -175,6 +180,10 @@ extension StorageService {
                 let objects = patient.diagnosticImagingArray
                 toDelete.append(contentsOf: objects)
                 notify(event: StorageEvent(event: .Delete, entity: .DiagnosticImaging, object: objects))
+            case .CancerScreening:
+                let objects = patient.cancerScreeningArray
+                toDelete.append(contentsOf: objects)
+                notify(event: StorageEvent(event: .Delete, entity: .CancerScreening, object: objects))
             case .Notes:
                 if let objects = notesArray(for: patient)?.filter({ $0.addedToTimeline == true }) {
                     toDelete.append(contentsOf: objects)
@@ -223,6 +232,9 @@ extension StorageService {
             case .DiagnosticImaging:
                 let diagnosticImaging = fetchDiagnosticImaging()
                 deleteAllRecords(in: diagnosticImaging)
+            case .CancerScreening:
+                let cancerScreening = fetchCancerScreening()
+                deleteAllRecords(in: cancerScreening)
             case .Notes:
                 let notes = fetchNotes().filter { $0.addedToTimeline == true }
                 deleteAllRecords(in: notes)
@@ -277,6 +289,10 @@ extension StorageService {
             case .DiagnosticImaging:
                 if let diagnosticImaging = dependent.info?.diagnosticImagingArray {
                     deleteAllRecords(in: diagnosticImaging)
+                }
+            case .CancerScreening:
+                if let cancerScreening = dependent.info?.cancerScreeningArray {
+                    deleteAllRecords(in: cancerScreening)
                 }
             case .Notes:
                 if let notes = notesArray(for: dependent.info)?.filter({ $0.addedToTimeline == true }) {

@@ -177,6 +177,8 @@ extension HealthRecordDetailViewController {
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             case .diagnosticImaging:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
+            case .cancerScreening:
+                Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             case .note:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             }
@@ -200,7 +202,7 @@ extension HealthRecordDetailViewController {
 extension HealthRecordDetailViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         switch type {
-        case .viewPDF, .downloadFullReport:
+        case .viewPDF, .downloadFullReport, .viewLetter, .viewResults:
             showPDF()
         default:
             break
@@ -228,6 +230,18 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
         switch dataSource.type {
         case .diagnosticImaging(model: let model):
             PDFService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchPDFDiagnostic(diagnosticImaging: model, patient: patient, completion: { [weak self] result, online in
+                guard let `self` = self else {return}
+                if let pdf = result {
+                    self.pdfData = pdf
+                    self.showPDFDocument(pdf: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                } else if online == false {
+                    // Show nothing, as there will be a toast
+                } else {
+                    self.showPDFUnavailableAlert()
+                }
+            })
+        case .cancerScreening(model: let model):
+            PDFService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchPDFCancer(cancerScreening: model, patient: patient, completion: { [weak self] result, online in
                 guard let `self` = self else {return}
                 if let pdf = result {
                     self.pdfData = pdf

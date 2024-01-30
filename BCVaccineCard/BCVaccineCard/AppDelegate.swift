@@ -58,11 +58,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppStates.shared.listen()
         //use .Prod or .Test for different endpoints for keys
 #if PROD
-        BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
+        BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: true)
 #elseif TEST
-        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
+        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: true)
 #elseif DEV
-        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
+        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: true)
 #endif
         AnalyticsService.shared.setup()
         
@@ -337,6 +337,7 @@ enum LoaderCaller {
     case PatientService_fetchAndStoreDetails
     case PatientService_fetchAndStoreOrganDonorStatus
     case PatientService_fetchAndStoreDiagnosticImaging
+    case PatientService_fetchAndStoreCancerScreening
     case PatientService_validateProfile
     case CovidTestsService_fetchAndStore
     case VaccineCardService_fetchAndStore_Patient
@@ -356,6 +357,7 @@ enum LoaderCaller {
     case PDFService_fetchPDF
     case PDFService_DonorStatus
     case PDFService_DiagnosticImaging
+    case PDFService_CancerScreening
     case CommentService_submitUnsyncedComments
     case CommentService_fetchAndStore
     case LabOrderService_fetchAndStore

@@ -96,6 +96,13 @@ extension Patient {
         }
     }
     
+    public var cancerScreeningArray: [CancerScreening] {
+        let set = cancerScreening as? Set<CancerScreening> ?? []
+        return set.sorted {
+            $0.resultDateTime ?? Date() > $1.resultDateTime ?? Date()
+        }
+    }
+    
 //    public var notesArray: [Note] {
 //        let set = notes as? Set<Note> ?? []
 //        return set.sorted {
@@ -353,6 +360,16 @@ extension ClinicalDocument {
 
 // MARK: DiagnosticImaging
 extension DiagnosticImaging {
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
+}
+
+// MARK: DiagnosticImaging
+extension CancerScreening {
     public var commentsArray: [Comment] {
         let set = comments as? Set<Comment> ?? []
         return set.sorted {

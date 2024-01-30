@@ -386,6 +386,7 @@ extension String {
     static var noPatientDetails: String { return "NoPatientDetails".localized }
     static var fetchedDonorStatus: String { return "FetchedDonorStatus".localized }
     static var fetchedDiagnosticImaging: String { return "FetchedDiagnosticImaging".localized }
+    static var fetchedCancerScreening: String { return "FetchedCancerScreening".localized }
     static var fetched: String { return "Fetched".localized }
     static var comments: String { return "Comments".localized }
     static var recordsRetrieved: String { return "RecordsRetrieved".localized }
