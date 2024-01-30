@@ -80,9 +80,9 @@ struct SyncService {
             if Defaults.enabledTypes?.contains(service: .OrganDonorRegistration) == true {
                 group.enter()
                 patientService.fetchAndStoreOrganDonorStatus(for: patient) { status in
-                    if status == nil {
-                        hadFailures = true
-                    }
+//                    if status == nil {
+//                        hadFailures = true
+//                    }
                     Logger.log(string: "\(String.fetchedDonorStatus) \(status != nil)", type: .Network)
                     group.leave()
                 }
@@ -91,9 +91,9 @@ struct SyncService {
             if Defaults.enabledTypes?.contains(dataset: .DiagnosticImaging) == true {
                 group.enter()
                 patientService.fetchAndStoreDiagnosticImaging(for: patient) { imaging in
-                    if imaging == nil {
-                        hadFailures = true
-                    }
+//                    if imaging == nil {
+//                        hadFailures = true
+//                    }
                     Logger.log(string: "\(String.fetchedDiagnosticImaging) \(imaging?.count)", type: .Network)
                     group.leave()
                 }
@@ -102,9 +102,9 @@ struct SyncService {
             if Defaults.enabledTypes?.contains(dataset: .BcCancerScreening) == true {
                 group.enter()
                 patientService.fetchAndStoreCancerScreening(for: patient) { cancerScreening in
-                    if cancerScreening == nil {
-                        hadFailures = true
-                    }
+//                    if cancerScreening == nil {
+//                        hadFailures = true
+//                    }
                     Logger.log(string: "\(String.fetchedCancerScreening) \(cancerScreening?.count)", type: .Network)
                     group.leave()
                 }
