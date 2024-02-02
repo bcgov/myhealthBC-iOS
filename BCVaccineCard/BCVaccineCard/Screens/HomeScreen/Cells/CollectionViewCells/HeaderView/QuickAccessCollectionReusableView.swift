@@ -40,7 +40,7 @@ class QuickAccessCollectionReusableView: UICollectionReusableView {
     }
     
     func configure(status: AuthStatus, delegateOwner: UIViewController) {
-        manageButton.isHidden = status == .UnAuthenticated
+        manageButton.isHidden = status != .Authenticated
         self.delegate = delegateOwner as? QuickAccessCollectionReusableViewDelegate
     }
     
