@@ -132,6 +132,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         if currentSegment == .Notes {
             // TODO: Update once we have folder structure built
             let patientRecords = fetchPatientRecords(for: .Notes)
+            print("CONNOR RECORDS: Current Segment Notes from setup", patientRecords.count)
             showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: self.searchText)
             if !patientRecords.isEmpty {
                 show(records: patientRecords, searchText: searchText)
@@ -149,6 +150,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         currentFilter = nil
         hideSelectedFilters()
         let patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: Remove filters", patientRecords.count)
         show(records: patientRecords, searchText: searchText)
     }
     
@@ -332,6 +334,7 @@ extension UsersListOfRecordsViewController: SegmentedViewDelegate {
     func segmentSelected(type: SegmentType) {
         currentSegment = type
         var patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: Segment Selected", patientRecords.count)
         if let searchText = searchText, searchText.trimWhiteSpacesAndNewLines.count > 0 {
             patientRecords = patientRecords.filter({ $0.title.lowercased().range(of: searchText.lowercased()) != nil })
         }
@@ -393,6 +396,7 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
     
     func searchButtonTapped(text: String) {
         let patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: search button tapped", patientRecords.count)
         self.recordsSearchBarView.endEditing(true)
         show(records: patientRecords, filter: currentFilter, searchText: searchText)
     }
@@ -401,6 +405,7 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
         searchText = text
         if searchText == nil || searchText?.trimWhiteSpacesAndNewLines.count == 0 {
             let patientRecords = fetchPatientRecords(for: currentSegment)
+            print("CONNOR RECORDS: text did change on search", patientRecords.count)
             show(records: patientRecords, filter: currentFilter, searchText: searchText)
         }
     }
@@ -423,6 +428,7 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     
     func selected(filter: RecordsFilter) {
         let patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: Filter selected", patientRecords.count)
         currentFilter = filter
         show(records: patientRecords, filter:filter, searchText: searchText)
     }
@@ -488,6 +494,7 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
         guard let filter = userInfo["filter"] else { return }
         currentSegment = filter.recordTypes.contains(.Notes) ? .Notes : .Timeline
         let patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: Apply quick links filter", patientRecords.count)
         currentFilter = filter
         if filter.recordTypes.contains(.Notes) {
             listOfRecordsSegmentedView.setSegmentedControl(forType: .Notes)
@@ -527,10 +534,12 @@ extension UsersListOfRecordsViewController {
         case .authenticated:
             setupSegmentedControl()
             guard self.dataSource.count == 0 else {
+                print("CONNOR RECORDS: fetch data source where we already have records", self.dataSource.count)
                 show(records: self.dataSource, filter: currentFilter, searchText: searchText)
                 return
             }
             let patientRecords = fetchPatientRecords(for: currentSegment)
+            print("CONNOR RECORDS: fetch data source authenticated", patientRecords.count)
             show(records: patientRecords, filter: currentFilter, searchText: searchText)
         }
     }
@@ -810,7 +819,9 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
     private func viewProtectedRecords(protectiveWord: String) {
         if protectiveWord.lowercased() == AuthManager().protectiveWord?.lowercased() {
             SessionStorage.protectiveWordEnteredThisSession = protectiveWord
-            show(records: fetchPatientRecords(for: currentSegment), filter: currentFilter, searchText: searchText)
+            let patientRecords = fetchPatientRecords(for: currentSegment)
+            print("CONNOR RECORDS: view protected records", patientRecords.count)
+            show(records: patientRecords, filter: currentFilter, searchText: searchText)
         } else {
             alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
                 self.promoptProtectedWord()
@@ -841,6 +852,7 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
 extension UsersListOfRecordsViewController {
     @objc private func refreshOnStorageUpdate() {
         let patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: refresh on storage update", patientRecords.count)
         show(records: patientRecords, filter: currentFilter, searchText: searchText)
         if currentSegment == .Notes {
             showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: self.searchText)
