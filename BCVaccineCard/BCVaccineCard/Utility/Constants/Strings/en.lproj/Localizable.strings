@@ -69,7 +69,7 @@
 "HealthResources" = "Health resources";
 "NewsFeed" = "News feed";
 "InitialOnboardingHealthPassesDescription" = "Save proof of vaccination documents for you and your family. Have them ready for travel or to access events and services that require it.";
-"InitialOnboardingHealthRecordsDescription" = "Access your lab test results, medication history, immunization records, health visits and more. Keep track of what's important to you and your health.";
+"InitialOnboardingHealthRecordsDescription" = "View and manage all your available health records, including dispensed medications, health visits, lab results, immunizations, BC Cancer cervix screenings and more.";
 "InitialOnboardingHealthResourcesDescription" = "Connect with HealthLink BC for health advice and get the latest information about COVID-19.";
 "InitialOnboardingDependentRecordDescription" = "Access to your children's (11 years old and younger) immunization and COVID-19 test records.";
 "InitialOnboardingNewsFeedDescription" = "Get the latest BC government COVID-19 news";
