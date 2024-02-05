@@ -277,7 +277,7 @@ struct HealthRecordsDetailDataSource {
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
         case .cancerScreening(model: let model):
             id = model.id
-            let text = model.eventType == "Result" ? "BC Cancer Result" : "BC Cancer Screening"
+            let text = model.eventType == "Result" ? "BC Cancer Result" : "BC Cancer Screening" // TODO: CONNOR ADJUST HERE
             title = text
             detailNavTitle = text
             name = model.patient?.name ?? "-"

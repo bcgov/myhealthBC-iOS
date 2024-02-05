@@ -25,6 +25,7 @@ struct QuickLinksPreferences: Codable {
         case ClinicalDocuments = "Clinical Documents"
         case ImagingReports = "Imaging Reports"
         case OrganDonor = "Organ Donor"
+        case BCCancerScreening = "BC Cancer Screening"
         
         enum Section: String, Codable {
             case HealthRecord = "Health Record"
@@ -44,6 +45,7 @@ struct QuickLinksPreferences: Codable {
             case .ClinicalDocuments: return .clinicalDocumentsHome
             case .ImagingReports: return .imagingReportsHome
             case .OrganDonor: return .organDonorHome
+            case .BCCancerScreening: return .bcCancerScreeningHome
             }
         }
         
@@ -60,6 +62,7 @@ struct QuickLinksPreferences: Codable {
             case .ClinicalDocuments: return .clinicalDocumentsManage
             case .ImagingReports: return .imagingReportsManage
             case .OrganDonor: return .organDonorManage
+            case .BCCancerScreening: return .bcCancerScreeningManage
             }
         }
 
@@ -76,6 +79,7 @@ struct QuickLinksPreferences: Codable {
             case .ClinicalDocuments: return "blue-bg-clinical-documents-icon"
             case .ImagingReports: return "blue-bg-diagnostic-imaging-icon"
             case .OrganDonor: return "ogran-donor-logo" // Note: Should probably fix the spelling error here"
+            case .BCCancerScreening: return "blue-bg-cancer-screening-icon"
             }
         }
         
@@ -104,13 +108,15 @@ struct QuickLinksPreferences: Codable {
                 currentFilter?.recordTypes = [.DiagnosticImaging]
             case .OrganDonor:
                 currentFilter = nil
+            case .BCCancerScreening:
+                currentFilter?.recordTypes = [.CancerScreening]
             }
             return currentFilter
         }
         
         var getSection: Section {
             switch self {
-            case .MyNotes, .Immunizations, .Medications, .LabResults, .COVID19Tests, .SpecialAuthority, .HospitalVisits, .HealthVisits, .ClinicalDocuments, .ImagingReports: return .HealthRecord
+            case .MyNotes, .Immunizations, .Medications, .LabResults, .COVID19Tests, .SpecialAuthority, .HospitalVisits, .HealthVisits, .ClinicalDocuments, .ImagingReports, .BCCancerScreening: return .HealthRecord
             case .OrganDonor: return .Service
             }
         }
@@ -130,7 +136,8 @@ struct QuickLinksPreferences: Codable {
             QuickLinksPreferences(name: .HealthVisits, enabled: false, addedDate: nil),
             QuickLinksPreferences(name: .ClinicalDocuments, enabled: false, addedDate: nil),
             QuickLinksPreferences(name: .ImagingReports, enabled: false, addedDate: nil),
-            QuickLinksPreferences(name: .OrganDonor, enabled: false, addedDate: nil)
+            QuickLinksPreferences(name: .OrganDonor, enabled: false, addedDate: nil),
+            QuickLinksPreferences(name: .BCCancerScreening, enabled: false, addedDate: nil)
         ]
     }
     

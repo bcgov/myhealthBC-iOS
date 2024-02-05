@@ -369,6 +369,7 @@ extension String {
     static var clinicalDocumentsHome: String { return "ClinicalDocumentsHome".localized }
     static var imagingReportsHome: String { return "ImagingReportsHome".localized }
     static var organDonorHome: String { return "OrganDonorHome".localized }
+    static var bcCancerScreeningHome: String { return "BCCancerScreeningHome".localized }
     
     static var myNotesManage: String { return "MyNotesManage".localized }
     static var immunizationsManage: String { return "ImmunizationsManage".localized }
@@ -381,6 +382,7 @@ extension String {
     static var clinicalDocumentsManage: String { return "ClinicalDocumentsManage".localized }
     static var imagingReportsManage: String { return "ImagingReportsManage".localized }
     static var organDonorManage: String { return "OrganDonorManage".localized }
+    static var bcCancerScreeningManage: String { return "BCCancerScreeningManage".localized }
     
     static var retrievingRecords: String { return "RetrievingRecords".localized }
     static var noPatientDetails: String { return "NoPatientDetails".localized }

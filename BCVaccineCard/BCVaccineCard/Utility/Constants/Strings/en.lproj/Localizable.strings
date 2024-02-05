@@ -308,6 +308,7 @@
 "ClinicalDocumentsHome" = "Clinical\nDocuments";
 "ImagingReportsHome" = "Imaging\nReports";
 "OrganDonorHome" = "Organ\nDonor";
+"BCCancerScreeningHome" = "BC Cancer\nScreening";
 
 "MyNotesManage" = "My Notes";
 "ImmunizationsManage" = "Immunization";
@@ -320,6 +321,7 @@
 "ClinicalDocumentsManage" = "Clinical Documents";
 "ImagingReportsManage" = "Imaging Reports";
 "OrganDonorManage" = "Organ Donor";
+"BCCancerScreeningManage" = "BC Cancer Screening";
 
 "RetrievingRecords" = "Retrieving records";
 "NoPatientDetails" = "Could not fetch patient details";
