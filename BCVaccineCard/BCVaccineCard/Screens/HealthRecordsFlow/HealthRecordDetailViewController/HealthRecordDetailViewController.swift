@@ -144,7 +144,7 @@ extension HealthRecordDetailViewController {
             rightNavButton = nil
         }
         
-        self.navDelegate?.setNavigationBarWith(title: dataSource.title,
+        self.navDelegate?.setNavigationBarWith(title: dataSource.detailNavTitle,
                                                leftNavButton: nil,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,

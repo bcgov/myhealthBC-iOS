@@ -23,13 +23,13 @@ class CancerScreeningDetailView: BaseHealthRecordsDetailView, UITableViewDelegat
     enum Section: Int, CaseIterable {
         case ViewPDF
         case Fields
-        case Links
+//        case Links
         case Comments
     }
     
     private var fields: [TextListModel] = []
     
-    private var links: [CancerScreeningLinks] = []
+//    private var links: [CancerScreeningLinks] = []
     
     struct HeaderSection {
         enum HeaderType {
@@ -59,9 +59,9 @@ class CancerScreeningDetailView: BaseHealthRecordsDetailView, UITableViewDelegat
     override func setup() {
         tableView?.dataSource = self
         tableView?.delegate = self
-        tableView?.register(UINib.init(nibName: CancerScreeningLinkTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CancerScreeningLinkTableViewCell.getName)
+//        tableView?.register(UINib.init(nibName: CancerScreeningLinkTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CancerScreeningLinkTableViewCell.getName)
         fields = createFields()
-        links = createLinks()
+//        links = createLinks()
         comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
     }
     
@@ -88,8 +88,8 @@ class CancerScreeningDetailView: BaseHealthRecordsDetailView, UITableViewDelegat
             return 1
         case .Fields:
             return fields.count
-        case .Links:
-            return links.count
+//        case .Links:
+//            return links.count
         case .Comments:
             return comments.count
         }
@@ -108,15 +108,15 @@ class CancerScreeningDetailView: BaseHealthRecordsDetailView, UITableViewDelegat
             return cell
         case .ViewPDF:
             guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
-            let type: AppStyleButton.ButtonType = self.model?.cancerScreen()?.eventType == "Result" ? .viewResults : .viewLetter
-            cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance, style: type)
+//            let type: AppStyleButton.ButtonType = self.model?.cancerScreen()?.eventType == "Result" ? .viewResults : .viewLetter
+            cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance, style: .viewLetter)
             return cell
-        case .Links:
-            guard let cell = cancerLinkCell(indexPath: indexPath, tableView: tableView) else {
-                return UITableViewCell()
-            }
-            cell.configure(text: links[indexPath.row].text, urlString: links[indexPath.row].urlString, delegate: self)
-            return cell
+//        case .Links:
+//            guard let cell = cancerLinkCell(indexPath: indexPath, tableView: tableView) else {
+//                return UITableViewCell()
+//            }
+//            cell.configure(text: links[indexPath.row].text, urlString: links[indexPath.row].urlString, delegate: self)
+//            return cell
         }
     }
     
@@ -149,12 +149,12 @@ class CancerScreeningDetailView: BaseHealthRecordsDetailView, UITableViewDelegat
     }
 }
 
-extension CancerScreeningDetailView: CancerScreeningLinkTableViewCellDelegate {
-    func linkTapped(urlString: String) {
-        AppDelegate.sharedInstance?.showExternalURL(url: urlString)
-    }
-
-}
+//extension CancerScreeningDetailView: CancerScreeningLinkTableViewCellDelegate {
+//    func linkTapped(urlString: String) {
+//        AppDelegate.sharedInstance?.showExternalURL(url: urlString)
+//    }
+//
+//}
 
 extension CancerScreeningDetailView {
     
@@ -163,11 +163,13 @@ extension CancerScreeningDetailView {
         switch model.type {
         case .cancerScreening(model: let model):
            
-            let firstText = model.eventType == "Result" ? "For more information about your screening results, please contact:" : "Cervix screening (Pap test) can stop at ago 69 if your results have always been normal. Ask your health care provider if you should still be tested. To book your next Pap test, contact your health care provider or a medical clinic.\n\nRelated information"
+            let firstText = model.eventType == "Result" ? "Download your cervix screening result letter. It may include important information about next steps. If you have questions, check the BC Cancer website or talk to your care provider." : "Find out about your cervix screening next steps. You will also get this letter in the mail. Learn more about cervix screening."
+            let linkedStrings = model.eventType == "Result" ? LinkedStrings(text: "check the BC Cancer website", link: "http://www.bccancer.bc.ca/contact", underlined: true) : LinkedStrings(text: "Learn more about cervix screening", link: "http://www.bccancer.bc.ca/screening/cervix", underlined: true)
+            let links = [linkedStrings]
                         
             let fields: [TextListModel] = [
                 TextListModel(
-                    header: TextProperties(text: firstText, bolded: false, fontSize: 15),
+                    header: TextProperties(text: firstText, bolded: false, fontSize: 15, links: links),
                     subtext: nil
                 )
             ]
@@ -177,26 +179,26 @@ extension CancerScreeningDetailView {
         }
     }
     
-    private func createLinks() -> [CancerScreeningLinks] {
-        guard let model = model else {return []}
-        switch model.type {
-        case .cancerScreening(model: let model):
-            
-            let firstLink: CancerScreeningLinks = model.eventType == "Result" ? CancerScreeningLinks(text: "BC Cancer", urlString: "http://www.bccancer.bc.ca/contact") : CancerScreeningLinks(text: "What is Cervix screening", urlString: "http://www.bccancer.bc.ca/screening/cervix/get-screened/what-is-cervical-screening")
-            
-            var links: [CancerScreeningLinks] = [
-                firstLink
-            ]
-            if model.eventType != "Result" {
-                let secondLink = CancerScreeningLinks(text: "Find clinics offering screening", urlString: "http://www.bccancer.bc.ca/screening/cervix/clinic-locator")
-                links.append(secondLink)
-            }
-            
-            return links
-        default:
-            return []
-        }
-    }
+//    private func createLinks() -> [CancerScreeningLinks] {
+//        guard let model = model else {return []}
+//        switch model.type {
+//        case .cancerScreening(model: let model):
+//            
+//            let firstLink: CancerScreeningLinks = model.eventType == "Result" ? CancerScreeningLinks(text: "BC Cancer", urlString: "http://www.bccancer.bc.ca/contact") : CancerScreeningLinks(text: "What is Cervix screening", urlString: "http://www.bccancer.bc.ca/screening/cervix/get-screened/what-is-cervical-screening")
+//            
+//            var links: [CancerScreeningLinks] = [
+//                firstLink
+//            ]
+//            if model.eventType != "Result" {
+//                let secondLink = CancerScreeningLinks(text: "Find clinics offering screening", urlString: "http://www.bccancer.bc.ca/screening/cervix/clinic-locator")
+//                links.append(secondLink)
+//            }
+//            
+//            return links
+//        default:
+//            return []
+//        }
+//    }
 }
 
 struct CancerScreeningLinks {

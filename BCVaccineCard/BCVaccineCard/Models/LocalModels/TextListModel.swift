@@ -16,6 +16,7 @@ struct TextListModel: Codable {
 struct LinkedStrings: Codable, Equatable {
     let text: String
     let link: String
+    var underlined: Bool = false
 }
 
 struct TextProperties: Codable {

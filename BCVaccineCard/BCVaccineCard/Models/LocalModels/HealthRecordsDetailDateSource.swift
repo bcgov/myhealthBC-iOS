@@ -190,7 +190,8 @@ struct HealthRecordsDetailDataSource {
         case .covidImmunizationRecord(let model, _):
             id = model.id
             title = .covid19vaccination
-            detailNavTitle = .vaccinationRecord
+//            detailNavTitle = .vaccinationRecord
+            detailNavTitle = .covid19vaccination
             name = model.name
             image = UIImage(named: "blue-bg-vaccine-record-icon")
             deleteAlertTitle = .deleteRecord
@@ -214,7 +215,8 @@ struct HealthRecordsDetailDataSource {
         case .laboratoryOrder(model: let model):
             id = model.id
             title = model.commonName ?? "-"
-            detailNavTitle = "Lab test"
+//            detailNavTitle = "Lab test"
+            detailNavTitle = model.commonName ?? "-"
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-test-result-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated lab result
@@ -232,7 +234,8 @@ struct HealthRecordsDetailDataSource {
         case .healthVisit(model: let model):
             id = model.id
             title = model.specialtyDescription ?? "-"
-            detailNavTitle = model.clinic?.name ?? "-"
+//            detailNavTitle = model.clinic?.name ?? "-"
+            detailNavTitle = model.specialtyDescription ?? "-"
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-health-visit-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
@@ -277,9 +280,10 @@ struct HealthRecordsDetailDataSource {
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
         case .cancerScreening(model: let model):
             id = model.id
-            let text = model.eventType == "Result" ? "BC Cancer Result" : "BC Cancer Screening" // TODO: CONNOR ADJUST HERE
+            let text = model.eventType == "Result" ? "BC Cancer Screening Result Letter" : "BC Cancer Screening Reminder Letter"
             title = text
-            detailNavTitle = text
+            let detailText = model.eventType == "Result" ? "BC Cancer screening result letter" : "BC Cancer screening reminder letter"
+            detailNavTitle = detailText
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-cancer-screening-icon")
             
@@ -288,7 +292,8 @@ struct HealthRecordsDetailDataSource {
         case .note(model: let model):
             id = model.id
             title = model.title ?? "-"
-            detailNavTitle = ""
+//            detailNavTitle = ""
+            detailNavTitle = model.title ?? "-"
             name = model.createdBy ?? "-" // NOTE: This is HDID
             image = UIImage(named: "blue-bg-notes-icon")
             
