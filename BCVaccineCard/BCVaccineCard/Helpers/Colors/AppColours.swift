@@ -12,6 +12,7 @@ class AppColours {
     static let appBlue = UIColor(red: 0/255, green: 51/255, blue: 102/255, alpha: 1.0)
     static let appBlueLight = UIColor(red: 217/255, green: 234/255, blue: 247/255, alpha: 1)
     static let blueLightText = UIColor(red: 26/255, green: 90/255, blue: 150/255, alpha: 1)
+    static let bannerBlue = UIColor(red: 0.851, green: 0.918, blue: 0.969, alpha: 1)
     static let green = UIColor(red: 72/255, green: 131/255, blue: 72/255, alpha: 1.0)
     static let partiallyVaxedBlue = UIColor(red: 45/255, green: 89/255, blue: 145/255, alpha: 1.0)
     static let backgroundGray = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1.0)

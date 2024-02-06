@@ -48,7 +48,8 @@ extension ManageHomeScreenViewController {
                 .HospitalVisits,
                 .HealthVisits,
                 .ClinicalDocuments,
-                .ImagingReports
+                .ImagingReports,
+                .BCCancerScreening
             ])
             
             let healthRecords = constructSectionTypes(storedPreferences: storedQuickLinks, for: .HealthRecord, order: recordsOrder)

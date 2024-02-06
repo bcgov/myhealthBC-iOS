@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -30,8 +30,8 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ZxB-XR-qZs">
-                        <rect key="frame" x="60" y="420" width="290" height="20.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZxB-XR-qZs">
+                        <rect key="frame" x="60" y="420" width="290" height="64"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -62,13 +62,13 @@
                 <constraint firstAttribute="trailingMargin" secondItem="ZxB-XR-qZs" secondAttribute="trailing" constant="40" id="cXO-sN-z2C"/>
                 <constraint firstItem="TBf-QY-0Ud" firstAttribute="top" relation="greaterThanOrEqual" secondItem="gTV-IL-0wX" secondAttribute="top" constant="20" id="gni-QM-8qV"/>
                 <constraint firstItem="EFF-Zp-gZg" firstAttribute="leading" secondItem="XmB-zU-1qa" secondAttribute="leading" id="pQN-65-UON"/>
-                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ZxB-XR-qZs" secondAttribute="bottom" constant="16" id="qe7-c6-vbm"/>
+                <constraint firstAttribute="bottom" secondItem="ZxB-XR-qZs" secondAttribute="bottom" constant="16" id="qe7-c6-vbm"/>
                 <constraint firstItem="ZxB-XR-qZs" firstAttribute="top" secondItem="XmB-zU-1qa" secondAttribute="bottom" constant="10" id="rWM-cD-LQb"/>
                 <constraint firstItem="afc-No-qc1" firstAttribute="centerX" secondItem="TBf-QY-0Ud" secondAttribute="centerX" id="s1O-6u-2Z2"/>
                 <constraint firstItem="EFF-Zp-gZg" firstAttribute="trailing" secondItem="XmB-zU-1qa" secondAttribute="trailing" id="tnr-8z-7To"/>
                 <constraint firstItem="TBf-QY-0Ud" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="uLb-yg-3fT"/>
                 <constraint firstItem="XmB-zU-1qa" firstAttribute="top" secondItem="EFF-Zp-gZg" secondAttribute="bottom" constant="4" id="yMQ-b5-08N"/>
-                <constraint firstAttribute="bottom" secondItem="XmB-zU-1qa" secondAttribute="bottom" constant="90" id="yY1-fR-2ii"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="XmB-zU-1qa" secondAttribute="bottom" constant="90" id="yY1-fR-2ii"/>
             </constraints>
             <size key="customSize" width="213" height="251"/>
             <connections>

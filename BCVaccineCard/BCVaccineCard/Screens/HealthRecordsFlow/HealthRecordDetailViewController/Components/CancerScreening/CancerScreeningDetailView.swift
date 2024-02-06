@@ -164,7 +164,7 @@ extension CancerScreeningDetailView {
         case .cancerScreening(model: let model):
            
             let firstText = model.eventType == "Result" ? "Download your cervix screening result letter. It may include important information about next steps. If you have questions, check the BC Cancer website or talk to your care provider." : "Find out about your cervix screening next steps. You will also get this letter in the mail. Learn more about cervix screening."
-            let linkedStrings = model.eventType == "Result" ? LinkedStrings(text: "check the BC Cancer website", link: "http://www.bccancer.bc.ca/contact", underlined: true) : LinkedStrings(text: "Learn more about cervix screening", link: "http://www.bccancer.bc.ca/screening/cervix", underlined: true)
+            let linkedStrings = model.eventType == "Result" ? LinkedStrings(text: "check the BC Cancer website", link: "http://www.bccancer.bc.ca/screening/cervix", underlined: true) : LinkedStrings(text: "Learn more about cervix screening", link: "http://www.bccancer.bc.ca/screening/cervix", underlined: true)
             let links = [linkedStrings]
                         
             let fields: [TextListModel] = [
