@@ -23,6 +23,11 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var noRecordsFoundImageView: UIImageView!
     @IBOutlet weak private var noRecordsFoundTitle: UILabel!
     @IBOutlet weak private var noRecordsFoundSubTitle: UILabel!
+    @IBOutlet weak private var noRecordsStackViewVerticalConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var bcCancerInfoView: BCCancerInfoView!
+    @IBOutlet weak private var bcCancerInfoViewHeight: NSLayoutConstraint!
+    @IBOutlet weak private var bcCancerInfoViewTop: NSLayoutConstraint!
+    @IBOutlet weak private var bcCancerInfoViewBottom: NSLayoutConstraint!
     
     @IBOutlet weak private var clearFiltersButton: UIButton!
     @IBOutlet weak private var filterStack: UIStackView!
@@ -69,7 +74,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private var bcCancerInfoShown: Bool {
-        return self.currentFilter?.recordTypes.count == 1 && ((self.currentFilter?.recordTypes.contains(.CancerScreening)) != nil) ? true : false
+        return self.currentFilter?.recordTypes.count == 1 && ((self.currentFilter?.recordTypes.contains(.CancerScreening)) != false) ? true : false
     }
     
     private var searchText: String?
@@ -131,6 +136,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundTitle.textColor = AppColours.appBlue
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
+        configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
         createNoteButton.isHidden = true
         fetchDataSource()
         if currentSegment == .Notes {
@@ -160,6 +166,18 @@ class UsersListOfRecordsViewController: BaseViewController {
         //TODO: Add to show route with proper ViewModel
         let vc = NoteViewController.construct(for: .AddNote, with: nil, existingNote: nil)
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: No Records Config
+extension UsersListOfRecordsViewController {
+    private func configureNoRecords(bcCancerInfo show: Bool) {
+        noRecordsStackViewVerticalConstraint.isActive = !show
+        bcCancerInfoViewHeight.constant = show ? 156 : 0
+        bcCancerInfoViewTop.constant = show ? 20 : 0
+        bcCancerInfoViewBottom.constant = show ? 80 : 0
+        bcCancerInfoView.isHidden = !show
+        self.noRecordsFoundView.layoutIfNeeded()
     }
 }
 
@@ -633,6 +651,9 @@ extension UsersListOfRecordsViewController {
         
         tableView.reloadData()
         noRecordsFoundView.isHidden = !patientRecords.isEmpty
+        if patientRecords.isEmpty {
+            configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
+        }
         tableView.isHidden = patientRecords.isEmpty
         recordsSearchBarView.isHidden = (((patientRecords.isEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
     }
@@ -648,6 +669,9 @@ extension UsersListOfRecordsViewController {
     private func showTimelineViews(patientRecordsEmpty: Bool, searchText: String?) {
         configureNoRecordsFoundView(for: .Timeline)
         noRecordsFoundView.isHidden = !patientRecordsEmpty
+        if patientRecordsEmpty {
+            configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
+        }
         tableView.isHidden = patientRecordsEmpty
         recordsSearchBarView.hideFilterSection = false
         recordsSearchBarView.isHidden = (((patientRecordsEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
@@ -657,6 +681,9 @@ extension UsersListOfRecordsViewController {
     private func showNotesViews(notesRecordsEmpty: Bool, searchText: String?) {
         configureNoRecordsFoundView(for: .Notes)
         noRecordsFoundView.isHidden = notesRecordsEmpty
+        if !notesRecordsEmpty {
+            configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
+        }
         tableView.isHidden = !notesRecordsEmpty
         recordsSearchBarView.endEditing(true)
         recordsSearchBarView.isHidden = (((notesRecordsEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))

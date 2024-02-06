@@ -61,7 +61,12 @@ struct AuthenticatedPatientDetailsResponseObject: Codable {
     
     var getBdayDate: Date? {
         guard let birthdate = birthdate else { return nil }
-        return Date.Formatter.gatewayDateAndTime.date(from: birthdate)
+        if let date = Date.Formatter.yearMonthDay.date(from: birthdate) {
+            return date
+        } else {
+            return Date.Formatter.gatewayDateAndTime.date(from: birthdate)
+        }
+        
     }
     
 //    func isUserEqualToOrOlderThan(ageInYears age: Int) -> Bool {

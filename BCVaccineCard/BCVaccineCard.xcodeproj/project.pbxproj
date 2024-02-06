@@ -1546,6 +1546,12 @@
 		79F65C2F2B71A4AE004A36DC /* BCCancerInfoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79F65C2B2B71A4AE004A36DC /* BCCancerInfoTableViewCell.xib */; };
 		79F65C302B71A4AE004A36DC /* BCCancerInfoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79F65C2B2B71A4AE004A36DC /* BCCancerInfoTableViewCell.xib */; };
 		79F65C312B71A4AE004A36DC /* BCCancerInfoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79F65C2B2B71A4AE004A36DC /* BCCancerInfoTableViewCell.xib */; };
+		79F65C342B72EC12004A36DC /* BCCancerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F65C332B72EC12004A36DC /* BCCancerInfoView.swift */; };
+		79F65C352B72EC12004A36DC /* BCCancerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F65C332B72EC12004A36DC /* BCCancerInfoView.swift */; };
+		79F65C362B72EC12004A36DC /* BCCancerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F65C332B72EC12004A36DC /* BCCancerInfoView.swift */; };
+		79F65C382B72EC39004A36DC /* BCCancerInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79F65C372B72EC39004A36DC /* BCCancerInfoView.xib */; };
+		79F65C392B72EC39004A36DC /* BCCancerInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79F65C372B72EC39004A36DC /* BCCancerInfoView.xib */; };
+		79F65C3A2B72EC39004A36DC /* BCCancerInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79F65C372B72EC39004A36DC /* BCCancerInfoView.xib */; };
 		79FDE423273335D000DAD988 /* FederalPassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FDE422273335D000DAD988 /* FederalPassView.swift */; };
 		79FDE424273335D000DAD988 /* FederalPassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FDE422273335D000DAD988 /* FederalPassView.swift */; };
 		79FDE426273335DC00DAD988 /* FederalPassView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79FDE425273335DC00DAD988 /* FederalPassView.xib */; };
@@ -2121,6 +2127,8 @@
 		79D93B1C27D048540083B603 /* AuthenticatedCommentResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedCommentResponseObject.swift; sourceTree = "<group>"; };
 		79F65C2A2B71A4AE004A36DC /* BCCancerInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCCancerInfoTableViewCell.swift; sourceTree = "<group>"; };
 		79F65C2B2B71A4AE004A36DC /* BCCancerInfoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BCCancerInfoTableViewCell.xib; sourceTree = "<group>"; };
+		79F65C332B72EC12004A36DC /* BCCancerInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCCancerInfoView.swift; sourceTree = "<group>"; };
+		79F65C372B72EC39004A36DC /* BCCancerInfoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BCCancerInfoView.xib; sourceTree = "<group>"; };
 		79FDE422273335D000DAD988 /* FederalPassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FederalPassView.swift; sourceTree = "<group>"; };
 		79FDE425273335DC00DAD988 /* FederalPassView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FederalPassView.xib; sourceTree = "<group>"; };
 		7E15141502BDF4E09AB8A86F /* Pods-HealthGatewayDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthGatewayDev.debug.xcconfig"; path = "Target Support Files/Pods-HealthGatewayDev/Pods-HealthGatewayDev.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2758,6 +2766,7 @@
 		2D4B118429F0651400D7C02C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				79F65C322B72EBEF004A36DC /* BCCancerInfoView */,
 				2DF665732A3067E90009D8F0 /* SegmentedView */,
 				2DF3180429E536DF0077EA87 /* NavBarDropDownView */,
 				2D4B118529F0652400D7C02C /* RecordsSearchBar */,
@@ -4350,6 +4359,15 @@
 			path = BCCancerInfoTableViewCell;
 			sourceTree = "<group>";
 		};
+		79F65C322B72EBEF004A36DC /* BCCancerInfoView */ = {
+			isa = PBXGroup;
+			children = (
+				79F65C332B72EC12004A36DC /* BCCancerInfoView.swift */,
+				79F65C372B72EC39004A36DC /* BCCancerInfoView.xib */,
+			);
+			path = BCCancerInfoView;
+			sourceTree = "<group>";
+		};
 		79FDE421273335B200DAD988 /* FederalPassView */ = {
 			isa = PBXGroup;
 			children = (
@@ -4600,6 +4618,7 @@
 				794BD6772703A3DB0084ADA8 /* ImageTableViewCell.xib in Resources */,
 				79BDA089270CEE8000FF30AB /* Localizable.strings in Resources */,
 				7944F68526F1261B006B9444 /* Assets.xcassets in Resources */,
+				79F65C392B72EC39004A36DC /* BCCancerInfoView.xib in Resources */,
 				79B9D01727E2950000987D9F /* Home.storyboard in Resources */,
 				297885202795F16E00FF912D /* SettingsRowTableViewCell.xib in Resources */,
 				293B32CD27D814EB0064BAAA /* CommentViewTableViewCell.xib in Resources */,
@@ -4819,6 +4838,7 @@
 				3E72058D2A57574A000887DE /* PatientRecommendationsTableViewCell.xib in Resources */,
 				799050C1273C8344006CD726 /* GetRecordsView.xib in Resources */,
 				794BD66B2702EEC00084ADA8 /* Main.storyboard in Resources */,
+				79F65C3A2B72EC39004A36DC /* BCCancerInfoView.xib in Resources */,
 				79218AB3275196150063004E /* HealthRecordsUserView.xib in Resources */,
 				2922C0CD286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib in Resources */,
 			);
@@ -4883,6 +4903,7 @@
 				798006212852C66E006E390F /* ImageTableViewCell.xib in Resources */,
 				798006222852C66E006E390F /* Localizable.strings in Resources */,
 				798006232852C66E006E390F /* Assets.xcassets in Resources */,
+				79F65C382B72EC39004A36DC /* BCCancerInfoView.xib in Resources */,
 				798006242852C66E006E390F /* Home.storyboard in Resources */,
 				798006252852C66E006E390F /* SettingsRowTableViewCell.xib in Resources */,
 				798006262852C66E006E390F /* CommentViewTableViewCell.xib in Resources */,
@@ -5341,6 +5362,7 @@
 				795AA76D271563C600E59FF1 /* ResourceDataSource.swift in Sources */,
 				29921C922773A5F0005025D2 /* AuthenticationInfoView.swift in Sources */,
 				7918A8C727482E0C00D19D1C /* TextListView.swift in Sources */,
+				79F65C352B72EC12004A36DC /* BCCancerInfoView.swift in Sources */,
 				2D185B1D2A8B60B3000E64DD /* QuickLinksPreferences.swift in Sources */,
 				795AA78527162AAA00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
@@ -5754,6 +5776,7 @@
 				79FDE424273335D000DAD988 /* FederalPassView.swift in Sources */,
 				3E5E6E9D28D239BE00724EDD /* CommunicationService.swift in Sources */,
 				795AA76B271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
+				79F65C362B72EC12004A36DC /* BCCancerInfoView.swift in Sources */,
 				2D185B1E2A8B60B3000E64DD /* QuickLinksPreferences.swift in Sources */,
 				2971956928871B1A00CA824A /* SectionDescriptionTableViewCell.swift in Sources */,
 				7918A8C827482E0C00D19D1C /* TextListView.swift in Sources */,
@@ -6144,6 +6167,7 @@
 				798005B12852C66E006E390F /* TestResult+CoreDataClass.swift in Sources */,
 				798005B22852C66E006E390F /* ResourceDataSource.swift in Sources */,
 				798005B32852C66E006E390F /* AuthenticationInfoView.swift in Sources */,
+				79F65C342B72EC12004A36DC /* BCCancerInfoView.swift in Sources */,
 				2D185B1C2A8B60B3000E64DD /* QuickLinksPreferences.swift in Sources */,
 				798005B42852C66E006E390F /* TextListView.swift in Sources */,
 				798005B52852C66E006E390F /* NotificationName+Ext.swift in Sources */,
@@ -6467,7 +6491,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
@@ -6476,7 +6500,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.9;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-DEV-AppStore";
@@ -6503,7 +6527,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Freshworks Studio Inc. (TCH45SXZ69)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
@@ -6512,7 +6536,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.9;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-DEV-AppStore";

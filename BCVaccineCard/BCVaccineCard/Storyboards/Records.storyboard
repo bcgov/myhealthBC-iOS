@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2hG-gH-503">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2hG-gH-503">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -211,25 +211,32 @@
                                         </subviews>
                                     </stackView>
                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X0v-Xx-ZMU">
-                                        <rect key="frame" x="0.0" y="162" width="414" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="162" width="414" height="545"/>
                                         <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RZh-If-sGR" customClass="BCCancerInfoView" customModule="HealthGateway" customModuleProvider="target">
+                                                <rect key="frame" x="24" y="20" width="366" height="156"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="156" id="Hye-VO-v3e"/>
+                                                </constraints>
+                                            </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="26" translatesAutoresizingMaskIntoConstraints="NO" id="Xgd-xG-TXl">
-                                                <rect key="frame" x="98.5" y="-79.5" width="217.5" height="159"/>
+                                                <rect key="frame" x="98.5" y="256" width="217.5" height="33"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no-records-found" translatesAutoresizingMaskIntoConstraints="NO" id="wGx-50-fT6">
-                                                        <rect key="frame" x="52" y="0.0" width="113" height="85"/>
+                                                        <rect key="frame" x="52" y="0.0" width="113" height="0.0"/>
                                                     </imageView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="lqL-5R-RZW">
-                                                        <rect key="frame" x="0.0" y="111" width="217.5" height="48"/>
+                                                        <rect key="frame" x="0.0" y="26" width="217.5" height="7"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No records found" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JOE-hg-i4O">
-                                                                <rect key="frame" x="42.5" y="0.0" width="132.5" height="20.5"/>
+                                                                <rect key="frame" x="42.5" y="0.0" width="132.5" height="0.0"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Clear all filters and start over" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7gx-Hz-mnf">
-                                                                <rect key="frame" x="0.0" y="27.5" width="217.5" height="20.5"/>
+                                                                <rect key="frame" x="0.0" y="7" width="217.5" height="0.0"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -240,9 +247,20 @@
                                             </stackView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="Xgd-xG-TXl" firstAttribute="centerY" secondItem="X0v-Xx-ZMU" secondAttribute="centerY" id="MGd-SV-9uc"/>
+                                            <constraint firstItem="RZh-If-sGR" firstAttribute="leading" secondItem="X0v-Xx-ZMU" secondAttribute="leading" constant="24" id="FtD-5k-djq"/>
+                                            <constraint firstItem="Xgd-xG-TXl" firstAttribute="centerY" secondItem="X0v-Xx-ZMU" secondAttribute="centerY" priority="999" id="MGd-SV-9uc"/>
+                                            <constraint firstItem="RZh-If-sGR" firstAttribute="centerX" secondItem="X0v-Xx-ZMU" secondAttribute="centerX" id="Meg-tN-efW"/>
+                                            <constraint firstItem="RZh-If-sGR" firstAttribute="top" secondItem="X0v-Xx-ZMU" secondAttribute="top" constant="20" id="OBd-Be-mf1"/>
+                                            <constraint firstAttribute="trailing" secondItem="RZh-If-sGR" secondAttribute="trailing" constant="24" id="V7M-pS-fdz"/>
+                                            <constraint firstItem="Xgd-xG-TXl" firstAttribute="top" secondItem="RZh-If-sGR" secondAttribute="bottom" constant="80" id="gmT-nH-5ld"/>
+                                            <constraint firstItem="Xgd-xG-TXl" firstAttribute="centerY" secondItem="X0v-Xx-ZMU" secondAttribute="centerY" id="sDw-h9-Wlp"/>
                                             <constraint firstItem="Xgd-xG-TXl" firstAttribute="centerX" secondItem="X0v-Xx-ZMU" secondAttribute="centerX" id="t4T-Nb-S39"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="MGd-SV-9uc"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="5KY-jQ-pFs">
                                         <rect key="frame" x="0.0" y="166" width="414" height="640"/>
@@ -280,6 +298,10 @@
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="bcCancerInfoView" destination="RZh-If-sGR" id="94b-F2-5BA"/>
+                        <outlet property="bcCancerInfoViewBottom" destination="gmT-nH-5ld" id="poO-a2-7C5"/>
+                        <outlet property="bcCancerInfoViewHeight" destination="Hye-VO-v3e" id="pnj-iY-QbD"/>
+                        <outlet property="bcCancerInfoViewTop" destination="OBd-Be-mf1" id="y9P-LW-Xo5"/>
                         <outlet property="clearFiltersButton" destination="3j5-aQ-YUT" id="iR9-Xw-dfE"/>
                         <outlet property="createNoteButton" destination="fxr-FQ-nj1" id="YBy-SR-bY8"/>
                         <outlet property="filterContainer" destination="O9M-xG-fWS" id="FPN-8Q-cnx"/>
@@ -289,6 +311,7 @@
                         <outlet property="noRecordsFoundSubTitle" destination="7gx-Hz-mnf" id="S4E-9M-jPM"/>
                         <outlet property="noRecordsFoundTitle" destination="JOE-hg-i4O" id="zg2-nS-4zv"/>
                         <outlet property="noRecordsFoundView" destination="X0v-Xx-ZMU" id="H1K-5B-TzM"/>
+                        <outlet property="noRecordsStackViewVerticalConstraint" destination="sDw-h9-Wlp" id="C4A-qL-Kj3"/>
                         <outlet property="parentContainerStackView" destination="hZg-Ig-nE6" id="ITZ-Cv-MxW"/>
                         <outlet property="recordsSearchBarView" destination="nDc-lg-KEV" id="pLm-b6-Qv2"/>
                         <outlet property="tableView" destination="5KY-jQ-pFs" id="WiD-Hs-Qa2"/>
