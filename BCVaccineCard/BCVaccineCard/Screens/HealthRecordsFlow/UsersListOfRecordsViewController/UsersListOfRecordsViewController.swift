@@ -175,7 +175,7 @@ extension UsersListOfRecordsViewController {
         noRecordsStackViewVerticalConstraint.isActive = !show
         bcCancerInfoViewHeight.constant = show ? 156 : 0
         bcCancerInfoViewTop.constant = show ? 20 : 0
-        bcCancerInfoViewBottom.constant = show ? 80 : 0
+        bcCancerInfoViewBottom.isActive = show
         bcCancerInfoView.isHidden = !show
         self.noRecordsFoundView.layoutIfNeeded()
     }
