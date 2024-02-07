@@ -245,6 +245,7 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
                 guard let `self` = self else {return}
                 if let pdf = result {
                     self.pdfData = pdf
+                    self.addAnalyticsForCancerScreeningPDF(model: model)
                     self.showPDFDocument(pdf: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
                 } else if online == false {
                     // Show nothing, as there will be a toast
@@ -263,6 +264,17 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
                 }
             })
         }
+    }
+    
+    private func addAnalyticsForCancerScreeningPDF(model: CancerScreening) {
+        let propertyType: AnalyticsAdditionalProperties.AnalyticsAdditionalPropertiesValues = model.eventType == "Result" ? .result : .recall
+        let additionalProperties: [AnalyticsAdditionalProperties] = [
+            AnalyticsAdditionalProperties(key: .dataset, value: .bcCancer),
+            AnalyticsAdditionalProperties(key: .type, value: propertyType),
+            AnalyticsAdditionalProperties(key: .format, value: .pdf),
+            AnalyticsAdditionalProperties(key: .actor, value: .user)
+        ]
+        AnalyticsService.shared.track(action: .Download, text: .Document, additionalProperties: additionalProperties)
     }
 }
 
