@@ -45,12 +45,20 @@ struct GatewayTestResultResponseRecord: Codable, Equatable {
     
     var collectionDateTimeDate: Date? {
         guard let dateString = self.collectionDateTime else { return nil }
-        return Date.Formatter.gatewayDateAndTime.date(from: dateString)
+        if let date = Date.Formatter.yearMonthDay.date(from: dateString) {
+            return date
+        } else {
+            return Date.Formatter.gatewayDateAndTime.date(from: dateString)
+        }
     }
     
     var resultDateTimeDate: Date? {
         guard let dateString = self.resultDateTime else { return nil }
-        return Date.Formatter.gatewayDateAndTime.date(from: dateString)
+        if let date = Date.Formatter.yearMonthDay.date(from: dateString) {
+            return date
+        } else {
+            return Date.Formatter.gatewayDateAndTime.date(from: dateString)
+        }
     }
 }
 

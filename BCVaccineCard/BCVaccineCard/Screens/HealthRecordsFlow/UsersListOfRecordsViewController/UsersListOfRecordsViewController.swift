@@ -23,6 +23,11 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var noRecordsFoundImageView: UIImageView!
     @IBOutlet weak private var noRecordsFoundTitle: UILabel!
     @IBOutlet weak private var noRecordsFoundSubTitle: UILabel!
+    @IBOutlet weak private var noRecordsStackViewVerticalConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var bcCancerInfoView: BCCancerInfoView!
+    @IBOutlet weak private var bcCancerInfoViewHeight: NSLayoutConstraint!
+    @IBOutlet weak private var bcCancerInfoViewTop: NSLayoutConstraint!
+    @IBOutlet weak private var bcCancerInfoViewBottom: NSLayoutConstraint!
     
     @IBOutlet weak private var clearFiltersButton: UIButton!
     @IBOutlet weak private var filterStack: UIStackView!
@@ -66,6 +71,10 @@ class UsersListOfRecordsViewController: BaseViewController {
                 }
             }
         }
+    }
+    
+    private var bcCancerInfoShown: Bool {
+        return self.currentFilter?.recordTypes.count == 1 && ((self.currentFilter?.recordTypes.contains(.CancerScreening)) != false) ? true : false
     }
     
     private var searchText: String?
@@ -127,6 +136,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundTitle.textColor = AppColours.appBlue
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
+        configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
         createNoteButton.isHidden = true
         fetchDataSource()
         if currentSegment == .Notes {
@@ -158,6 +168,18 @@ class UsersListOfRecordsViewController: BaseViewController {
         //TODO: Add to show route with proper ViewModel
         let vc = NoteViewController.construct(for: .AddNote, with: nil, existingNote: nil)
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: No Records Config
+extension UsersListOfRecordsViewController {
+    private func configureNoRecords(bcCancerInfo show: Bool) {
+        noRecordsStackViewVerticalConstraint.isActive = !show
+        bcCancerInfoViewHeight.constant = show ? 156 : 0
+        bcCancerInfoViewTop.constant = show ? 20 : 0
+        bcCancerInfoViewBottom.isActive = show
+        bcCancerInfoView.isHidden = !show
+        self.noRecordsFoundView.layoutIfNeeded()
     }
 }
 
@@ -639,6 +661,9 @@ extension UsersListOfRecordsViewController {
         
         tableView.reloadData()
         noRecordsFoundView.isHidden = !patientRecords.isEmpty
+        if patientRecords.isEmpty {
+            configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
+        }
         tableView.isHidden = patientRecords.isEmpty
         recordsSearchBarView.isHidden = (((patientRecords.isEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
     }
@@ -654,6 +679,9 @@ extension UsersListOfRecordsViewController {
     private func showTimelineViews(patientRecordsEmpty: Bool, searchText: String?) {
         configureNoRecordsFoundView(for: .Timeline)
         noRecordsFoundView.isHidden = !patientRecordsEmpty
+        if patientRecordsEmpty {
+            configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
+        }
         tableView.isHidden = patientRecordsEmpty
         recordsSearchBarView.hideFilterSection = false
         recordsSearchBarView.isHidden = (((patientRecordsEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
@@ -663,6 +691,9 @@ extension UsersListOfRecordsViewController {
     private func showNotesViews(notesRecordsEmpty: Bool, searchText: String?) {
         configureNoRecordsFoundView(for: .Notes)
         noRecordsFoundView.isHidden = notesRecordsEmpty
+        if !notesRecordsEmpty {
+            configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
+        }
         tableView.isHidden = !notesRecordsEmpty
         recordsSearchBarView.endEditing(true)
         recordsSearchBarView.isHidden = (((notesRecordsEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
@@ -693,6 +724,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     private func setupTableView() {
         tableView.register(UINib.init(nibName: UserRecordListTableViewCell.getName, bundle: .main), forCellReuseIdentifier: UserRecordListTableViewCell.getName)
         tableView.register(UINib.init(nibName: HiddenRecordsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HiddenRecordsTableViewCell.getName)
+        tableView.register(UINib.init(nibName: BCCancerInfoTableViewCell.getName, bundle: .main), forCellReuseIdentifier: BCCancerInfoTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 84
         tableView.delegate = self
@@ -706,12 +738,14 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             return 1
         }
         
-        // Protective word not entered
-        if viewModel?.showProtectiveWordPrompt == true {
-            return 2
-        }
+        let protectiveWordCount: Int = viewModel?.showProtectiveWordPrompt == true ? 1 : 0
+        let bcCancerInfoCount: Int = self.bcCancerInfoShown == true ? 1 : 0
+//        // Protective word not entered
+//        if viewModel?.showProtectiveWordPrompt == true {
+//            return 2
+//        }
         
-        return 1
+        return 1 + protectiveWordCount + bcCancerInfoCount
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -725,6 +759,19 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
            section == 0 {
            return 1
         }
+    
+        if viewModel?.state == .authenticated,
+           bcCancerInfoShown == true {
+            if viewModel?.showProtectiveWordPrompt == true,
+               section == 1 {
+                return 1
+            }
+            if viewModel?.showProtectiveWordPrompt == false,
+               section == 0 {
+                return 1
+            }
+        }
+
         
         // Records
         return dataSource.count
@@ -761,6 +808,14 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         return cell
     }
     
+    private func getBCCancerInfoCell(indexPath: IndexPath) -> UITableViewCell {
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: BCCancerInfoTableViewCell.getName, for: indexPath) as? BCCancerInfoTableViewCell else {
+            return UITableViewCell()
+        }
+        return cell
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if viewModel?.state == .AuthExpired {
             return getLoginCell(indexPath: indexPath)
@@ -769,12 +824,16 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             return getProtectiveWordCell(indexPath: indexPath)
         }
         
+        if (viewModel?.showProtectiveWordPrompt == true && bcCancerInfoShown && indexPath.section == 1) || (viewModel?.showProtectiveWordPrompt == false && bcCancerInfoShown && indexPath.section == 0) {
+            return getBCCancerInfoCell(indexPath: indexPath)
+        }
         return recordCell(indexPath: indexPath)
         
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if viewModel?.showProtectiveWordPrompt == true, indexPath.section == 0 {
+        if (viewModel?.showProtectiveWordPrompt == true && indexPath.section == 0) ||
+            (viewModel?.showProtectiveWordPrompt == true && bcCancerInfoShown && indexPath.section == 1) || (viewModel?.showProtectiveWordPrompt == false && bcCancerInfoShown && indexPath.section == 0) {
             return
         }
         guard dataSource.count > indexPath.row else {return}

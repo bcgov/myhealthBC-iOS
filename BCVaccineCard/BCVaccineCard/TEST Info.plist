@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Health Gateway Dev</string>
+	<string>Health Gateway Test</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -40,10 +40,10 @@
 		<string>ca.bc.gov.idtest.servicescard</string>
 		<string>ca.bc.gov.iddev.servicescard</string>
 		<string>ca.bc.gov.id.servicescard</string>
-        <string>googlegmail</string>
-        <string>ms-outlook</string>
-        <string>readdle-spark</string>
-        <string>ymail</string>
+		<string>googlegmail</string>
+		<string>ms-outlook</string>
+		<string>readdle-spark</string>
+		<string>ymail</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

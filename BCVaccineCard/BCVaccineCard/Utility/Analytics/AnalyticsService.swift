@@ -71,6 +71,22 @@ class AnalyticsService: NSObject, RequestCallback {
         tracker?.track(event)
     }
     
+    /// Track an action with a pre-defined text in AnalyticsText along with additional values
+    /// - Parameters:
+    ///   - action: AnalyticsAction enum describing the event
+    ///   - text: AnalyticsText enum destribing the action
+    ///   - additionalProperties: AnalyticsAdditionalProperties struct describing additional keys and values for the event
+    public func track(action: AnalyticsAction, text: AnalyticsText, additionalProperties: [AnalyticsAdditionalProperties]) {
+        let actionString = action.rawValue
+        let actionTextString = text.rawValue
+        var payload: [String: NSObject] = ["action": actionString as NSObject, "text": actionTextString as NSObject]
+        for property in additionalProperties {
+            payload[property.key.rawValue] = property.value.rawValue as NSObject
+        }
+        let event = SelfDescribing(schema: schema, payload: payload)
+        tracker?.track(event)
+    }
+    
     /// Track an Action only
     /// - Parameter action: AnalyticsAction enum describing the event
     public func track(action: AnalyticsAction) {

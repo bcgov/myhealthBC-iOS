@@ -95,7 +95,7 @@ struct Defaults {
         }
     }
     
-    static func getStoresPreferencesFor(phn: String) -> [QuickLinksPreferences] {
+    static func getStoredPreferencesFor(phn: String) -> [QuickLinksPreferences] {
         guard let data = UserDefaults.standard.value(forKey: self.Key.quickLinksPreferences.rawValue) as? Data else {
             return []
         }
