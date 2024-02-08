@@ -12,7 +12,22 @@ struct QuickLinksPreferences: Codable {
     let name: QuickLinksNames
     var enabled: Bool
     var addedDate: Date?
-    var includedInFeatureToggle: Bool
+    var includedInFeatureToggle: Bool?
+    
+//    enum Keys: CodingKey {
+//        case name
+//        case enabled
+//        case addedDate
+//        case includedInFeatureToggle
+//      }
+//    
+//    public init(from decoder: Decoder) throws {
+//        let container = try decoder.container(keyedBy: CodingKeys.self)
+//        name = try container.decode(QuickLinksNames.self, forKey: .name)
+//        enabled = try container.decode(Bool.self, forKey: .enabled)
+//        addedDate = try container.decode(Date.self, forKey: .addedDate)
+//        includedInFeatureToggle = try container.decodeIfPresent(Bool.self, forKey: .includedInFeatureToggle) ?? false
+//    }
     
     enum QuickLinksNames: String, Codable {
         case MyNotes = "My Notes"
