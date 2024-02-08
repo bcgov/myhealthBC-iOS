@@ -90,13 +90,15 @@ extension ManageHomeScreenViewController {
             case .Service:
                 toggleEnabledFeatures = QuickLinksPreferences.convertFeatureToggleToQuickLinksPreferences(for: .Service)
             }
-            let adjustedPreferences = storedPreferences.filter { $0.name.getSection == type }
-            let ds: [QuickLinksPreferences] = order.compactMap { name in
+            var adjustedPreferences = storedPreferences.filter { $0.name.getSection == type }
+            let ds: [QuickLinksPreferences] = order.map { name in
                 if let index = adjustedPreferences.firstIndex(where: { $0.name == name }) {
+                    let isFeatureToggleEnabled = QuickLinksPreferences.isFeatureEnabled(feature: name, enabledTypes: toggleEnabledFeatures)
+                    adjustedPreferences[index].includedInFeatureToggle = isFeatureToggleEnabled
                     return adjustedPreferences[index]
                 } else {
-                    // Should never get here, but we should find a better way to satisfy this constraint
-                    return QuickLinksPreferences(name: .MyNotes, enabled: false, includedInFeatureToggle: false)
+                    // Should never get here because all records are stored, but we should find a better way to satisfy this constraint
+                    return QuickLinksPreferences(name: name, enabled: false, includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: name, enabledTypes: toggleEnabledFeatures))
                 }
             }
             return ds
