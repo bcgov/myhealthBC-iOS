@@ -176,7 +176,14 @@ struct QuickLinksPreferences: Codable {
         guard let enabledTypes = Defaults.enabledTypes else { return [] }
         switch section {
         case .HealthRecord:
-            return enabledTypes.datasets.compactMap { $0.getQuickLinksNameType }
+            var types = enabledTypes.datasets.compactMap { $0.getQuickLinksNameType }
+            let updatedTypes: [QuickLinksPreferences.QuickLinksNames]
+            if !HealthRecordConstants.notesEnabled {
+                updatedTypes = types.filter({ $0 != .MyNotes })
+            } else {
+                updatedTypes = types
+            }
+            return updatedTypes
         case .Service:
             return enabledTypes.services.compactMap { $0.getQuickLinksNameType }
         }

@@ -35,7 +35,7 @@ extension ManageHomeScreenViewController {
             
             var recordsOrder: [QuickLinksPreferences.QuickLinksNames] = []
             
-            if Defaults.enabledTypes?.contains(dataset: .Note) == true {
+            if Defaults.enabledTypes?.contains(dataset: .Note) == true && HealthRecordConstants.notesEnabled == true {
                 recordsOrder.append(.MyNotes)
             }
             
