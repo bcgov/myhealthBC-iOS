@@ -138,8 +138,8 @@ class HomeScreenViewController: BaseViewController {
     
     private func reduceQuickLinksPreferencesAndSort() -> [HomeScreenCellType] {
         let phn = StorageService.shared.fetchAuthenticatedPatient()?.phn ?? ""
-        let quickLinksPreferences = Defaults.getStoresPreferencesFor(phn: phn)
-        let sortedQuickLinks = quickLinksPreferences.filter { $0.enabled == true }.sorted { $0.addedDate ?? Date() < $1.addedDate ?? Date() }
+        let quickLinksPreferences = Defaults.getStoredPreferencesFor(phn: phn)
+        let sortedQuickLinks = quickLinksPreferences.filter { $0.enabled == true && $0.includedInFeatureToggle == true }.sorted { $0.addedDate ?? Date() < $1.addedDate ?? Date() }
         return convertQuickLinkIntoDataSource(quickLinks: sortedQuickLinks)
     }
     
@@ -474,7 +474,7 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
     // Look into adding completion block here
     private func modifyLocallyStoredPreferences(remove link: QuickLinksPreferences, completion: @escaping() -> Void) {
         let phn = StorageService.shared.fetchAuthenticatedPatient()?.phn ?? ""
-        var storedPrefences = Defaults.getStoresPreferencesFor(phn: phn)
+        var storedPrefences = Defaults.getStoredPreferencesFor(phn: phn)
         if storedPrefences.isEmpty {
             storedPrefences = QuickLinksPreferences.constructEmptyPreferences()
         }

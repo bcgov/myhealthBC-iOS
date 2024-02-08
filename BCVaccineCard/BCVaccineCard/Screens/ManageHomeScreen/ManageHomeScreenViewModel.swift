@@ -26,7 +26,7 @@ extension ManageHomeScreenViewController {
                 storedQuickLinks = QuickLinksPreferences.constructEmptyPreferences()
                 return 
             }
-            storedQuickLinks = Defaults.getStoresPreferencesFor(phn: phn)
+            storedQuickLinks = Defaults.getStoredPreferencesFor(phn: phn)
             if storedQuickLinks.isEmpty {
                 storedQuickLinks = QuickLinksPreferences.constructEmptyPreferences()
             }
@@ -83,17 +83,26 @@ extension ManageHomeScreenViewController {
         private func constructSectionTypes(storedPreferences: [QuickLinksPreferences],
                                            for type: QuickLinksPreferences.QuickLinksNames.Section,
                                            order: [QuickLinksPreferences.QuickLinksNames]) -> [QuickLinksPreferences] {
+            let toggleEnabledFeatures: [QuickLinksPreferences.QuickLinksNames]
+            switch type {
+            case .HealthRecord:
+                toggleEnabledFeatures = QuickLinksPreferences.convertFeatureToggleToQuickLinksPreferences(for: .HealthRecord)
+            case .Service:
+                toggleEnabledFeatures = QuickLinksPreferences.convertFeatureToggleToQuickLinksPreferences(for: .Service)
+            }
             let adjustedPreferences = storedPreferences.filter { $0.name.getSection == type }
-            let ds: [QuickLinksPreferences] = order.map { name in
+            let ds: [QuickLinksPreferences] = order.compactMap { name in
                 if let index = adjustedPreferences.firstIndex(where: { $0.name == name }) {
                     return adjustedPreferences[index]
                 } else {
                     // Should never get here, but we should find a better way to satisfy this constraint
-                    return QuickLinksPreferences(name: .MyNotes, enabled: false)
+                    return QuickLinksPreferences(name: .MyNotes, enabled: false, includedInFeatureToggle: false)
                 }
             }
             return ds
         }
+        
+        
     }
     
     enum DataSource {
