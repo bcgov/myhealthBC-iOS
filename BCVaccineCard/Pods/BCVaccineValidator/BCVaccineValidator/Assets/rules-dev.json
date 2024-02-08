@@ -1,8 +1,8 @@
 {
-  "publishDateTime": "2021-10-19T23:40:29.6568937+00:00",
+  "publishDateTime": "2022-05-25T23:40:29.6568937+00:00",
   "ruleSet": [
     {
-      "mixTypesAllowed": false,
+      "mixTypesAllowed": true,
       "mixTypesRuRequired": 2,
       "ruRequired": 2,
       "intervalRequired": false,
