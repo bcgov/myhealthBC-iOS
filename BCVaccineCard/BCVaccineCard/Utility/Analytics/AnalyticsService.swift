@@ -14,6 +14,7 @@ class AnalyticsService: NSObject, RequestCallback {
     fileprivate let endPoint = "spt.apps.gov.bc.ca"
     fileprivate let namespace = "iOS"
     fileprivate let schema = "iglu:ca.bc.gov.gateway/action/jsonschema/1-0-0"
+    fileprivate let schema2 = "iglu:ca.bc.gov.gateway/action/jsonschema/2-0-0"
     
     fileprivate let userDefaultsKey = "analyticsEnabled"
     
@@ -83,7 +84,8 @@ class AnalyticsService: NSObject, RequestCallback {
         for property in additionalProperties {
             payload[property.key.rawValue] = property.value.rawValue as NSObject
         }
-        let event = SelfDescribing(schema: schema, payload: payload)
+        // NOTE: This will have to be reworked to support other schema's - using schema2 for now for BC Cancer
+        let event = SelfDescribing(schema: schema2, payload: payload)
         tracker?.track(event)
     }
     
