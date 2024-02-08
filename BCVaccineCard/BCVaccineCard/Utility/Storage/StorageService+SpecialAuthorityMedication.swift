@@ -14,6 +14,8 @@ extension StorageService {
             formatted = timezoneDate
         } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: dateString ?? "") {
             formatted = nozoneDate
+        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: dateString ?? "") {
+            formatted = simpleDate
         } else {
             formatted = nil
         }

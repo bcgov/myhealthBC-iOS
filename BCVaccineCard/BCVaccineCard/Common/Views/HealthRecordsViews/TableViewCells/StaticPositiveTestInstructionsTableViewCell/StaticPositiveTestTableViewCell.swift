@@ -56,7 +56,7 @@ class StaticPositiveTestTableViewCell:  UITableViewCell, UITextViewDelegate {
     
 }
 
-
+// TODO: Move to proper extension during refactor/tech debt
 extension NSMutableAttributedString {
     public func range(textToFind: String) -> NSRange? {
         self.mutableString.range(of: textToFind)

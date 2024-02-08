@@ -18,6 +18,10 @@ class ManageQuickLinkTableViewCell: UITableViewCell {
     @IBOutlet private weak var quickLinkLabel: UILabel!
     @IBOutlet private weak var checkboxButton: UIButton!
     
+//    @IBOutlet private weak var topConstraint: NSLayoutConstraint!
+//    @IBOutlet private weak var bottomConstraint: NSLayoutConstraint!
+//    @IBOutlet private weak var heightConstraint: NSLayoutConstraint!
+    
     private weak var delegate: ManageQuickLinkTableViewCellDelegate?
     private var enabled = false
     private var indexPath = IndexPath()
@@ -28,6 +32,7 @@ class ManageQuickLinkTableViewCell: UITableViewCell {
     }
 
     private func setup() {
+//        heightConstraint.isActive = false
         shadowView.backgroundColor = UIColor.clear
         shadowView.layer.shadowColor = UIColor.black.cgColor
         shadowView.layer.shadowOffset = CGSize(width: 2, height: 2)
@@ -47,6 +52,15 @@ class ManageQuickLinkTableViewCell: UITableViewCell {
         quickLinkLabel.text = quickLink.name.getManageScreenDisplayableName
         setCheckboxButton(enabled: self.enabled)
         self.delegate = delegateOwner as? ManageQuickLinkTableViewCellDelegate
+        
+//        if quickLink.includedInFeatureToggle == false {
+//            topConstraint.constant = 0
+//            bottomConstraint.constant = 0
+//            heightConstraint.isActive = true
+//            heightConstraint.constant = 0
+//            self.isHidden = true
+//            self.layoutIfNeeded()
+//        }
     }
     
     private func setCheckboxButton(enabled: Bool) {

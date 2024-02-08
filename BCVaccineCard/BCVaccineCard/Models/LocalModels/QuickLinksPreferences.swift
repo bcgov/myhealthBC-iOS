@@ -12,6 +12,22 @@ struct QuickLinksPreferences: Codable {
     let name: QuickLinksNames
     var enabled: Bool
     var addedDate: Date?
+    var includedInFeatureToggle: Bool?
+    
+//    enum Keys: CodingKey {
+//        case name
+//        case enabled
+//        case addedDate
+//        case includedInFeatureToggle
+//      }
+//    
+//    public init(from decoder: Decoder) throws {
+//        let container = try decoder.container(keyedBy: CodingKeys.self)
+//        name = try container.decode(QuickLinksNames.self, forKey: .name)
+//        enabled = try container.decode(Bool.self, forKey: .enabled)
+//        addedDate = try container.decode(Date.self, forKey: .addedDate)
+//        includedInFeatureToggle = try container.decodeIfPresent(Bool.self, forKey: .includedInFeatureToggle) ?? false
+//    }
     
     enum QuickLinksNames: String, Codable {
         case MyNotes = "My Notes"
@@ -25,6 +41,7 @@ struct QuickLinksPreferences: Codable {
         case ClinicalDocuments = "Clinical Documents"
         case ImagingReports = "Imaging Reports"
         case OrganDonor = "Organ Donor"
+        case BCCancerScreening = "BC Cancer Screening"
         
         enum Section: String, Codable {
             case HealthRecord = "Health Record"
@@ -44,6 +61,7 @@ struct QuickLinksPreferences: Codable {
             case .ClinicalDocuments: return .clinicalDocumentsHome
             case .ImagingReports: return .imagingReportsHome
             case .OrganDonor: return .organDonorHome
+            case .BCCancerScreening: return .bcCancerScreeningHome
             }
         }
         
@@ -60,6 +78,7 @@ struct QuickLinksPreferences: Codable {
             case .ClinicalDocuments: return .clinicalDocumentsManage
             case .ImagingReports: return .imagingReportsManage
             case .OrganDonor: return .organDonorManage
+            case .BCCancerScreening: return .bcCancerScreeningManage
             }
         }
 
@@ -76,6 +95,7 @@ struct QuickLinksPreferences: Codable {
             case .ClinicalDocuments: return "blue-bg-clinical-documents-icon"
             case .ImagingReports: return "blue-bg-diagnostic-imaging-icon"
             case .OrganDonor: return "ogran-donor-logo" // Note: Should probably fix the spelling error here"
+            case .BCCancerScreening: return "blue-bg-cancer-screening-icon"
             }
         }
         
@@ -104,13 +124,15 @@ struct QuickLinksPreferences: Codable {
                 currentFilter?.recordTypes = [.DiagnosticImaging]
             case .OrganDonor:
                 currentFilter = nil
+            case .BCCancerScreening:
+                currentFilter?.recordTypes = [.CancerScreening]
             }
             return currentFilter
         }
         
         var getSection: Section {
             switch self {
-            case .MyNotes, .Immunizations, .Medications, .LabResults, .COVID19Tests, .SpecialAuthority, .HospitalVisits, .HealthVisits, .ClinicalDocuments, .ImagingReports: return .HealthRecord
+            case .MyNotes, .Immunizations, .Medications, .LabResults, .COVID19Tests, .SpecialAuthority, .HospitalVisits, .HealthVisits, .ClinicalDocuments, .ImagingReports, .BCCancerScreening: return .HealthRecord
             case .OrganDonor: return .Service
             }
         }
@@ -119,19 +141,49 @@ struct QuickLinksPreferences: Codable {
     
     // NOTE: For now, we have to manually set this, until we refine and come up with a better way (case iterable, use int raw values, then have a get function to get the string name)
     static func constructEmptyPreferences() -> [QuickLinksPreferences] {
+        let records = QuickLinksPreferences.convertFeatureToggleToQuickLinksPreferences(for: .HealthRecord)
+        let services = QuickLinksPreferences.convertFeatureToggleToQuickLinksPreferences(for: .Service)
         return [
-            QuickLinksPreferences(name: .MyNotes, enabled: false, addedDate: nil),
-            QuickLinksPreferences(name: .Immunizations, enabled: false, addedDate: nil),
-            QuickLinksPreferences(name: .Medications, enabled: false, addedDate: nil),
-            QuickLinksPreferences(name: .LabResults, enabled: false, addedDate: nil),
-            QuickLinksPreferences(name: .COVID19Tests, enabled: false, addedDate: nil),
-            QuickLinksPreferences(name: .SpecialAuthority, enabled: false, addedDate: nil),
-            QuickLinksPreferences(name: .HospitalVisits, enabled: false, addedDate: nil),
-            QuickLinksPreferences(name: .HealthVisits, enabled: false, addedDate: nil),
-            QuickLinksPreferences(name: .ClinicalDocuments, enabled: false, addedDate: nil),
-            QuickLinksPreferences(name: .ImagingReports, enabled: false, addedDate: nil),
-            QuickLinksPreferences(name: .OrganDonor, enabled: false, addedDate: nil)
+            QuickLinksPreferences(name: .MyNotes, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .MyNotes, enabledTypes: records)),
+            QuickLinksPreferences(name: .Immunizations, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .Immunizations, enabledTypes: records)),
+            QuickLinksPreferences(name: .Medications, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .Medications, enabledTypes: records)),
+            QuickLinksPreferences(name: .LabResults, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .LabResults, enabledTypes: records)),
+            QuickLinksPreferences(name: .COVID19Tests, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .COVID19Tests, enabledTypes: records)),
+            QuickLinksPreferences(name: .SpecialAuthority, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .SpecialAuthority, enabledTypes: records)),
+            QuickLinksPreferences(name: .HospitalVisits, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .HospitalVisits, enabledTypes: records)),
+            QuickLinksPreferences(name: .HealthVisits, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .HealthVisits, enabledTypes: records)),
+            QuickLinksPreferences(name: .ClinicalDocuments, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .ClinicalDocuments, enabledTypes: records)),
+            QuickLinksPreferences(name: .ImagingReports, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .ImagingReports, enabledTypes: records)),
+            QuickLinksPreferences(name: .BCCancerScreening, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .BCCancerScreening, enabledTypes: records)),
+            QuickLinksPreferences(name: .OrganDonor, enabled: false, addedDate: nil,
+                                  includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: .OrganDonor, enabledTypes: services))
+            
         ]
+    }
+    
+    static func convertFeatureToggleToQuickLinksPreferences(for section: QuickLinksPreferences.QuickLinksNames.Section) -> [QuickLinksPreferences.QuickLinksNames] {
+        guard let enabledTypes = Defaults.enabledTypes else { return [] }
+        switch section {
+        case .HealthRecord:
+            return enabledTypes.datasets.compactMap { $0.getQuickLinksNameType }
+        case .Service:
+            return enabledTypes.services.compactMap { $0.getQuickLinksNameType }
+        }
+    }
+    
+    static func isFeatureEnabled(feature: QuickLinksNames, enabledTypes: [QuickLinksNames]) -> Bool {
+        return enabledTypes.contains(feature)
     }
     
 }

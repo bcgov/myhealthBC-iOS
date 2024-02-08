@@ -45,7 +45,7 @@ struct Constants {
         case .healthPasses:
             return 1
         case .healthRecords:
-            return 2
+            return 3
         case .healthResources:
             return 1
 //        case .newsFeed:

@@ -86,12 +86,37 @@ struct EnabledTypes: Codable {
             case .UnknownValue: return nil
             }
         }
+        
+        var getQuickLinksNameType: QuickLinksPreferences.QuickLinksNames? {
+            switch self {
+            case .Covid19TestResult: return .COVID19Tests
+            case .ClinicalDocument: return .ClinicalDocuments
+            case .DiagnosticImaging: return .ImagingReports
+            case .HealthVisit: return .HealthVisits
+            case .HospitalVisit: return .HospitalVisits
+            case .Immunization: return .Immunizations
+            case .LabResult: return .LabResults
+            case .Medication: return .Medications
+            case .Note: return .MyNotes
+            case .SpecialAuthorityRequest: return .SpecialAuthority
+            case .BcCancerScreening: return .BCCancerScreening
+            case .UnknownValue: return nil
+            }
+        }
     }
     
     enum ServiceTypes: String, Codable {
         case OrganDonorRegistration = "organDonorRegistration"
         case HealthConnectRegistry = "healthConnectRegistry"
         case UnknownValue = "UnknownValue"
+        
+        var getQuickLinksNameType: QuickLinksPreferences.QuickLinksNames? {
+            switch self {
+            case .OrganDonorRegistration: return .OrganDonor
+            case .HealthConnectRegistry: return nil
+            case .UnknownValue: return nil
+            }
+        }
     }
     
     let datasets: [DataSetValues]

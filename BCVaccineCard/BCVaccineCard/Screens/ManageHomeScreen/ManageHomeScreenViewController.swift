@@ -97,28 +97,48 @@ extension ManageHomeScreenViewController: UITableViewDelegate, UITableViewDataSo
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard viewModel?.dataSource[section].getSectionTitle != nil else {
-            return 0
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let section = viewModel?.dataSource[indexPath.section] else { return 0 }
+        switch section {
+        case .introText:
+            return UITableView.automaticDimension
+        case .healthRecord(types: let types), .service(types: let types):
+            return types[indexPath.row].includedInFeatureToggle == true ? UITableView.automaticDimension : 0.0
         }
-        return 32
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard let dsSection = viewModel?.dataSource[section] else { return 0 }
+        switch dsSection {
+        case .introText: return 0
+        case .healthRecord(types: let types), .service(types: let types):
+            return types.filter { $0.includedInFeatureToggle == true }.count > 0 ? 32 : 0
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let title = viewModel?.dataSource[section].getSectionTitle else { return nil }
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 32))
-        view.backgroundColor = .white
-        let titleLabel = UILabel(frame: CGRect(x: 8, y: 8, width: tableView.frame.width - 8, height: 24))
-        titleLabel.font = UIFont.bcSansBoldWithSize(size: 15)
-        titleLabel.textColor = AppColours.appBlue
-        titleLabel.text = title
-        titleLabel.backgroundColor = .white
-        view.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint(item: titleLabel, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 8).isActive = true
-        NSLayoutConstraint(item: titleLabel, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: -8).isActive = true
-        
-        return view
+        guard let dsSection = viewModel?.dataSource[section] else { return nil }
+        switch dsSection {
+        case .introText: return nil
+        case .healthRecord(types: let types), .service(types: let types):
+            guard types.filter({ $0.includedInFeatureToggle == true }).count > 0 else {
+                return nil
+            }
+            guard let title = viewModel?.dataSource[section].getSectionTitle else { return nil }
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 32))
+            view.backgroundColor = .white
+            let titleLabel = UILabel(frame: CGRect(x: 8, y: 8, width: tableView.frame.width - 8, height: 24))
+            titleLabel.font = UIFont.bcSansBoldWithSize(size: 15)
+            titleLabel.textColor = AppColours.appBlue
+            titleLabel.text = title
+            titleLabel.backgroundColor = .white
+            view.addSubview(titleLabel)
+            titleLabel.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint(item: titleLabel, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 8).isActive = true
+            NSLayoutConstraint(item: titleLabel, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: -8).isActive = true
+            
+            return view
+        }
     }
 }
 

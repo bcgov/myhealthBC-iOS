@@ -145,12 +145,16 @@ extension StorageService: StorageMedicationManager {
             dispenseDate = timezoneDate
         } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dispensedDate ?? "") {
             dispenseDate = nozoneDate
+        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: object.dispensedDate ?? "") {
+            dispenseDate = simpleDate
         }
         
         if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dateEntered ?? "") {
             dateEntered = timezoneDate
         } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dateEntered ?? "") {
             dateEntered = nozoneDate
+        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: object.dateEntered ?? "") {
+            dateEntered = simpleDate
         }
         
         return storePrescription(
@@ -209,7 +213,12 @@ extension StorageService: StorageMedicationManager {
         gateWayResponse: AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary,
         initialProtectedMedFetch: Bool
     ) -> Medication? {
-        let drugDiscontinuedDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: gateWayResponse.drugDiscontinuedDate ?? "")
+        var drugDiscontinuedDate: Date?
+        if let zoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: gateWayResponse.drugDiscontinuedDate ?? "") {
+            drugDiscontinuedDate = zoneDate
+        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: gateWayResponse.drugDiscontinuedDate ?? "") {
+            drugDiscontinuedDate = simpleDate
+        }
         return storeMedication(din: gateWayResponse.din,
                                brandName: gateWayResponse.brandName,
                                genericName: gateWayResponse.genericName,
