@@ -258,13 +258,21 @@ extension RecordsFilter.RecordType {
     // Patient filters - set based on HealthRecordConstants.enabledTypes
     static var avaiableFilters: [RecordsFilter.RecordType] {
         guard let availableTypes = Defaults.enabledTypes?.datasets else { return [] }
-        return EnabledTypes.convertToFilterType(types: availableTypes)
+        var newTypes = availableTypes
+        if !HealthRecordConstants.notesEnabled {
+            newTypes = availableTypes.filter({ $0.getRecordFilterType != .Notes })
+        }
+        return EnabledTypes.convertToFilterType(types: newTypes)
     }
     
     // Dependent filters - set based on HealthRecordConstants.enabledDepententRecordTypes
     static var dependentFilters: [RecordsFilter.RecordType] {
         guard let availableTypes = Defaults.enabledTypes?.dependentDatasets else { return [] }
-        return EnabledTypes.convertToFilterType(types: availableTypes)
+        var newTypes = availableTypes
+        if !HealthRecordConstants.notesEnabled {
+            newTypes = availableTypes.filter({ $0.getRecordFilterType != .Notes })
+        }
+        return EnabledTypes.convertToFilterType(types: newTypes)
     }
 }
 
