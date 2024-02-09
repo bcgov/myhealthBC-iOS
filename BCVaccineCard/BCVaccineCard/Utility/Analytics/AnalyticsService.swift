@@ -11,7 +11,15 @@ import SnowplowTracker
 class AnalyticsService: NSObject, RequestCallback {
     public static let shared = AnalyticsService()
     
-    fileprivate let endPoint = "spt.apps.gov.bc.ca"
+    fileprivate var endPoint: String {
+#if PROD
+        return "spt.apps.gov.bc.ca"
+#elseif TEST
+        return "spm.apps.gov.bc.ca"
+#elseif DEV
+        return "spm.apps.gov.bc.ca"
+#endif
+    }
     fileprivate let namespace = "iOS"
     fileprivate let schema = "iglu:ca.bc.gov.gateway/action/jsonschema/1-0-0"
     fileprivate let schema2 = "iglu:ca.bc.gov.gateway/action/jsonschema/2-0-0"
