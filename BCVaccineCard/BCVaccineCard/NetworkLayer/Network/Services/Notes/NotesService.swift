@@ -23,7 +23,10 @@ struct NotesService {
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([Note]?)->Void) {
-        let shouldFetch = patient.isDependent() ? (Defaults.enabledTypes?.contains(dependentDataset: .Note) == true) : (Defaults.enabledTypes?.contains(dataset: .Note) == true)
+        var shouldFetch = patient.isDependent() ? (Defaults.enabledTypes?.contains(dependentDataset: .Note) == true) : (Defaults.enabledTypes?.contains(dataset: .Note) == true)
+        if !HealthRecordConstants.notesEnabled {
+            shouldFetch = false
+        }
         if !shouldFetch {return completion([])}
         network.addLoader(message: .SyncingRecords, caller: .Notes_fetchAndStore)
         fetch(for: patient) { response in

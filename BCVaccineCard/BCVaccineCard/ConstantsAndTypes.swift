@@ -56,9 +56,9 @@ struct HealthRecordConstants {
         return true
     }
     
-//    static var notesEnabled: Bool {
-//        return false
-//    }
+    static var notesEnabled: Bool {
+        return false
+    }
     
 //    static var diagnosticImagingEnabled: Bool {
 //        return true
