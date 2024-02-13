@@ -178,8 +178,8 @@ extension StorageService: StorageCovidTestResultManager {
         for record in records {
             // Note: For Amir - Adding this here as a fallback for computed propertied
             // FIXME: Remove the next two lines once we decide on how we are going to handle the new authenticated test result core data model
-            let collectionDateTime = record.collectionDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.collectionDateTime ?? "")
-            let resultDateTime = record.resultDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.resultDateTime ?? "")
+            let collectionDateTime = record.collectionDateTimeDate ?? record.collectionDateTime?.getGatewayDate()
+            let resultDateTime = record.resultDateTimeDate ?? record.resultDateTime?.getGatewayDate()
             if let resultModel = storeCovidTestResult(
                 resultId: id,
                 patientDisplayName: record.patientDisplayName,

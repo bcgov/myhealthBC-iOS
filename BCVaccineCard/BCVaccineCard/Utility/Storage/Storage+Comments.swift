@@ -176,17 +176,18 @@ extension StorageService: StorageCommentManager {
         if let versionInt = object.version {
             comment.version = Int64(versionInt)
         }
-        if let createdDateTime = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: object.createdDateTime ?? "") {
-            comment.createdDateTime = createdDateTime
-        } else if let simpleCreatedDate = Date.Formatter.yearMonthDay.date(from: object.createdDateTime ?? "") {
-            comment.createdDateTime = simpleCreatedDate
-        }
-        
-        if let updatedDateTime = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: object.updatedDateTime ?? "") {
-            comment.updatedDateTime = updatedDateTime
-        } else if let simpleUpdatedDateTime = Date.Formatter.yearMonthDay.date(from: object.updatedDateTime ?? "") {
-            comment.updatedDateTime = simpleUpdatedDateTime
-        }
+        comment.createdDateTime = object.createdDateTime?.getGatewayDate()
+//        if let createdDateTime = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: object.createdDateTime ?? "") {
+//            comment.createdDateTime = createdDateTime
+//        } else if let simpleCreatedDate = Date.Formatter.yearMonthDay.date(from: object.createdDateTime ?? "") {
+//            comment.createdDateTime = simpleCreatedDate
+//        }
+        comment.updatedDateTime = object.updatedDateTime?.getGatewayDate()
+//        if let updatedDateTime = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: object.updatedDateTime ?? "") {
+//            comment.updatedDateTime = updatedDateTime
+//        } else if let simpleUpdatedDateTime = Date.Formatter.yearMonthDay.date(from: object.updatedDateTime ?? "") {
+//            comment.updatedDateTime = simpleUpdatedDateTime
+//        }
         
         comment.id = object.id
         comment.userProfileID = object.userProfileID
