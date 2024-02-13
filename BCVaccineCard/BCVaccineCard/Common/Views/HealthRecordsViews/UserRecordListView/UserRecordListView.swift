@@ -104,10 +104,10 @@ class UserRecordListView: UIView {
         }
         
         switch record.type {
-//        case .hospitalVisit, .clinicalDocument:
-//            // records that dont show date
-//            recordTypeSubtitleLabel.text = statusToInclude
-        case .covidImmunizationRecord, .covidTestResultRecord, .medication, .healthVisit, .specialAuthorityDrug, .laboratoryOrder, .immunization, .diagnosticImaging, .cancerScreening, .note, .hospitalVisit, .clinicalDocument:
+        case .hospitalVisit, .clinicalDocument:
+            // records that dont show date
+            recordTypeSubtitleLabel.text = statusToInclude
+        case .covidImmunizationRecord, .covidTestResultRecord, .medication, .healthVisit, .specialAuthorityDrug, .laboratoryOrder, .immunization, .diagnosticImaging, .cancerScreening, .note:
             // records that show date
             var text: String
             if let statusToInclude = statusToInclude, statusToInclude.trimWhiteSpacesAndNewLines.count > 0 {
