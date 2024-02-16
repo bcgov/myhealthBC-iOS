@@ -368,11 +368,19 @@ extension String {
     func getGatewayDate() -> Date? {
         let formatted: Date?
         if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: self) {
-            formatted = timezoneDate
+            let epochDate = timezoneDate.timeIntervalSince1970
+            let timezoneOffset = TimeZone(identifier: "America/Vancouver")?.secondsFromGMT() ?? 0
+            let timezeonEpochOffset = (epochDate + Double(timezoneOffset))
+            let pstDate = Date(timeIntervalSince1970: timezeonEpochOffset)
+            formatted = pstDate
         } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: self) {
             formatted = nozoneDate
         } else if let withMillisenconds = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: self) {
-            formatted = withMillisenconds
+            let epochDate = withMillisenconds.timeIntervalSince1970
+            let timezoneOffset = TimeZone(identifier: "America/Vancouver")?.secondsFromGMT() ?? 0
+            let timezeonEpochOffset = (epochDate + Double(timezoneOffset))
+            let pstDate = Date(timeIntervalSince1970: timezeonEpochOffset)
+            formatted = pstDate
         } else if let commentDate = Date.Formatter.commentServerDateTime.date(from: self) {
             formatted = commentDate
         } else if let noteJournalDate = Date.Formatter.yearMonthDay.date(from: self) {
