@@ -23,6 +23,11 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var noRecordsFoundImageView: UIImageView!
     @IBOutlet weak private var noRecordsFoundTitle: UILabel!
     @IBOutlet weak private var noRecordsFoundSubTitle: UILabel!
+    @IBOutlet weak private var noRecordsStackViewVerticalConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var bcCancerInfoView: BCCancerInfoView!
+    @IBOutlet weak private var bcCancerInfoViewHeight: NSLayoutConstraint!
+    @IBOutlet weak private var bcCancerInfoViewTop: NSLayoutConstraint!
+    @IBOutlet weak private var bcCancerInfoViewBottom: NSLayoutConstraint!
     
     @IBOutlet weak private var clearFiltersButton: UIButton!
     @IBOutlet weak private var filterStack: UIStackView!
@@ -66,6 +71,10 @@ class UsersListOfRecordsViewController: BaseViewController {
                 }
             }
         }
+    }
+    
+    private var bcCancerInfoShown: Bool {
+        return self.currentFilter?.recordTypes.count == 1 && ((self.currentFilter?.recordTypes.contains(.CancerScreening)) != false) ? true : false
     }
     
     private var searchText: String?
@@ -127,11 +136,13 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundTitle.textColor = AppColours.appBlue
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
+        configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
         createNoteButton.isHidden = true
         fetchDataSource()
         if currentSegment == .Notes {
             // TODO: Update once we have folder structure built
             let patientRecords = fetchPatientRecords(for: .Notes)
+            print("CONNOR RECORDS: Notes", patientRecords.count)
             showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: self.searchText)
             if !patientRecords.isEmpty {
                 show(records: patientRecords, searchText: searchText)
@@ -149,6 +160,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         currentFilter = nil
         hideSelectedFilters()
         let patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: Remove filters", patientRecords.count)
         show(records: patientRecords, searchText: searchText)
     }
     
@@ -156,6 +168,18 @@ class UsersListOfRecordsViewController: BaseViewController {
         //TODO: Add to show route with proper ViewModel
         let vc = NoteViewController.construct(for: .AddNote, with: nil, existingNote: nil)
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: No Records Config
+extension UsersListOfRecordsViewController {
+    private func configureNoRecords(bcCancerInfo show: Bool) {
+        noRecordsStackViewVerticalConstraint.isActive = !show
+        bcCancerInfoViewHeight.constant = show ? 156 : 0
+        bcCancerInfoViewTop.constant = show ? 20 : 0
+        bcCancerInfoViewBottom.isActive = show
+        bcCancerInfoView.isHidden = !show
+        self.noRecordsFoundView.layoutIfNeeded()
     }
 }
 
@@ -203,7 +227,8 @@ extension UsersListOfRecordsViewController {
             guard let dependent = patient.dependencyInfo else { return }
             HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records, hadFails in
                 let message: String = !hadFails ? "Records retrieved" : "Not all records were fetched successfully"
-                self?.showToast(message: message)
+                // Note: Commenting this out due to client request
+//                self?.showToast(message: message)
                 SessionStorage.dependentRecordsFetched.append(patient)
                 self?.refreshControl.endRefreshing()
             }
@@ -321,7 +346,11 @@ extension UsersListOfRecordsViewController {
 extension UsersListOfRecordsViewController: SegmentedViewDelegate {
     
     private func setupSegmentedControl() {
-        if HealthRecordConstants.notesEnabled, viewModel?.userType != .Dependent {
+        guard HealthRecordConstants.notesEnabled else {
+            listOfRecordsSegmentedView.isHidden = true
+            return
+        }
+        if (Defaults.enabledTypes?.contains(dataset: .Note) == true), viewModel?.userType != .Dependent {
             listOfRecordsSegmentedView.isHidden = false
             listOfRecordsSegmentedView.configure(delegateOwner: self, dataSource: [.Timeline, .Notes])
         } else {
@@ -332,6 +361,7 @@ extension UsersListOfRecordsViewController: SegmentedViewDelegate {
     func segmentSelected(type: SegmentType) {
         currentSegment = type
         var patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: segment selected: ", type, patientRecords.count)
         if let searchText = searchText, searchText.trimWhiteSpacesAndNewLines.count > 0 {
             patientRecords = patientRecords.filter({ $0.title.lowercased().range(of: searchText.lowercased()) != nil })
         }
@@ -393,6 +423,7 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
     
     func searchButtonTapped(text: String) {
         let patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: Search button tapped", patientRecords.count)
         self.recordsSearchBarView.endEditing(true)
         show(records: patientRecords, filter: currentFilter, searchText: searchText)
     }
@@ -401,6 +432,7 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
         searchText = text
         if searchText == nil || searchText?.trimWhiteSpacesAndNewLines.count == 0 {
             let patientRecords = fetchPatientRecords(for: currentSegment)
+            print("CONNOR RECORDS: Search text did change", patientRecords.count)
             show(records: patientRecords, filter: currentFilter, searchText: searchText)
         }
     }
@@ -423,6 +455,7 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     
     func selected(filter: RecordsFilter) {
         let patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: Filter selected", patientRecords.count)
         currentFilter = filter
         show(records: patientRecords, filter:filter, searchText: searchText)
     }
@@ -488,6 +521,7 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
         guard let filter = userInfo["filter"] else { return }
         currentSegment = filter.recordTypes.contains(.Notes) ? .Notes : .Timeline
         let patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: apply quick link filter", patientRecords.count)
         currentFilter = filter
         if filter.recordTypes.contains(.Notes) {
             listOfRecordsSegmentedView.setSegmentedControl(forType: .Notes)
@@ -526,11 +560,14 @@ extension UsersListOfRecordsViewController {
             listOfRecordsSegmentedView.isHidden = true
         case .authenticated:
             setupSegmentedControl()
+            // TODO: Maybe remove this, and just fetch patient records anyways?
             guard self.dataSource.count == 0 else {
+                print("CONNOR RECORDS: Records not fetched here due to records already existing", self.dataSource.count)
                 show(records: self.dataSource, filter: currentFilter, searchText: searchText)
                 return
             }
             let patientRecords = fetchPatientRecords(for: currentSegment)
+            print("CONNOR RECORDS: fetch data source", patientRecords.count)
             show(records: patientRecords, filter: currentFilter, searchText: searchText)
         }
     }
@@ -593,6 +630,8 @@ extension UsersListOfRecordsViewController {
                         showItem = filter.recordTypes.contains(.ClinicalDocuments)
                     case .diagnosticImaging:
                         showItem = filter.recordTypes.contains(.DiagnosticImaging)
+                    case .cancerScreening:
+                        showItem = filter.recordTypes.contains(.CancerScreening)
                     case .note:
                         showItem = filter.recordTypes.contains(.Notes)
                     }
@@ -626,6 +665,9 @@ extension UsersListOfRecordsViewController {
         
         tableView.reloadData()
         noRecordsFoundView.isHidden = !patientRecords.isEmpty
+        if patientRecords.isEmpty {
+            configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
+        }
         tableView.isHidden = patientRecords.isEmpty
         recordsSearchBarView.isHidden = (((patientRecords.isEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
     }
@@ -641,6 +683,9 @@ extension UsersListOfRecordsViewController {
     private func showTimelineViews(patientRecordsEmpty: Bool, searchText: String?) {
         configureNoRecordsFoundView(for: .Timeline)
         noRecordsFoundView.isHidden = !patientRecordsEmpty
+        if patientRecordsEmpty {
+            configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
+        }
         tableView.isHidden = patientRecordsEmpty
         recordsSearchBarView.hideFilterSection = false
         recordsSearchBarView.isHidden = (((patientRecordsEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
@@ -650,6 +695,9 @@ extension UsersListOfRecordsViewController {
     private func showNotesViews(notesRecordsEmpty: Bool, searchText: String?) {
         configureNoRecordsFoundView(for: .Notes)
         noRecordsFoundView.isHidden = notesRecordsEmpty
+        if !notesRecordsEmpty {
+            configureNoRecords(bcCancerInfo: self.bcCancerInfoShown)
+        }
         tableView.isHidden = !notesRecordsEmpty
         recordsSearchBarView.endEditing(true)
         recordsSearchBarView.isHidden = (((notesRecordsEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
@@ -680,6 +728,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     private func setupTableView() {
         tableView.register(UINib.init(nibName: UserRecordListTableViewCell.getName, bundle: .main), forCellReuseIdentifier: UserRecordListTableViewCell.getName)
         tableView.register(UINib.init(nibName: HiddenRecordsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HiddenRecordsTableViewCell.getName)
+        tableView.register(UINib.init(nibName: BCCancerInfoTableViewCell.getName, bundle: .main), forCellReuseIdentifier: BCCancerInfoTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 84
         tableView.delegate = self
@@ -693,12 +742,14 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             return 1
         }
         
-        // Protective word not entered
-        if viewModel?.showProtectiveWordPrompt == true {
-            return 2
-        }
+        let protectiveWordCount: Int = viewModel?.showProtectiveWordPrompt == true ? 1 : 0
+        let bcCancerInfoCount: Int = self.bcCancerInfoShown == true ? 1 : 0
+//        // Protective word not entered
+//        if viewModel?.showProtectiveWordPrompt == true {
+//            return 2
+//        }
         
-        return 1
+        return 1 + protectiveWordCount + bcCancerInfoCount
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -712,6 +763,19 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
            section == 0 {
            return 1
         }
+    
+        if viewModel?.state == .authenticated,
+           bcCancerInfoShown == true {
+            if viewModel?.showProtectiveWordPrompt == true,
+               section == 1 {
+                return 1
+            }
+            if viewModel?.showProtectiveWordPrompt == false,
+               section == 0 {
+                return 1
+            }
+        }
+
         
         // Records
         return dataSource.count
@@ -748,6 +812,14 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         return cell
     }
     
+    private func getBCCancerInfoCell(indexPath: IndexPath) -> UITableViewCell {
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: BCCancerInfoTableViewCell.getName, for: indexPath) as? BCCancerInfoTableViewCell else {
+            return UITableViewCell()
+        }
+        return cell
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if viewModel?.state == .AuthExpired {
             return getLoginCell(indexPath: indexPath)
@@ -756,12 +828,16 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             return getProtectiveWordCell(indexPath: indexPath)
         }
         
+        if (viewModel?.showProtectiveWordPrompt == true && bcCancerInfoShown && indexPath.section == 1) || (viewModel?.showProtectiveWordPrompt == false && bcCancerInfoShown && indexPath.section == 0) {
+            return getBCCancerInfoCell(indexPath: indexPath)
+        }
         return recordCell(indexPath: indexPath)
         
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if viewModel?.showProtectiveWordPrompt == true, indexPath.section == 0 {
+        if (viewModel?.showProtectiveWordPrompt == true && indexPath.section == 0) ||
+            (viewModel?.showProtectiveWordPrompt == true && bcCancerInfoShown && indexPath.section == 1) || (viewModel?.showProtectiveWordPrompt == false && bcCancerInfoShown && indexPath.section == 0) {
             return
         }
         guard dataSource.count > indexPath.row else {return}
@@ -810,7 +886,9 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
     private func viewProtectedRecords(protectiveWord: String) {
         if protectiveWord.lowercased() == AuthManager().protectiveWord?.lowercased() {
             SessionStorage.protectiveWordEnteredThisSession = protectiveWord
-            show(records: fetchPatientRecords(for: currentSegment), filter: currentFilter, searchText: searchText)
+            let patientRecords = fetchPatientRecords(for: currentSegment)
+            print("CONNOR RECORDS: view protected records", patientRecords.count)
+            show(records: patientRecords, filter: currentFilter, searchText: searchText)
         } else {
             alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
                 self.promoptProtectedWord()
@@ -841,6 +919,7 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
 extension UsersListOfRecordsViewController {
     @objc private func refreshOnStorageUpdate() {
         let patientRecords = fetchPatientRecords(for: currentSegment)
+        print("CONNOR RECORDS: Refresh on storage update called", patientRecords.count)
         show(records: patientRecords, filter: currentFilter, searchText: searchText)
         if currentSegment == .Notes {
             showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: self.searchText)

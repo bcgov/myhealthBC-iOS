@@ -20,7 +20,8 @@ struct HealthVisitsService {
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([HealthVisit]?)->Void) {
-        if !HealthRecordConstants.enabledTypes.contains(.healthVisit) {return completion([])}
+        let shouldFetch = patient.isDependent() ? (Defaults.enabledTypes?.contains(dependentDataset: .HealthVisit) == true) : (Defaults.enabledTypes?.contains(dataset: .HealthVisit) == true)
+        if !shouldFetch {return completion([])}
         Logger.log(string: "Fetching HealthVisit records for \(patient.name)", type: .Network)
         network.addLoader(message: .SyncingRecords, caller: .HealthVisitsService_fetchAndStore)
         fetch(for: patient) { result in

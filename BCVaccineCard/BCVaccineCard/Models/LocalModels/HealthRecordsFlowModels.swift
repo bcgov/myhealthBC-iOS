@@ -27,6 +27,7 @@ struct HealthRecord {
         case HospitalVisit(HospitalVisit)
         case ClinicalDocument(ClinicalDocument)
         case DiagnosticImaging(DiagnosticImaging)
+        case CancerScreening(CancerScreening)
         case Note(Note)
     }
     
@@ -84,6 +85,10 @@ struct HealthRecord {
             patient = object.patient!
             patientName = patient.name ?? ""
             birthDate = patient.birthday
+        case .CancerScreening(let object):
+            patient = object.patient!
+            patientName = patient.name ?? ""
+            birthDate = patient.birthday
         case .Note(let object):
             patient = StorageService.shared.fetchPatient(hdid: object.hdid ?? "") ?? StorageService.shared.fetchAuthenticatedPatient()!
             patientName = patient.name ?? ""
@@ -114,6 +119,8 @@ extension HealthRecord {
         case .ClinicalDocument(let object):
             return object.id ?? ""
         case .DiagnosticImaging(let object):
+            return object.id ?? ""
+        case .CancerScreening(let object):
             return object.id ?? ""
         case .Note(let object):
             return object.id ?? ""
@@ -161,6 +168,8 @@ extension HealthRecord {
             return HealthRecordsDetailDataSource(type: .clinicalDocument(model: object))
         case .DiagnosticImaging(let object):
             return HealthRecordsDetailDataSource(type: .diagnosticImaging(model: object))
+        case .CancerScreening(let object):
+            return HealthRecordsDetailDataSource(type: .cancerScreening(model: object))
         case .Note(let object):
             return HealthRecordsDetailDataSource(type: .note(model: object))
         }
@@ -187,6 +196,8 @@ extension HealthRecord {
         case .ClinicalDocument(let object):
             return object.authenticated
         case . DiagnosticImaging(let object):
+            return true
+        case .CancerScreening(let object):
             return true
         case .Note(let object):
             return true
@@ -243,6 +254,8 @@ extension Array where Element == HealthRecord {
                 firstDate = model.serviceDate
             case .diagnosticImaging(model: let model):
                 firstDate = model.examDate
+            case .cancerScreening(model: let model):
+                firstDate = model.eventType == "Result" ? model.resultDateTime : model.eventDateTime
             case .note(model: let model):
                 firstDate = model.journalDate
             }
@@ -267,6 +280,8 @@ extension Array where Element == HealthRecord {
                 secondDate = model.serviceDate
             case .diagnosticImaging(model: let model):
                 secondDate = model.examDate
+            case .cancerScreening(model: let model):
+                secondDate = model.eventType == "Result" ? model.resultDateTime : model.eventDateTime
             case .note(model: let model):
                 secondDate = model.journalDate
             }
@@ -324,6 +339,11 @@ extension Array where Element == HealthRecord {
                 return false
             case .DiagnosticImaging(let object):
                 if recordType == .diagnosticImaging {
+                    return object.id == id
+                }
+                return false
+            case .CancerScreening(let object):
+                if recordType == .cancerScreening {
                     return object.id == id
                 }
                 return false

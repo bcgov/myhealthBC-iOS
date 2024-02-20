@@ -97,6 +97,8 @@ class UserRecordListView: UIView {
             statusToInclude = record.mainRecord?.listStatus
         case .diagnosticImaging:
             statusToInclude = record.mainRecord?.listStatus
+        case .cancerScreening:
+            statusToInclude = record.mainRecord?.listStatus
         case .note:
             statusToInclude = record.mainRecord?.listStatus
         }
@@ -105,7 +107,7 @@ class UserRecordListView: UIView {
         case .hospitalVisit, .clinicalDocument:
             // records that dont show date
             recordTypeSubtitleLabel.text = statusToInclude
-        case .covidImmunizationRecord, .covidTestResultRecord, .medication, .healthVisit, .specialAuthorityDrug, .laboratoryOrder, .immunization, .diagnosticImaging, .note:
+        case .covidImmunizationRecord, .covidTestResultRecord, .medication, .healthVisit, .specialAuthorityDrug, .laboratoryOrder, .immunization, .diagnosticImaging, .cancerScreening, .note:
             // records that show date
             var text: String
             if let statusToInclude = statusToInclude, statusToInclude.trimWhiteSpacesAndNewLines.count > 0 {

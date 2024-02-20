@@ -4,7 +4,6 @@
 //
 //  Created by Connor Ogilvie on 2021-10-11.
 //
-// TODO: 1.) Add in UI for OnboardingCollectionViewCell, and for this VC 2.) Remove old code from this VC, 3.) Test out
 
 import UIKit
 

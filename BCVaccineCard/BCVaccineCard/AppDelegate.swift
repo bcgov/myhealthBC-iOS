@@ -25,7 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var syncService: SyncService?
     var configService: MobileConfigService?
     
-    
     var coreDataContext: NSManagedObjectContext?
     
     fileprivate var dataLoadCount: Int = 0 
@@ -338,6 +337,7 @@ enum LoaderCaller {
     case PatientService_fetchAndStoreDetails
     case PatientService_fetchAndStoreOrganDonorStatus
     case PatientService_fetchAndStoreDiagnosticImaging
+    case PatientService_fetchAndStoreCancerScreening
     case PatientService_validateProfile
     case CovidTestsService_fetchAndStore
     case VaccineCardService_fetchAndStore_Patient
@@ -357,6 +357,7 @@ enum LoaderCaller {
     case PDFService_fetchPDF
     case PDFService_DonorStatus
     case PDFService_DiagnosticImaging
+    case PDFService_CancerScreening
     case CommentService_submitUnsyncedComments
     case CommentService_fetchAndStore
     case LabOrderService_fetchAndStore

@@ -154,6 +154,8 @@ extension StorageService: StorageCommentManager {
                 clinicalDoc.addToComments(comment)
             case .DiagnosticImaging(let diagnosticImaging):
                 diagnosticImaging.addToComments(comment)
+            case .CancerScreening(let cancerScreening):
+                cancerScreening.addToComments(comment)
             case .Note(let note):
                 break
             }
@@ -176,10 +178,16 @@ extension StorageService: StorageCommentManager {
         }
         if let createdDateTime = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: object.createdDateTime ?? "") {
             comment.createdDateTime = createdDateTime
+        } else if let simpleCreatedDate = Date.Formatter.yearMonthDay.date(from: object.createdDateTime ?? "") {
+            comment.createdDateTime = simpleCreatedDate
         }
+        
         if let updatedDateTime = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: object.updatedDateTime ?? "") {
             comment.updatedDateTime = updatedDateTime
+        } else if let simpleUpdatedDateTime = Date.Formatter.yearMonthDay.date(from: object.updatedDateTime ?? "") {
+            comment.updatedDateTime = simpleUpdatedDateTime
         }
+        
         comment.id = object.id
         comment.userProfileID = object.userProfileID
         comment.text = object.text
@@ -372,6 +380,9 @@ extension StorageService: StorageCommentManager {
             case .DiagnosticImaging(let diagnostiImaging):
                 diagnostiImaging.removeFromComments(oldComment)
                 diagnostiImaging.addToComments(newComment)
+            case .CancerScreening(let cancerScreening):
+                cancerScreening.removeFromComments(oldComment)
+                cancerScreening.addToComments(newComment)
             case .Note(let note):
                 break
             }
@@ -413,6 +424,8 @@ extension StorageService: StorageCommentManager {
                 clinicalDoc.removeFromComments(comment)
             case .DiagnosticImaging(let diagnosticImaging):
                 diagnosticImaging.removeFromComments(comment)
+            case .CancerScreening(let cancerScreening):
+                cancerScreening.removeFromComments(comment)
             case .Note(let note):
                 break
             }

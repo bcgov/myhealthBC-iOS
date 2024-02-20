@@ -12,34 +12,34 @@ struct UXConstants {
         return false
     }
 }
-
+// TODO: Switch from using this to using feature toggle
 struct HealthRecordConstants {
     // ENABLE AND DISABLE PRIMARY PATIENT RECORD TYPES
-    static var enabledTypes: [RecordType] {
-        var types: [RecordType] = [
-            .covidImmunizationRecord,
-            .covidTestResultRecord,
-            .medication,
-            .laboratoryOrder,
-            .immunization,
-            .healthVisit,
-            .specialAuthorityDrug,
-            .hospitalVisit,
-            .clinicalDocument,
-            .diagnosticImaging
-        ]
-        if !HealthRecordConstants.notesEnabled {
-            if let index = types.firstIndex(of: .notes) {
-                types.remove(at: index)
-            }
-        }
-        return types
-    }
+//    static var enabledTypes: [RecordType] {
+//        var types: [RecordType] = [
+//            .covidImmunizationRecord,
+//            .covidTestResultRecord,
+//            .medication,
+//            .laboratoryOrder,
+//            .immunization,
+//            .healthVisit,
+//            .specialAuthorityDrug,
+//            .hospitalVisit,
+//            .clinicalDocument,
+//            .diagnosticImaging
+//        ]
+//        if !HealthRecordConstants.notesEnabled {
+//            if let index = types.firstIndex(of: .notes) {
+//                types.remove(at: index)
+//            }
+//        }
+//        return types
+//    }
     
     // ENABLE AND DISABLE DEPENDENT RECORD TYPES
-    static var enabledDepententRecordTypes: [RecordType] {
-        return [.covidTestResultRecord, .immunization]
-    }
+//    static var enabledDepententRecordTypes: [RecordType] {
+//        return [.covidTestResultRecord, .immunization]
+//    }
     
     // ENABLE AND DISABLE COMMENTS
     static var commentsEnabled: Bool {
@@ -60,9 +60,9 @@ struct HealthRecordConstants {
         return false
     }
     
-    static var diagnosticImagingEnabled: Bool {
-        return true
-    }
+//    static var diagnosticImagingEnabled: Bool {
+//        return true
+//    }
     
     static var guardianAuditEnabled: Bool {
         return false
@@ -75,7 +75,7 @@ extension HealthRecordsDetailDataSource.Record {
     var commentsEnabled: Bool {
         if !HealthRecordConstants.commentsEnabled { return false}
         switch self.type {
-        case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging : return true
+        case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging, .cancerScreening : return true
             default: return false
         }
     }
@@ -104,6 +104,7 @@ extension HealthRecordConstants {
         case hospitalVisit
         case clinicalDocument
         case diagnosticImaging
+        case cancerScreening
         case notes
     }
 }
@@ -121,6 +122,7 @@ extension StorageService {
         case HospitalVisit
         case ClinicalDocument
         case DiagnosticImaging
+        case CancerScreening
         case Notes
     }
 }
@@ -148,6 +150,8 @@ extension HealthRecordConstants.RecordType {
             return .ClinicalDocuments
         case .diagnosticImaging:
             return .DiagnosticImaging
+        case .cancerScreening:
+            return .CancerScreening
         case .notes:
             return .Notes
         }
@@ -175,6 +179,8 @@ extension HealthRecordConstants.RecordType {
             return .ClinicalDocument
         case .diagnosticImaging:
             return .DiagnosticImaging
+        case .cancerScreening:
+            return .CancerScreening
         case .notes:
             return .Notes
         }
@@ -192,6 +198,7 @@ struct RecordsFilter {
         case SpecialAuthorityDrugs = "Special Authority"
         case HospitalVisits = "Hospital Visits"
         case DiagnosticImaging = "Imaging reports"
+        case CancerScreening = "BC Cancer Screening"
         case Notes = "Notes"
     }
     
@@ -215,6 +222,7 @@ enum NotificationCategory: String {
     case Medication = "Medications"
     case HospitalVisits = "HospitalVisit"
     case DiagnosticImaging = "DiExam"
+    case CancerScreening = "CancerScreening" //TODO: Connor check this out
 }
 
 extension NotificationCategory {
@@ -240,6 +248,8 @@ extension NotificationCategory {
             return RecordsFilter.RecordType.HospitalVisits
         case .DiagnosticImaging:
             return RecordsFilter.RecordType.DiagnosticImaging
+        case .CancerScreening:
+            return RecordsFilter.RecordType.CancerScreening
         }
     }
 }
@@ -247,14 +257,22 @@ extension NotificationCategory {
 extension RecordsFilter.RecordType {
     // Patient filters - set based on HealthRecordConstants.enabledTypes
     static var avaiableFilters: [RecordsFilter.RecordType] {
-        let availableTypes = HealthRecordConstants.enabledTypes
-        return availableTypes.compactMap({$0.toRecordsFilterType()})
+        guard let availableTypes = Defaults.enabledTypes?.datasets else { return [] }
+        var newTypes = availableTypes
+        if !HealthRecordConstants.notesEnabled {
+            newTypes = availableTypes.filter({ $0.getRecordFilterType != .Notes })
+        }
+        return EnabledTypes.convertToFilterType(types: newTypes)
     }
     
     // Dependent filters - set based on HealthRecordConstants.enabledDepententRecordTypes
     static var dependentFilters: [RecordsFilter.RecordType] {
-        let availableTypes = HealthRecordConstants.enabledDepententRecordTypes
-        return availableTypes.compactMap({$0.toRecordsFilterType()})
+        guard let availableTypes = Defaults.enabledTypes?.dependentDatasets else { return [] }
+        var newTypes = availableTypes
+        if !HealthRecordConstants.notesEnabled {
+            newTypes = availableTypes.filter({ $0.getRecordFilterType != .Notes })
+        }
+        return EnabledTypes.convertToFilterType(types: newTypes)
     }
 }
 

@@ -271,8 +271,8 @@ extension LabOrderRecordDetailView {
             return ("Cancelled", .black, false)
         } else if test.testStatus == "Completed" || test.testStatus == "Corrected" {
             let text = test.outOfRange ? "Out of Range" : "In Range"
-            let color: TextProperties.CodableColors = test.outOfRange ? .red : .green
-            return (text, color, true)
+//            let color: TextProperties.CodableColors = test.outOfRange ? .red : .green
+            return (text, .black, false)
         }
         
         return ("Unknown", .black, false)

@@ -144,7 +144,7 @@ extension HealthRecordDetailViewController {
             rightNavButton = nil
         }
         
-        self.navDelegate?.setNavigationBarWith(title: dataSource.title,
+        self.navDelegate?.setNavigationBarWith(title: dataSource.detailNavTitle,
                                                leftNavButton: nil,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,
@@ -177,6 +177,8 @@ extension HealthRecordDetailViewController {
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             case .diagnosticImaging:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
+            case .cancerScreening:
+                Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             case .note:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             }
@@ -200,7 +202,7 @@ extension HealthRecordDetailViewController {
 extension HealthRecordDetailViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         switch type {
-        case .viewPDF, .downloadFullReport:
+        case .viewPDF, .downloadFullReport, .viewLetter, .viewResults:
             showPDF()
         default:
             break
@@ -238,6 +240,19 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
                     self.showPDFUnavailableAlert()
                 }
             })
+        case .cancerScreening(model: let model):
+            PDFService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchPDFCancer(cancerScreening: model, patient: patient, completion: { [weak self] result, online in
+                guard let `self` = self else {return}
+                if let pdf = result {
+                    self.pdfData = pdf
+                    self.addAnalyticsForCancerScreeningPDF(model: model)
+                    self.showPDFDocument(pdf: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                } else if online == false {
+                    // Show nothing, as there will be a toast
+                } else {
+                    self.showPDFUnavailableAlert()
+                }
+            })
         default:
             PDFService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchPDF(record: dataSource, patient: patient, completion: { [weak self] result in
                 guard let `self` = self else {return}
@@ -249,6 +264,17 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
                 }
             })
         }
+    }
+    
+    private func addAnalyticsForCancerScreeningPDF(model: CancerScreening) {
+        let propertyType: AnalyticsAdditionalProperties.AnalyticsAdditionalPropertiesValues = model.eventType == "Result" ? .result : .recall
+        let additionalProperties: [AnalyticsAdditionalProperties] = [
+            AnalyticsAdditionalProperties(key: .dataset, value: .bcCancer),
+            AnalyticsAdditionalProperties(key: .type, value: propertyType),
+            AnalyticsAdditionalProperties(key: .format, value: .pdf),
+            AnalyticsAdditionalProperties(key: .actor, value: .user)
+        ]
+        AnalyticsService.shared.track(action: .Download, text: .Document, additionalProperties: additionalProperties)
     }
 }
 

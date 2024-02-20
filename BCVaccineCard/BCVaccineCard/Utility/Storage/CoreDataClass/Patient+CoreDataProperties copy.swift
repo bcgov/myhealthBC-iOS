@@ -34,6 +34,7 @@ extension Patient {
     @NSManaged public var dependencyInfo: Dependent?
     @NSManaged public var dependents: NSSet?
     @NSManaged public var diagnosticImaging: NSSet?
+    @NSManaged public var cancerScreening: NSSet?
     @NSManaged public var healthVisits: NSSet?
     @NSManaged public var hospitalVisits: NSSet?
     @NSManaged public var immunizations: NSSet?
@@ -132,6 +133,23 @@ extension Patient {
 
     @objc(removeDiagnosticImaging:)
     @NSManaged public func removeFromDiagnosticImaging(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for cancerScreening
+extension Patient {
+
+    @objc(addCancerScreeningObject:)
+    @NSManaged public func addToCancerScreening(_ value: CancerScreening)
+
+    @objc(removeCancerScreeningObject:)
+    @NSManaged public func removeFromCancerScreening(_ value: CancerScreening)
+
+    @objc(addCancerScreening:)
+    @NSManaged public func addToCancerScreening(_ values: NSSet)
+
+    @objc(removeCancerScreening:)
+    @NSManaged public func removeFromCancerScreening(_ values: NSSet)
 
 }
 

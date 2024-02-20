@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BCCancerInfoView" customModule="HealthGateway" customModuleProvider="target">
+            <connections>
+                <outlet property="containerView" destination="Tfk-Ov-b6o" id="zqR-am-Tpg"/>
+                <outlet property="contentView" destination="iN0-l3-epB" id="NhE-Mr-fpb"/>
+                <outlet property="infoIconImageView" destination="z0B-L6-sfi" id="nzJ-cM-tPr"/>
+                <outlet property="infoTextView" destination="cgy-HI-GZs" id="hRD-DM-15s"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="280" height="156"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tfk-Ov-b6o">
+                    <rect key="frame" x="0.0" y="0.0" width="280" height="156"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="z0B-L6-sfi">
+                            <rect key="frame" x="15" y="15" width="24" height="24"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="24" id="RlT-HN-dbF"/>
+                                <constraint firstAttribute="width" secondItem="z0B-L6-sfi" secondAttribute="height" multiplier="1:1" id="toJ-JP-DeU"/>
+                            </constraints>
+                        </imageView>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="cgy-HI-GZs">
+                            <rect key="frame" x="49" y="15" width="216" height="126"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <string key="text">Only BC Cancer cervix screening letters are available here. Your Health Gateway timeline may include these and other screening test results in lab or imaging reports. Learn more</string>
+                            <color key="textColor" systemColor="labelColor"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="z0B-L6-sfi" firstAttribute="leading" secondItem="Tfk-Ov-b6o" secondAttribute="leading" constant="15" id="3Bo-sN-l59"/>
+                        <constraint firstAttribute="bottom" secondItem="cgy-HI-GZs" secondAttribute="bottom" constant="15" id="5ka-jm-Obb"/>
+                        <constraint firstItem="z0B-L6-sfi" firstAttribute="top" secondItem="Tfk-Ov-b6o" secondAttribute="top" constant="15" id="9dc-BK-Zpc"/>
+                        <constraint firstAttribute="trailing" secondItem="cgy-HI-GZs" secondAttribute="trailing" constant="15" id="Gsa-HV-emZ"/>
+                        <constraint firstItem="cgy-HI-GZs" firstAttribute="leading" secondItem="z0B-L6-sfi" secondAttribute="trailing" constant="10" id="okk-mT-pgj"/>
+                        <constraint firstItem="cgy-HI-GZs" firstAttribute="top" secondItem="z0B-L6-sfi" secondAttribute="top" id="toy-ze-gnE"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="Tfk-Ov-b6o" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="2Ss-Lz-9DX"/>
+                <constraint firstItem="Tfk-Ov-b6o" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="LRh-Xb-MJi"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Tfk-Ov-b6o" secondAttribute="trailing" id="Zfw-eb-JPi"/>
+                <constraint firstAttribute="bottom" secondItem="Tfk-Ov-b6o" secondAttribute="bottom" id="seh-Vp-P6k"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="134" y="21"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

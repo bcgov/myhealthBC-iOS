@@ -11,9 +11,18 @@ import SnowplowTracker
 class AnalyticsService: NSObject, RequestCallback {
     public static let shared = AnalyticsService()
     
-    fileprivate let endPoint = "spt.apps.gov.bc.ca"
+    fileprivate var endPoint: String {
+#if PROD
+        return "spt.apps.gov.bc.ca"
+#elseif TEST
+        return "spm.apps.gov.bc.ca"
+#elseif DEV
+        return "spm.apps.gov.bc.ca"
+#endif
+    }
     fileprivate let namespace = "iOS"
     fileprivate let schema = "iglu:ca.bc.gov.gateway/action/jsonschema/1-0-0"
+    fileprivate let schema2 = "iglu:ca.bc.gov.gateway/action/jsonschema/2-0-0"
     
     fileprivate let userDefaultsKey = "analyticsEnabled"
     
@@ -68,6 +77,23 @@ class AnalyticsService: NSObject, RequestCallback {
         let actionString = action.rawValue
         let actionTextString = text.rawValue
         let event = SelfDescribing(schema: schema, payload: ["action": actionString as NSObject, "text": actionTextString as NSObject])
+        tracker?.track(event)
+    }
+    
+    /// Track an action with a pre-defined text in AnalyticsText along with additional values
+    /// - Parameters:
+    ///   - action: AnalyticsAction enum describing the event
+    ///   - text: AnalyticsText enum destribing the action
+    ///   - additionalProperties: AnalyticsAdditionalProperties struct describing additional keys and values for the event
+    public func track(action: AnalyticsAction, text: AnalyticsText, additionalProperties: [AnalyticsAdditionalProperties]) {
+        let actionString = action.rawValue
+        let actionTextString = text.rawValue
+        var payload: [String: NSObject] = ["action": actionString as NSObject, "text": actionTextString as NSObject]
+        for property in additionalProperties {
+            payload[property.key.rawValue] = property.value.rawValue as NSObject
+        }
+        // NOTE: This will have to be reworked to support other schema's - using schema2 for now for BC Cancer
+        let event = SelfDescribing(schema: schema2, payload: payload)
         tracker?.track(event)
     }
     

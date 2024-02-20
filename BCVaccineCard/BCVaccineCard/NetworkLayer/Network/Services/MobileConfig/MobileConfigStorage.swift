@@ -76,7 +76,7 @@ struct MobileConfigStorage {
         }
         return idString
     }
-    
+    // TODO: Maybe look into storing some default values for types?
     public static var offlineConfig: MobileConfigurationResponseObject {
         let authConfig = AuthenticationConfig(endpoint: authEndpoint,
                                               identityProviderID: authIdentityProviderID,
@@ -85,7 +85,10 @@ struct MobileConfigStorage {
         return MobileConfigurationResponseObject(online: false,
                                                  baseURL: baseURL,
                                                  authentication: authConfig,
-                                                 version: version)
+                                                 version: version,
+                                                 datasets: [],
+                                                 dependentDatasets: [],
+                                                 services: [])
     }
     
     public static func store(config: MobileConfigurationResponseObject) {

@@ -101,7 +101,7 @@ class CommunicationBannerCollectionViewCell: UICollectionViewCell {
 
     private func style() {
         layoutIfNeeded()
-        container.backgroundColor = UIColor(red: 0.851, green: 0.918, blue: 0.969, alpha: 1)
+        container.backgroundColor = AppColours.bannerBlue
         container.layer.cornerRadius = 10
 
         titleLabel.textColor = AppColours.blueLightText

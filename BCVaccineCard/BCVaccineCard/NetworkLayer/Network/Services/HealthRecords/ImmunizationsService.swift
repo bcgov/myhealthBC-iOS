@@ -74,7 +74,8 @@ extension ImmnunizationsService {
         }
         
         guard currentAttempt < maxRetry else {
-            network.showToast(message: .fetchRecordError, style: .Warn)
+            // Note: Commenting this out due to client request
+//            network.showToast(message: .fetchRecordError, style: .Warn)
             return completion(nil)
         }
         

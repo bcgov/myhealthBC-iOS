@@ -26,7 +26,7 @@ extension ManageHomeScreenViewController {
                 storedQuickLinks = QuickLinksPreferences.constructEmptyPreferences()
                 return 
             }
-            storedQuickLinks = Defaults.getStoresPreferencesFor(phn: phn)
+            storedQuickLinks = Defaults.getStoredPreferencesFor(phn: phn)
             if storedQuickLinks.isEmpty {
                 storedQuickLinks = QuickLinksPreferences.constructEmptyPreferences()
             }
@@ -35,7 +35,7 @@ extension ManageHomeScreenViewController {
             
             var recordsOrder: [QuickLinksPreferences.QuickLinksNames] = []
             
-            if HealthRecordConstants.notesEnabled {
+            if Defaults.enabledTypes?.contains(dataset: .Note) == true && HealthRecordConstants.notesEnabled == true {
                 recordsOrder.append(.MyNotes)
             }
             
@@ -48,7 +48,8 @@ extension ManageHomeScreenViewController {
                 .HospitalVisits,
                 .HealthVisits,
                 .ClinicalDocuments,
-                .ImagingReports
+                .ImagingReports,
+                .BCCancerScreening
             ])
             
             let healthRecords = constructSectionTypes(storedPreferences: storedQuickLinks, for: .HealthRecord, order: recordsOrder)
@@ -82,17 +83,28 @@ extension ManageHomeScreenViewController {
         private func constructSectionTypes(storedPreferences: [QuickLinksPreferences],
                                            for type: QuickLinksPreferences.QuickLinksNames.Section,
                                            order: [QuickLinksPreferences.QuickLinksNames]) -> [QuickLinksPreferences] {
-            let adjustedPreferences = storedPreferences.filter { $0.name.getSection == type }
+            let toggleEnabledFeatures: [QuickLinksPreferences.QuickLinksNames]
+            switch type {
+            case .HealthRecord:
+                toggleEnabledFeatures = QuickLinksPreferences.convertFeatureToggleToQuickLinksPreferences(for: .HealthRecord)
+            case .Service:
+                toggleEnabledFeatures = QuickLinksPreferences.convertFeatureToggleToQuickLinksPreferences(for: .Service)
+            }
+            var adjustedPreferences = storedPreferences.filter { $0.name.getSection == type }
             let ds: [QuickLinksPreferences] = order.map { name in
                 if let index = adjustedPreferences.firstIndex(where: { $0.name == name }) {
+                    let isFeatureToggleEnabled = QuickLinksPreferences.isFeatureEnabled(feature: name, enabledTypes: toggleEnabledFeatures)
+                    adjustedPreferences[index].includedInFeatureToggle = isFeatureToggleEnabled
                     return adjustedPreferences[index]
                 } else {
-                    // Should never get here, but we should find a better way to satisfy this constraint
-                    return QuickLinksPreferences(name: .MyNotes, enabled: false)
+                    // Should never get here because all records are stored, but we should find a better way to satisfy this constraint
+                    return QuickLinksPreferences(name: name, enabled: false, includedInFeatureToggle: QuickLinksPreferences.isFeatureEnabled(feature: name, enabledTypes: toggleEnabledFeatures))
                 }
             }
             return ds
         }
+        
+        
     }
     
     enum DataSource {

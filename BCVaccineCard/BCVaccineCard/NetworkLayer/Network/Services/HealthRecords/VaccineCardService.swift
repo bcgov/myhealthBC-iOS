@@ -149,7 +149,9 @@ extension VaccineCardService {
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: .fetchRecordError, style: .Warn)
+                    // Note: Commenting this out due to client request
+//                    network.showToast(message: .fetchRecordError, style: .Warn)
+                    print("Do Nothing")
                 default:
                     break
                 }
@@ -182,7 +184,6 @@ extension VaccineCardService {
             let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, VaccineCardsResponse>(url: endpoints.vaccineCardAuthenticated(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
-            
             { result in
                 Logger.log(string: "Network VaccineCard Result received", type: .Network)
                 if (result?.resourcePayload) != nil {
@@ -194,7 +195,9 @@ extension VaccineCardService {
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: .fetchRecordError, style: .Warn)
+                    // Note: Commenting this out due to client request
+//                    network.showToast(message: .fetchRecordError, style: .Warn)
+                    print("Do Nothing")
                 default:
                     break
                 }

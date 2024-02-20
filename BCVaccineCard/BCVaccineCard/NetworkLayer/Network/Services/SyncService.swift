@@ -36,11 +36,12 @@ struct SyncService {
         SessionStorage.syncPerformedThisSession = true
         
         // API status
-        MobileConfigService(network: network).fetchConfig { config in
+        MobileConfigService(network: network).fetchConfig(forceNetworkRefetch: true) { config in
             guard let config = config, config.online else {
                 return completion(nil)
             }
             
+//            Defaults.enabledTypes = config.getEnabledTypes()
             // Submit comments before removing all records
             let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
             commentsService.submitUnsyncedComments {
@@ -63,7 +64,8 @@ struct SyncService {
         let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
         let notificationService = NotificationService(network: network, authManager: authManager, configService: configService)
         if showToast {
-            network.showToast(message: .retrievingRecords)
+            // Note: Commenting this out due to client request
+//            network.showToast(message: .retrievingRecords)
         }
         AppDelegate.sharedInstance?.cachedCommunicationPreferences = nil
         patientService.fetchAndStoreDetails { patient in
@@ -75,22 +77,35 @@ struct SyncService {
             var hadFailures = false
             let group = DispatchGroup()
             
-            group.enter()
-            patientService.fetchAndStoreOrganDonorStatus(for: patient) { status in
-                if status == nil {
-                    hadFailures = true
+            if Defaults.enabledTypes?.contains(service: .OrganDonorRegistration) == true {
+                group.enter()
+                patientService.fetchAndStoreOrganDonorStatus(for: patient) { status in
+//                    if status == nil {
+//                        hadFailures = true
+//                    }
+                    Logger.log(string: "\(String.fetchedDonorStatus) \(status != nil)", type: .Network)
+                    group.leave()
                 }
-                Logger.log(string: "\(String.fetchedDonorStatus) \(status != nil)", type: .Network)
-                group.leave()
             }
             
-            if HealthRecordConstants.diagnosticImagingEnabled {
+            if Defaults.enabledTypes?.contains(dataset: .DiagnosticImaging) == true {
                 group.enter()
                 patientService.fetchAndStoreDiagnosticImaging(for: patient) { imaging in
-                    if imaging == nil {
-                        hadFailures = true
-                    }
+//                    if imaging == nil {
+//                        hadFailures = true
+//                    }
                     Logger.log(string: "\(String.fetchedDiagnosticImaging) \(imaging?.count)", type: .Network)
+                    group.leave()
+                }
+            }
+            
+            if Defaults.enabledTypes?.contains(dataset: .BcCancerScreening) == true {
+                group.enter()
+                patientService.fetchAndStoreCancerScreening(for: patient) { cancerScreening in
+//                    if cancerScreening == nil {
+//                        hadFailures = true
+//                    }
+                    Logger.log(string: "\(String.fetchedCancerScreening) \(cancerScreening?.count)", type: .Network)
                     group.leave()
                 }
             }
@@ -130,10 +145,11 @@ struct SyncService {
             group.notify(queue: .main) {
                 let message: String = !hadFailures ? .recordsRetrieved : .fetchRecordError
                 
+                // Note: Commenting this out due to client request
                 if showToast {
-                    network.showToast(message: message)
+//                    network.showToast(message: message)
                 } else if hadFailures {
-                    network.showToast(message: message, style: .Warn)
+//                    network.showToast(message: message, style: .Warn)
                 }
                 
                 return completion(patient)

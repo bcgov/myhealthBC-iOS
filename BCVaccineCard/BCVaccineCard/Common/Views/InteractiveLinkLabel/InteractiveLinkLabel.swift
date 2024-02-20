@@ -139,7 +139,13 @@ class InteractiveLinkLabel: UILabel {
         for linkedString in linkedStrings {
             let range = (string as NSString).range(of: linkedString.text)
             if let url = URL(string: linkedString.link) {
-                let linkAttribute: [NSAttributedString.Key: Any] = [NSAttributedString.Key.link: url]
+                var linkAttribute: [NSAttributedString.Key: Any] = [
+                    NSAttributedString.Key.link: url
+                ]
+                if linkedString.underlined {
+                    linkAttribute[NSAttributedString.Key.underlineStyle] = NSUnderlineStyle.single.rawValue
+                    linkAttribute[NSAttributedString.Key.underlineColor] = UIColor.systemBlue
+                }
                 attributedString.addAttributes(linkAttribute, range: range)
             }
         }

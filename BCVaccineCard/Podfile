@@ -33,6 +33,29 @@ target 'HealthGatewayDev' do
 
 end
 
+target 'HealthGatewayTest' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for BCVaccineCard
+  pod 'IQKeyboardManagerSwift'
+  pod 'QueueITLibrary', '~> 3.0.3'
+  pod "AlamofireRSSParser"
+  pod 'SnowplowTracker', '~> 2.0'
+  pod 'SwiftyJSON', '~> 4.0'
+  pod 'SwiftQRCodeGenerator', '~> 1.0.3'
+  pod 'PocketSVG', '~> 2.6'
+  pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator', :branch => 'legacyy'
+  pod 'EncryptedCoreData', :git => 'https://github.com/project-imas/encrypted-core-data.git'
+  pod 'KeychainAccess'
+  pod 'AppAuth'
+  pod 'JWTDecode', '~> 2.6'
+  pod 'ReachabilitySwift'
+  pod 'SwiftyJSON', '~> 4.0'
+  pod 'SwipeCellKit'
+
+end
+
 target 'HealthGateway' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!

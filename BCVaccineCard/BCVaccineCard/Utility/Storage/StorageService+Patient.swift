@@ -193,6 +193,58 @@ extension StorageService: StoragePatientManager {
         }
     }
     
+    func store(
+        cancerScreeningArray objectArray: [CancerScreeningResponse],
+        for patient: Patient
+    ) -> [CancerScreening]? {
+        guard let context = managedContext,
+              let phn = patient.phn,
+              let patientRefetch = fetchPatient(phn: phn, context: context) else {
+            return nil
+        }
+        var storedObjects: [CancerScreening] = []
+        for object in objectArray {
+            if let storedDiagnosticImage = store(cancerScreening: object, for: patientRefetch, context: context) {
+                storedObjects.append(storedDiagnosticImage)
+            }
+        }
+        return storedObjects
+    }
+    
+    private func store(cancerScreening object: CancerScreeningResponse, for patient: Patient, context: NSManagedObjectContext) -> CancerScreening? {
+        
+        let model = CancerScreening(context: context)
+        model.eventType = object.eventType
+        model.programName = object.programName
+        model.fileID = object.fileID
+        model.eventDateTime = object.eventDateTime?.getGatewayDate()
+        model.resultDateTime = object.resultDateTime?.getGatewayDate()
+        model.itemType = object.itemType
+        model.id = object.id
+        model.type = object.type
+        model.patient = patient
+        do {
+            try context.save()
+            notify(event: StorageEvent(event: .Save, entity: .CancerScreening, object: patient))
+            return model
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return nil
+        }
+    }
+    
+    func fetchCancerScreening() -> [CancerScreening] {
+        guard let context = managedContext else {return []}
+        do {
+            return try context.fetch(CancerScreening.fetchRequest())
+        } catch let error as NSError {
+            Logger.log(string: "Could not fetch. \(error), \(error.userInfo)", type: .storage)
+            return []
+        }
+    }
+    
+    
+    
     /// returns existing patient
     /// or
     /// creates and returns a new one if it doesnt exist.

@@ -20,6 +20,7 @@ struct HealthRecordsDetailDataSource {
             case hospitalVisit(model: HospitalVisit)
             case clinicalDocument(model: ClinicalDocument)
             case diagnosticImaging(model: DiagnosticImaging)
+            case cancerScreening(model: CancerScreening)
             case note(model: Note)
         }
         let id: String
@@ -52,6 +53,8 @@ struct HealthRecordsDetailDataSource {
                 return model.commentsArray
             case .diagnosticImaging(model: let model):
                 return model.commentsArray
+            case .cancerScreening(model: let model):
+                return model.commentsArray
             case .note(model: let model):
                 return []
             }
@@ -60,7 +63,7 @@ struct HealthRecordsDetailDataSource {
         var includesSeparatorUI: Bool {
             switch self.type {
             case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder, .immunization: return true
-            case .medication, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging, .note: return false
+            case .medication, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging, .cancerScreening, .note: return false
             }
         }
     }
@@ -76,6 +79,7 @@ struct HealthRecordsDetailDataSource {
         case hospitalVisit(model: HospitalVisit)
         case clinicalDocument(model:ClinicalDocument)
         case diagnosticImaging(model: DiagnosticImaging)
+        case cancerScreening(model: CancerScreening)
         case note(model: Note)
     }
     
@@ -118,6 +122,8 @@ struct HealthRecordsDetailDataSource {
             return records.first
         case .diagnosticImaging(model: let model):
             return records.first
+        case .cancerScreening(model: let model):
+            return records.first
         case .note:
             return records.first
         }
@@ -146,6 +152,8 @@ struct HealthRecordsDetailDataSource {
         case .diagnosticImaging(model: let model):
             // Pretty sure we can't get diagnostic reports without being authenticated
             return true
+        case .cancerScreening(model: let model):
+            return true
         case .note(model: let model):
             return true
         }
@@ -163,6 +171,7 @@ struct HealthRecordsDetailDataSource {
                 .hospitalVisit,
                 .clinicalDocument,
                 .diagnosticImaging,
+                .cancerScreening,
                 .note:
             return false
         case .medication:
@@ -181,7 +190,8 @@ struct HealthRecordsDetailDataSource {
         case .covidImmunizationRecord(let model, _):
             id = model.id
             title = .covid19vaccination
-            detailNavTitle = .vaccinationRecord
+//            detailNavTitle = .vaccinationRecord
+            detailNavTitle = .covid19vaccination
             name = model.name
             image = UIImage(named: "blue-bg-vaccine-record-icon")
             deleteAlertTitle = .deleteRecord
@@ -205,7 +215,8 @@ struct HealthRecordsDetailDataSource {
         case .laboratoryOrder(model: let model):
             id = model.id
             title = model.commonName ?? "-"
-            detailNavTitle = "Lab test"
+//            detailNavTitle = "Lab test"
+            detailNavTitle = model.commonName ?? "-"
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-test-result-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated lab result
@@ -223,7 +234,8 @@ struct HealthRecordsDetailDataSource {
         case .healthVisit(model: let model):
             id = model.id
             title = model.specialtyDescription ?? "-"
-            detailNavTitle = model.clinic?.name ?? "-"
+//            detailNavTitle = model.clinic?.name ?? "-"
+            detailNavTitle = model.specialtyDescription ?? "-"
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-health-visit-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
@@ -266,10 +278,22 @@ struct HealthRecordsDetailDataSource {
             
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
+        case .cancerScreening(model: let model):
+            id = model.id
+            let text = model.eventType == "Result" ? "BC Cancer Screening Result Letter" : "BC Cancer Screening Reminder Letter"
+            title = text
+            let detailText = model.eventType == "Result" ? "BC Cancer screening result letter" : "BC Cancer screening reminder letter"
+            detailNavTitle = detailText
+            name = model.patient?.name ?? "-"
+            image = UIImage(named: "blue-bg-cancer-screening-icon")
+            
+            deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
+            deleteAlertMessage = "Should not see this" // Showing for testing purposes
         case .note(model: let model):
             id = model.id
             title = model.title ?? "-"
-            detailNavTitle = ""
+//            detailNavTitle = ""
+            detailNavTitle = model.title ?? "-"
             name = model.createdBy ?? "-" // NOTE: This is HDID
             image = UIImage(named: "blue-bg-notes-icon")
             
@@ -316,6 +340,9 @@ extension HealthRecordsDetailDataSource {
             return result
         case .diagnosticImaging(model: let model):
             result.append(genRecord(diagnosticImaging: model))
+            return result
+        case .cancerScreening(model: let model):
+            result.append(genRecord(cancerScreening: model))
             return result
         case . note(model: let model):
             result.append(genRecord(note: model))
@@ -417,12 +444,19 @@ extension HealthRecordsDetailDataSource {
     // MARK: Diagnostic Imaging
     private static func genRecord(diagnosticImaging: DiagnosticImaging) -> Record {
         let dateString = diagnosticImaging.examDate?.monthDayYearString
-        // TODO: confirm data
         var status = ""
         if diagnosticImaging.isObjectUpdated == true {
             status = "Updated"
         }
         return Record(id: diagnosticImaging.id ?? UUID().uuidString, name: diagnosticImaging.modality ?? "", type: .diagnosticImaging(model: diagnosticImaging), status: status, date: dateString, listStatus: status, commentID: diagnosticImaging.id)
+    }
+    
+    // MARK: Cancer Screening
+    private static func genRecord(cancerScreening: CancerScreening) -> Record {
+        let dateString = cancerScreening.eventType == "Result" ? cancerScreening.resultDateTime?.monthDayYearString : cancerScreening.eventDateTime?.monthDayYearString
+        var status = cancerScreening.programName ?? ""
+
+        return Record(id: cancerScreening.id ?? UUID().uuidString, name: cancerScreening.itemType ?? "", type: .cancerScreening(model: cancerScreening), status: status, date: dateString, listStatus: status, commentID: cancerScreening.id)
     }
     
     // MARK: Note
