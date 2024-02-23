@@ -59,7 +59,7 @@ extension StorageService: StorageImmunizationManager {
         return storeImmunization(
             patient: patient,
             id: object.id,
-            dateOfImmunization: getGatewayDate(from: object.dateOfImmunization),
+            dateOfImmunization: object.dateOfImmunization?.getGatewayDate(),
             providerOrClinic: object.providerOrClinic,
             status: object.status,
             targetedDisease: object.targetedDisease,
@@ -112,11 +112,11 @@ extension StorageService: StorageImmunizationManager {
     private func storeImmunizationForecast(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Immunization.Forecast) -> ImmunizationForecast? {
         return storeImmunizationForecast(
             recommendationID: object.recommendationID,
-            createDate: getGatewayDate(from: object.createDate),
+            createDate: object.createDate?.getGatewayDate(),
             status: object.status,
             displayName: object.displayName,
-            eligibleDate: getGatewayDate(from: object.eligibleDate),
-            dueDate: getGatewayDate(from: object.dueDate)
+            eligibleDate: object.eligibleDate?.getGatewayDate(),
+            dueDate: object.dueDate?.getGatewayDate()
         )
     }
     
