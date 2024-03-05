@@ -152,6 +152,13 @@ struct SyncService {
 //                    network.showToast(message: message, style: .Warn)
                 }
                 
+                // Note: Doing this hack for now, as a proper solution should only be used once we have more clarity from the HG team:
+                
+                if StorageService.shared.getRecords(for: patient).detailDataSource(patient: patient).filter({ $0.mainRecord?.displayable == false }).count > 0 {
+                    network.showToast(message: .fetchRecordError, style: .Warn)
+                }
+                
+                
                 return completion(patient)
             }
         }

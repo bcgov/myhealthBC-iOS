@@ -575,7 +575,8 @@ extension UsersListOfRecordsViewController {
     private func fetchPatientRecords(for segment: SegmentType) -> [HealthRecordsDetailDataSource] {
         guard let patient = viewModel?.patient else {return []}
         let records = StorageService.shared.getRecords(for: patient)
-        var patientRecords = records.detailDataSource(patient: patient)
+        // TODO: Add filter here for displaying
+        var patientRecords = records.detailDataSource(patient: patient).filter { $0.mainRecord?.displayable == true }
         if segment == .Timeline {
             patientRecords = patientRecords.filter({ dataSource in
                 switch dataSource.type {
