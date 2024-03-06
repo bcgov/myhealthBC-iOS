@@ -7,21 +7,21 @@
 
 import Foundation
 
-extension StorageService {
-    func getGatewayDate(from dateString: String?) -> Date? {
-        let formatted: Date?
-        if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: dateString ?? "") {
-            formatted = timezoneDate
-        } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: dateString ?? "") {
-            formatted = nozoneDate
-        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: dateString ?? "") {
-            formatted = simpleDate
-        } else {
-            formatted = nil
-        }
-        return formatted
-    }
-}
+//extension StorageService {
+//    func getGatewayDate(from dateString: String?) -> Date? {
+//        let formatted: Date?
+//        if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: dateString ?? "") {
+//            formatted = timezoneDate
+//        } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: dateString ?? "") {
+//            formatted = nozoneDate
+//        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: dateString ?? "") {
+//            formatted = simpleDate
+//        } else {
+//            formatted = nil
+//        }
+//        return formatted
+//    }
+//}
 protocol StorageSpecialAuthorityMedicationManager {
     // MARK: Store
     func storeSpecialAuthorityMedication(
@@ -68,9 +68,9 @@ extension StorageService: StorageSpecialAuthorityMedicationManager {
             requestStatus: object.requestStatus,
             prescriberFirstName: object.prescriberFirstName,
             prescriberLastName: object.prescriberLastName,
-            requestedDate: getGatewayDate(from: object.requestedDate),
-            effectiveDate: getGatewayDate(from: object.effectiveDate),
-            expiryDate: getGatewayDate(from: object.expiryDate),
+            requestedDate: object.requestedDate?.getGatewayDate(),
+            effectiveDate: object.effectiveDate?.getGatewayDate(),
+            expiryDate: object.expiryDate?.getGatewayDate(),
             patient: patient
         )
     }

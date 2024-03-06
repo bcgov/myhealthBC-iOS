@@ -453,6 +453,7 @@ extension HealthRecordsDetailDataSource {
     
     // MARK: Cancer Screening
     private static func genRecord(cancerScreening: CancerScreening) -> Record {
+        // Note: Having to convert date to PST statically (done on the date itself in Storage save)
         let dateString = cancerScreening.eventType == "Result" ? cancerScreening.resultDateTime?.monthDayYearString : cancerScreening.eventDateTime?.monthDayYearString
         var status = cancerScreening.programName ?? ""
 

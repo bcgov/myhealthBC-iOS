@@ -68,10 +68,10 @@ extension StorageService: StorageImmunizationRecommendationManager {
         
         return storeRecommendation(
             authenticated: authenticated,
-            agentDueDate: getGatewayDate(from: object.agentDueDate),
-            agentEligibleDate: getGatewayDate(from: object.agentEligibleDate),
-            diseaseDueDate: getGatewayDate(from: object.diseaseDueDate),
-            diseaseEligibleDate: getGatewayDate(from: object.diseaseEligibleDate),
+            agentDueDate: object.agentDueDate?.getGatewayDate(),
+            agentEligibleDate: object.agentEligibleDate?.getGatewayDate(),
+            diseaseDueDate: object.diseaseDueDate?.getGatewayDate(),
+            diseaseEligibleDate: object.diseaseEligibleDate?.getGatewayDate(),
             recommendationSetID: object.recommendationSetID,
             recommendedVaccinations: object.recommendedVaccinations,
             status: object.status,

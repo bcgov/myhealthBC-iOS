@@ -23,6 +23,7 @@ extension Date {
             let formatter = DateFormatter()
             formatter.dateStyle = .short
             formatter.timeStyle = .short
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
@@ -30,6 +31,7 @@ extension Date {
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             formatter.timeStyle = .medium
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
@@ -37,6 +39,7 @@ extension Date {
             let formatter = DateFormatter()
             formatter.dateStyle = .long
             formatter.timeStyle = .long
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
@@ -44,66 +47,78 @@ extension Date {
             let formatter = DateFormatter()
             formatter.dateStyle = .full
             formatter.timeStyle = .full
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         static let customDateTime: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM dd\nhh:mm a"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         static let issuedOnDateTime: DateFormatter = {
             let formatter = DateFormatter()
             //            September-09-2012, 14:27
             formatter.dateFormat = "MMMM-dd-yyyy, hh:mm z"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         static let issuedOnDateTimeWithAmPm: DateFormatter = {
             let formatter = DateFormatter()
 //            September-09-2012, 14:27
             formatter.dateFormat = "MMMM-dd-yyyy, hh:mm a z"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         static let issuedOnDate: DateFormatter = {
             let formatter = DateFormatter()
             //            September-09-2012
             formatter.dateFormat = "MMMM-dd-yyyy"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         static let gatewayDateAndTime: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         static let gatewayDateAndTimeWithMS: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         static let gatewayDateAndTimeWithMSAndTimeZone: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         static let postServerDateTime: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         static let gatewayDateAndTimeWithTimeZone: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         static let labOrderDateTime: DateFormatter = {
             let formatter = DateFormatter()
             //            2012-May-14, 4:35 PM
             formatter.dateFormat = "yyyy-MMMM-dd, hh:mm a"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         static let commentsDateTime: DateFormatter = {
             let formatter = DateFormatter()
             //            2012-Apr-14, 4:35 PM
             formatter.dateFormat = "yyyy-MMM-dd, hh:mm a"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
@@ -111,12 +126,14 @@ extension Date {
             let formatter = DateFormatter()
             //            2012-Apr-14, 4:35 PM
             formatter.dateFormat = "yyyy-MMM-dd, hh:mm a"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let forecastDueDate: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MMM-dd"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
@@ -124,42 +141,49 @@ extension Date {
         static let shortDate: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateStyle = .short
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let mediumDate: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let longDate: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateStyle = .long
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let fullDate: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateStyle = .full
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let birthdayYearDate: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let monthDayYearDate: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM d, yyyy"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let commentServerDateTime: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
@@ -167,60 +191,70 @@ extension Date {
         static let shortTime: DateFormatter = {
             let formatter = DateFormatter()
             formatter.timeStyle = .short
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let mediumTime: DateFormatter = {
             let formatter = DateFormatter()
             formatter.timeStyle = .medium
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let longTime: DateFormatter = {
             let formatter = DateFormatter()
             formatter.timeStyle = .long
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let fullTime: DateFormatter = {
             let formatter = DateFormatter()
             formatter.timeStyle = .full
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let monthAndDay: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMM dd"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let yearMonthDay: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let yearMonthStringDay: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MMM-dd"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let monthAndYear: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM yyyy"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let customHeaderDateAndTime: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM dd, hh:mm a"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
         static let customHeaderDateAndTimeShort: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMM dd, hh:mm a"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
@@ -228,6 +262,7 @@ extension Date {
         static let dayOfWeek: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "EEE"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
         
@@ -235,6 +270,7 @@ extension Date {
         static let dayNumber: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "d"
+            formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
     }
@@ -368,10 +404,20 @@ extension String {
     func getGatewayDate() -> Date? {
         let formatted: Date?
         if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: self) {
+//            let epochDate = timezoneDate.timeIntervalSince1970
+//            let timezoneOffset = TimeZone(identifier: "America/Vancouver")?.secondsFromGMT() ?? 0
+//            let timezeonEpochOffset = (epochDate + Double(timezoneOffset))
+//            let pstDate = Date(timeIntervalSince1970: timezeonEpochOffset)
+//            formatted = pstDate
             formatted = timezoneDate
         } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: self) {
             formatted = nozoneDate
         } else if let withMillisenconds = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: self) {
+//            let epochDate = withMillisenconds.timeIntervalSince1970
+//            let timezoneOffset = TimeZone(identifier: "America/Vancouver")?.secondsFromGMT() ?? 0
+//            let timezeonEpochOffset = (epochDate + Double(timezoneOffset))
+//            let pstDate = Date(timeIntervalSince1970: timezeonEpochOffset)
+//            formatted = pstDate
             formatted = withMillisenconds
         } else if let commentDate = Date.Formatter.commentServerDateTime.date(from: self) {
             formatted = commentDate

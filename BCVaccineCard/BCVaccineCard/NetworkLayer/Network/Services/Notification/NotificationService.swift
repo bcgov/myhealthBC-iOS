@@ -90,7 +90,6 @@ extension NotificationService {
             ]
             
             let parameters: DefaultParams = DefaultParams(apiVersion: "1")
-            
             let requestModel = NetworkRequest<DefaultParams, AuthenticatedNotificationResponse>(url: endpoints.notifcations(base: baseURL, hdid: hdid),
                                                                             type: .Get,
                                                                             parameters: parameters,

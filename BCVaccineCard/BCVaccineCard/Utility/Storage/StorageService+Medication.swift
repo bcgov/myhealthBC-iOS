@@ -141,21 +141,23 @@ extension StorageService: StorageMedicationManager {
         var dispenseDate: Date?
         var dateEntered: Date?
         
-        if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dispensedDate ?? "") {
-            dispenseDate = timezoneDate
-        } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dispensedDate ?? "") {
-            dispenseDate = nozoneDate
-        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: object.dispensedDate ?? "") {
-            dispenseDate = simpleDate
-        }
+        dispenseDate = object.dispensedDate?.getGatewayDate()
+//        if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dispensedDate ?? "") {
+//            dispenseDate = timezoneDate
+//        } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dispensedDate ?? "") {
+//            dispenseDate = nozoneDate
+//        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: object.dispensedDate ?? "") {
+//            dispenseDate = simpleDate
+//        }
         
-        if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dateEntered ?? "") {
-            dateEntered = timezoneDate
-        } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dateEntered ?? "") {
-            dateEntered = nozoneDate
-        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: object.dateEntered ?? "") {
-            dateEntered = simpleDate
-        }
+        dateEntered = object.dateEntered?.getGatewayDate()
+//        if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dateEntered ?? "") {
+//            dateEntered = timezoneDate
+//        } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dateEntered ?? "") {
+//            dateEntered = nozoneDate
+//        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: object.dateEntered ?? "") {
+//            dateEntered = simpleDate
+//        }
         
         return storePrescription(
             patient: patient,
@@ -214,11 +216,12 @@ extension StorageService: StorageMedicationManager {
         initialProtectedMedFetch: Bool
     ) -> Medication? {
         var drugDiscontinuedDate: Date?
-        if let zoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: gateWayResponse.drugDiscontinuedDate ?? "") {
-            drugDiscontinuedDate = zoneDate
-        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: gateWayResponse.drugDiscontinuedDate ?? "") {
-            drugDiscontinuedDate = simpleDate
-        }
+        drugDiscontinuedDate = gateWayResponse.drugDiscontinuedDate?.getGatewayDate()
+//        if let zoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: gateWayResponse.drugDiscontinuedDate ?? "") {
+//            drugDiscontinuedDate = zoneDate
+//        } else if let simpleDate = Date.Formatter.yearMonthDay.date(from: gateWayResponse.drugDiscontinuedDate ?? "") {
+//            drugDiscontinuedDate = simpleDate
+//        }
         return storeMedication(din: gateWayResponse.din,
                                brandName: gateWayResponse.brandName,
                                genericName: gateWayResponse.genericName,
