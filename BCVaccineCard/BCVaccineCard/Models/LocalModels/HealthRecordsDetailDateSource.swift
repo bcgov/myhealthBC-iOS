@@ -41,6 +41,19 @@ struct HealthRecordsDetailDataSource {
             }
         }
         
+        var titleError: Bool {
+            return title == nil
+        }
+        
+        var dateParsingError: Bool {
+            switch type {
+            case .hospitalVisit, .clinicalDocument:
+                return false
+            default:
+                return date == nil
+            }
+        }
+        
         var comments: [Comment] {
             switch type {
             case .covidImmunizationRecord:
