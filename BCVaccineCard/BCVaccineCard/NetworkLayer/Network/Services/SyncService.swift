@@ -152,6 +152,16 @@ struct SyncService {
 //                    network.showToast(message: message, style: .Warn)
                 }
                 
+                // Note: Doing this hack for now, as a proper solution should only be used once we have more clarity from the HG team:
+                let detailedRecords = StorageService.shared.getRecords(for: patient).detailDataSource(patient: patient)
+                if detailedRecords.filter({ $0.mainRecord?.titleError == true }).count > 0 {
+                    network.showToast(message: "Some partial records were not displayed", style: .Warn)
+                } else if detailedRecords.filter({ $0.mainRecord?.dateParsingError == true }).count > 0 {
+                    network.showToast(message: "Not all records were fetched successfully", style: .Warn)
+                }
+               
+                
+                
                 return completion(patient)
             }
         }
