@@ -7,6 +7,13 @@
 
 import Foundation
 
+enum APIResponseEdgeCases {
+    case dateParseErrors
+    case noTitleShown
+    case dateParseErrorAndNoTitle
+    case noIssues
+}
+
 struct SyncService {
     
     let network: Network
