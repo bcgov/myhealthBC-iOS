@@ -20,6 +20,7 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     }
     
     @IBOutlet weak private var tableView: UITableView!
+    private var recordsView: HealthRecordsView?
     
     public static var currentInstance: HealthRecordDetailViewController!
     
@@ -86,6 +87,11 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
         super.viewDidAppear(animated)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+//        HealthRecordDetailViewController.currentInstance = nil
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
@@ -99,7 +105,9 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     }
     
     func setupContent() {
-        let recordsView: HealthRecordsView = HealthRecordsView()
+        self.recordsView = HealthRecordsView()
+        guard let recordsView = self.recordsView else { return }
+//        let recordsView: HealthRecordsView = HealthRecordsView()
         recordsView.frame = .zero
         recordsView.bounds = view.bounds
         view.addSubview(recordsView)
@@ -109,6 +117,10 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
         view.layoutSubviews()
         recordsView.configure(models: dataSource.records, delegate: self)
         view.layoutSubviews()
+    }
+    
+    private func removeContent() {
+        self.recordsView?.removeFromSuperview()
     }
     
     func showComments(for record: HealthRecordsDetailDataSource.Record) {
@@ -144,13 +156,21 @@ extension HealthRecordDetailViewController {
             rightNavButton = nil
         }
         
+        let leftNavButton = NavButton(image: UIImage(named: "app-back-arrow"), action: #selector(self.goBack), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitleMoreInfo, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintMoreInfo))
+        
         self.navDelegate?.setNavigationBarWith(title: dataSource.detailNavTitle,
-                                               leftNavButton: nil,
+                                               leftNavButton: leftNavButton,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
+    }
+    @objc private func goBack() {
+        self.recordsView = nil
+        removeContent()
+        HealthRecordDetailViewController.currentInstance = nil
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc private func showMoreInfo() {

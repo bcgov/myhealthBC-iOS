@@ -175,6 +175,9 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
         // Fields
         let fieldSection = hasHeader ? indexPath.section - 1 : indexPath.section
         guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+        // Next two lines are a hot fix
+        guard fieldSection < fields.count else { return UITableViewCell() }
+        guard indexPath.row < fields[fieldSection].count else { return UITableViewCell() }
         cell.setup(with: fields[fieldSection][indexPath.row])
         return cell
     }
