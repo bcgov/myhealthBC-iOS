@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2hG-gH-503">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2hG-gH-503">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -161,6 +161,36 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t3P-d4-9WB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2830" y="-665"/>
+        </scene>
+        <!--Learn More View Controller-->
+        <scene sceneID="Lhu-E3-cov">
+            <objects>
+                <viewController storyboardIdentifier="LearnMoreViewController" id="YDv-AQ-LL0" customClass="LearnMoreViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="27g-PW-CbQ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="vyo-aL-px8">
+                                <rect key="frame" x="24" y="56" width="366" height="806"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="kja-So-zzq"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="vyo-aL-px8" firstAttribute="top" secondItem="kja-So-zzq" secondAttribute="top" constant="8" id="1xZ-t2-VeI"/>
+                            <constraint firstItem="kja-So-zzq" firstAttribute="trailing" secondItem="vyo-aL-px8" secondAttribute="trailing" constant="24" id="G3a-8T-4pv"/>
+                            <constraint firstItem="kja-So-zzq" firstAttribute="bottom" secondItem="vyo-aL-px8" secondAttribute="bottom" id="a7c-rY-oYP"/>
+                            <constraint firstItem="vyo-aL-px8" firstAttribute="leading" secondItem="kja-So-zzq" secondAttribute="leading" constant="24" id="rei-PQ-Jsr"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="vyo-aL-px8" id="S47-6s-Xat"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d6D-Di-Ek7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3710" y="-666"/>
         </scene>
         <!--Users List Of Records View Controller-->
         <scene sceneID="euA-09-vEQ">

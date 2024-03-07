@@ -127,7 +127,7 @@ extension HealthRecordDetailViewController {
         case .laboratoryOrder(model: let labOrder):
             if labOrder.reportAvailable == true {
                 self.type = .normal
-//                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+                rightNavButton = NavButton(image: UIImage(named: "info-icon"), action: #selector(self.showMoreInfo), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitleMoreInfo, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintMoreInfo))
             }
         case .covidTestResultRecord(model: let covidTestOrder):
             if covidTestOrder.reportAvailable == true {
@@ -151,6 +151,11 @@ extension HealthRecordDetailViewController {
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
+    }
+    
+    @objc private func showMoreInfo() {
+        let vc = LearnMoreViewController.construct()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc private func deleteButton(manuallyAdded: Bool) {
