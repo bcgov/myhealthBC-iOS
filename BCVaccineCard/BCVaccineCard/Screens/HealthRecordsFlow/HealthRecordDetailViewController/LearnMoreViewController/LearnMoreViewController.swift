@@ -76,9 +76,9 @@ extension LearnMoreViewController {
     private func navSetup() {
         let leftButton = NavButton(image: UIImage(named: "close-icon"), action: #selector(self.dismissScreen), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.LearnMoreScreen.navLeftIconTitle, hint: AccessibilityLabels.LearnMoreScreen.navLeftIconHint))
         self.navDelegate?.setNavigationBarWith(title: "Understand lab test result",
-                                               leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
-                                               navStyle: .large,
+                                               leftNavButton: leftButton,
+                                               rightNavButton: nil,
+                                               navStyle: .small,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
@@ -130,22 +130,22 @@ extension LearnMoreViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? 0 : 50
+        return section == 0 ? 0 : 32
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 50))
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 32))
             view.backgroundColor = .white
-            let titleLabel = UILabel(frame: CGRect(x: 8, y: 8, width: tableView.frame.width - 8, height: 24))
+            let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 24))
             titleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
             titleLabel.textColor = AppColours.textBlack
             titleLabel.text = "Related Information"
             titleLabel.backgroundColor = .white
             view.addSubview(titleLabel)
             titleLabel.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint(item: titleLabel, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 8).isActive = true
-            NSLayoutConstraint(item: titleLabel, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: -8).isActive = true
+            NSLayoutConstraint(item: titleLabel, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0).isActive = true
+            NSLayoutConstraint(item: titleLabel, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
             
             return view
         }

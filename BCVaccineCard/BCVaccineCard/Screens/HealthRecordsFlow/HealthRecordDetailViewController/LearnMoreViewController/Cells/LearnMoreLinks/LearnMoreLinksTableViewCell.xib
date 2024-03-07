@@ -19,7 +19,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Link Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="0RG-4X-0we">
-                        <rect key="frame" x="12" y="10" width="308" height="24"/>
+                        <rect key="frame" x="0.0" y="10" width="320" height="24"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <color key="textColor" systemColor="labelColor"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -28,7 +28,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="0RG-4X-0we" secondAttribute="trailing" id="5aN-Rm-dkP"/>
-                    <constraint firstItem="0RG-4X-0we" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="Qdi-gT-adq"/>
+                    <constraint firstItem="0RG-4X-0we" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Qdi-gT-adq"/>
                     <constraint firstItem="0RG-4X-0we" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="gHJ-0J-GEm"/>
                     <constraint firstAttribute="bottom" secondItem="0RG-4X-0we" secondAttribute="bottom" constant="10" id="mgg-RQ-XUN"/>
                 </constraints>

@@ -17,9 +17,9 @@ class LearnMoreLinksTableViewCell: UITableViewCell {
     }
     
     func config(link: String, urlString: String) {
-        let wholeString = "\u{2022} \(link)"
+        let wholeString = " \u{2022}  \(link)"
         let linkString = "\(link)"
-        linkTextView.attributedText = attributedText(withString: wholeString, linkString: linkString)
+        linkTextView.attributedText = attributedText(withString: wholeString, linkString: linkString, link: urlString)
         linkTextView.linkTextAttributes = [
                 NSAttributedString.Key.underlineColor: AppColours.appBlue,
                 NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue,
@@ -29,10 +29,10 @@ class LearnMoreLinksTableViewCell: UITableViewCell {
         linkTextView.delegate = self
     }
     
-    private func attributedText(withString string: String, linkString: String) -> NSAttributedString {
+    private func attributedText(withString string: String, linkString: String, link: String) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: string,
                                                          attributes: [NSAttributedString.Key.font: UIFont.bcSansBoldWithSize(size: 17), NSAttributedString.Key.foregroundColor: AppColours.appBlue])
-        if let url = URL(string: linkString) {
+        if let url = URL(string: link) {
             let linkAttribute: [NSAttributedString.Key: Any] = [NSAttributedString.Key.link: url]
             
             let range = (string as NSString).range(of: linkString)
