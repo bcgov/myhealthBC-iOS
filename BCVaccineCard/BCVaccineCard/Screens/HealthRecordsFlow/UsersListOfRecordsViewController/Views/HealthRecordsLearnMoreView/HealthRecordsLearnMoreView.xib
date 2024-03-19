@@ -35,7 +35,6 @@
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="cgy-HI-GZs">
                             <rect key="frame" x="49" y="15" width="216" height="126"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            <string key="text">Only BC Cancer cervix screening letters are available here. Your Health Gateway timeline may include these and other screening test results in lab or imaging reports. Learn more</string>
                             <color key="textColor" systemColor="labelColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>

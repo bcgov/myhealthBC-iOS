@@ -84,6 +84,17 @@ class UsersListOfRecordsViewController: BaseViewController {
         return ((self.currentFilter?.recordTypes.contains(type)) != false) ? type.getRecordLearnMoreType : .NotApplicable
     }
     
+    private func getRecordsLearnMoreType() -> RecordsLearnMoreTypes {
+        guard self.currentFilter?.recordTypes.count == 1 else { return .NotApplicable }
+        if ((self.currentFilter?.recordTypes.contains(.CancerScreening)) != false) {
+            return .BCCancerScreening
+        } else if ((self.currentFilter?.recordTypes.contains(.DiagnosticImaging)) != false) {
+            return .DiagnosticImaging
+        } else {
+            return .NotApplicable
+        }
+    }
+    
     private var searchText: String?
     
     private var inEditMode = false {
@@ -143,7 +154,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundTitle.textColor = AppColours.appBlue
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
-        configureNoRecords(recordsLearnMore: recordsLearnMoreShownBool)
+        configureNoRecords()
         createNoteButton.isHidden = true
         fetchDataSource()
         if currentSegment == .Notes {
@@ -180,12 +191,20 @@ class UsersListOfRecordsViewController: BaseViewController {
 
 // MARK: No Records Config
 extension UsersListOfRecordsViewController {
-    private func configureNoRecords(recordsLearnMore show: Bool) {
-        noRecordsStackViewVerticalConstraint.isActive = !show
-        bcCancerInfoViewHeight.constant = show ? 156 : 0
-        bcCancerInfoViewTop.constant = show ? 20 : 0
-        bcCancerInfoViewBottom.isActive = show
-        bcCancerInfoView.isHidden = !show
+    private func configureNoRecords() {
+        let type = getRecordsLearnMoreType()
+        noRecordsStackViewVerticalConstraint.isActive = type == .NotApplicable
+        bcCancerInfoViewHeight.constant = type == .BCCancerScreening ? 156 : type == .DiagnosticImaging ? 100 : 0
+        bcCancerInfoViewTop.constant = type == .BCCancerScreening ? 20 : type == .DiagnosticImaging ? 20 : 0
+        bcCancerInfoViewBottom.isActive = type != .NotApplicable
+        bcCancerInfoView.isHidden = type == .NotApplicable
+        if type != .NotApplicable {
+            if recordsLearnMoreShown(type: .CancerScreening) == .BCCancerScreening {
+                bcCancerInfoView.configure(type: .BCCancerScreening)
+            } else if recordsLearnMoreShown(type: .DiagnosticImaging) == .DiagnosticImaging {
+                bcCancerInfoView.configure(type: .DiagnosticImaging)
+            }
+        }
         self.noRecordsFoundView.layoutIfNeeded()
     }
 }
@@ -674,7 +693,7 @@ extension UsersListOfRecordsViewController {
         tableView.reloadData()
         noRecordsFoundView.isHidden = !patientRecords.isEmpty
         if patientRecords.isEmpty {
-            configureNoRecords(recordsLearnMore: self.recordsLearnMoreShownBool)
+            configureNoRecords()
         }
         tableView.isHidden = patientRecords.isEmpty
         recordsSearchBarView.isHidden = (((patientRecords.isEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
@@ -692,7 +711,7 @@ extension UsersListOfRecordsViewController {
         configureNoRecordsFoundView(for: .Timeline)
         noRecordsFoundView.isHidden = !patientRecordsEmpty
         if patientRecordsEmpty {
-            configureNoRecords(recordsLearnMore: self.recordsLearnMoreShownBool)
+            configureNoRecords()
         }
         tableView.isHidden = patientRecordsEmpty
         recordsSearchBarView.hideFilterSection = false
@@ -704,7 +723,7 @@ extension UsersListOfRecordsViewController {
         configureNoRecordsFoundView(for: .Notes)
         noRecordsFoundView.isHidden = notesRecordsEmpty
         if !notesRecordsEmpty {
-            configureNoRecords(recordsLearnMore: self.recordsLearnMoreShownBool)
+            configureNoRecords()
         }
         tableView.isHidden = !notesRecordsEmpty
         recordsSearchBarView.endEditing(true)
