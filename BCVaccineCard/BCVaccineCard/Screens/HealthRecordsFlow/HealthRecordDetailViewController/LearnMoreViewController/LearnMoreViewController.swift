@@ -63,7 +63,7 @@ class LearnMoreViewController: BaseViewController {
             DataSource.CellType.link(text: "HealthLink BC", urlString: "https://www.healthlinkbc.ca/tests-treatments-medications/medical-tests"),
             DataSource.CellType.link(text: "Mayo Clinic Laboratories", urlString: "https://www.mayocliniclabs.com/"),
             DataSource.CellType.link(text: "For pathology tests (like a biopsy)", urlString: "https://www.mypathologyreport.ca/"),
-            DataSource.CellType.link(text: "Get checked online", urlString: "https://getcheckedonline.com/Pages/default.aspx")
+            DataSource.CellType.link(text: "BC CDC - Smart Sex Resource", urlString: "https://smartsexresource.com/resources/")
         ]
         let section2 = DataSource.Section(rows: section2Data)
         self.dataSource = DataSource(sections: [section1, section2])
