@@ -22,6 +22,7 @@ class HealthRecordsLearnMoreTableViewCell: UITableViewCell {
     
     func configure(type: RecordsLearnMoreTypes) {
         recordLearnMoreView.configure(type: type)
+        self.layoutIfNeeded()
     }
     
 }

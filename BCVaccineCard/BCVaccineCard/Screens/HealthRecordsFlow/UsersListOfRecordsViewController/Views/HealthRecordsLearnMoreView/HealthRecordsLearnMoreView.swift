@@ -61,6 +61,7 @@ class HealthRecordsLearnMoreView: UIView {
         infoTextView.attributedText = attrStr
         
         infoIconImageView.image = UIImage(named: "more-info")
+        self.layoutIfNeeded()
     }
     
     private func setupForBCCancer(attributes: [NSAttributedString.Key: Any]) -> NSMutableAttributedString {
@@ -83,7 +84,7 @@ class HealthRecordsLearnMoreView: UIView {
     }
     
     private func setupForDiagnosticImaging(attributes: [NSAttributedString.Key: Any]) -> NSMutableAttributedString {
-        let attrStr = NSMutableAttributedString(string: "Most reports are available 10-14 days after your procedure. Learn more", attributes: attributes)
+        let attrStr = NSMutableAttributedString(string: "Most reports are available 10-14 days after your procedure. Learn more \n", attributes: attributes)
         if let range = attrStr.range(textToFind: "Learn more"), let url = URL(string: "https://www2.gov.bc.ca/gov/content/health/managing-your-health/health-gateway/guide/healthrecords#medicalimaging") {
             let attr: [NSAttributedString.Key: Any] = [
                 NSAttributedString.Key.link: url
