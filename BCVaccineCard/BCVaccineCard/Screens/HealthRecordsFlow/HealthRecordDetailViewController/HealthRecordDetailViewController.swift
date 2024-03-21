@@ -19,8 +19,8 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
         return HealthRecordDetailViewController()
     }
     
-    @IBOutlet weak private var tableView: UITableView!
-    private var recordsView: HealthRecordsView?
+    @IBOutlet private weak var recordsView: HealthRecordsView!
+//    private var recordsView: HealthRecordsView?
     
     public static var currentInstance: HealthRecordDetailViewController!
     
@@ -105,14 +105,14 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     }
     
     func setupContent() {
-        self.recordsView = HealthRecordsView()
-        guard let recordsView = self.recordsView else { return }
-//        let recordsView: HealthRecordsView = HealthRecordsView()
-        recordsView.frame = .zero
-        recordsView.bounds = view.bounds
-        view.addSubview(recordsView)
-        recordsView.layoutIfNeeded()
-        recordsView.addEqualSizeContraints(to: self.view, safe: true)
+//        self.recordsView = HealthRecordsView()
+//        guard let recordsView = self.recordsView else { return }
+////        let recordsView: HealthRecordsView = HealthRecordsView()
+//        recordsView.frame = .zero
+//        recordsView.bounds = view.bounds
+//        view.addSubview(recordsView)
+//        recordsView.layoutIfNeeded()
+//        recordsView.addEqualSizeContraints(to: self.view, safe: true)
         // Note: keep this here so the child views in HealthRecordsView get sized properly
         view.layoutSubviews()
         recordsView.configure(models: dataSource.records, delegate: self)
@@ -167,8 +167,8 @@ extension HealthRecordDetailViewController {
                                                backButtonHintString: nil)
     }
     @objc private func goBack() {
-        self.recordsView = nil
-        removeContent()
+//        self.recordsView = nil
+//        removeContent()
         HealthRecordDetailViewController.currentInstance = nil
         self.navigationController?.popViewController(animated: true)
     }

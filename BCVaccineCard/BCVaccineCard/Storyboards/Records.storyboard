@@ -358,9 +358,24 @@
                     <view key="view" contentMode="scaleToFill" id="73N-XY-hgW">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RqZ-si-3Fe" customClass="HealthRecordsView" customModule="HealthGateway" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Xb5-L5-VYM"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="RqZ-si-3Fe" firstAttribute="top" secondItem="Xb5-L5-VYM" secondAttribute="top" id="2PK-Oj-USS"/>
+                            <constraint firstItem="Xb5-L5-VYM" firstAttribute="bottom" secondItem="RqZ-si-3Fe" secondAttribute="bottom" id="3wu-JN-Mm2"/>
+                            <constraint firstItem="RqZ-si-3Fe" firstAttribute="leading" secondItem="Xb5-L5-VYM" secondAttribute="leading" id="pVH-jK-cZY"/>
+                            <constraint firstItem="Xb5-L5-VYM" firstAttribute="trailing" secondItem="RqZ-si-3Fe" secondAttribute="trailing" id="xKe-d5-ZU1"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="recordsView" destination="RqZ-si-3Fe" id="z7D-nC-qQu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qOJ-9A-qBL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
