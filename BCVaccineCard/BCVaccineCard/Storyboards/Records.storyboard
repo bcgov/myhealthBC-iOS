@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2hG-gH-503">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -357,24 +358,9 @@
                     <view key="view" contentMode="scaleToFill" id="73N-XY-hgW">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="U2u-Gs-sK0">
-                                <rect key="frame" x="24" y="56" width="366" height="806"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Xb5-L5-VYM"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="U2u-Gs-sK0" firstAttribute="top" secondItem="Xb5-L5-VYM" secondAttribute="top" constant="8" id="EKH-0s-zku"/>
-                            <constraint firstItem="Xb5-L5-VYM" firstAttribute="bottom" secondItem="U2u-Gs-sK0" secondAttribute="bottom" id="GAB-67-aFP"/>
-                            <constraint firstItem="Xb5-L5-VYM" firstAttribute="trailing" secondItem="U2u-Gs-sK0" secondAttribute="trailing" constant="24" id="TWR-oo-5ug"/>
-                            <constraint firstItem="U2u-Gs-sK0" firstAttribute="leading" secondItem="Xb5-L5-VYM" secondAttribute="leading" constant="24" id="mJk-M8-huu"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="tableView" destination="U2u-Gs-sK0" id="67f-zD-Zmw"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qOJ-9A-qBL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
