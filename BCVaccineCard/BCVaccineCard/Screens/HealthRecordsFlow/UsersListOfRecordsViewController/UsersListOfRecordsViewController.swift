@@ -194,7 +194,7 @@ extension UsersListOfRecordsViewController {
     private func configureNoRecords() {
         let type = getRecordsLearnMoreType()
         noRecordsStackViewVerticalConstraint.isActive = type == .NotApplicable
-        bcCancerInfoViewHeight.constant = type == .BCCancerScreening ? 156 : type == .DiagnosticImaging ? 100 : 0
+        bcCancerInfoViewHeight.constant = type == .BCCancerScreening ? 156 : type == .DiagnosticImaging ? 124 : 0
         bcCancerInfoViewTop.constant = type == .BCCancerScreening ? 20 : type == .DiagnosticImaging ? 20 : 0
         bcCancerInfoViewBottom.isActive = type != .NotApplicable
         bcCancerInfoView.isHidden = type == .NotApplicable
@@ -509,12 +509,12 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
         
         var fromDateText = ""
         if let startDate = current.fromDate {
-            fromDateText = startDate.issuedOnDate
+            fromDateText = startDate.issuedOnDateNonPSTString
         }
         
         var toDateText = ""
         if let endDate = current.toDate {
-            toDateText = endDate.issuedOnDate
+            toDateText = endDate.issuedOnDateNonPSTString
         }
         
         var dateFilter = ""

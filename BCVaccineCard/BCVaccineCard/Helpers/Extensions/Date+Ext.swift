@@ -77,6 +77,12 @@ extension Date {
             formatter.timeZone = TimeZone(abbreviation: "PST")
             return formatter
         }()
+        static let issuedOnDateNonPST: DateFormatter = {
+            let formatter = DateFormatter()
+            //            September-09-2012
+            formatter.dateFormat = "MMMM-dd-yyyy"
+            return formatter
+        }()
         static let gatewayDateAndTime: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -290,6 +296,7 @@ extension Date {
     var issuedOnDateTime: String { return Formatter.issuedOnDateTime.string(from: self) }
     var issuedOnDateTimeWithAmPm: String { return Formatter.issuedOnDateTimeWithAmPm.string(from: self) }
     var issuedOnDate: String { return Formatter.issuedOnDate.string(from: self) }
+    var issuedOnDateNonPSTString: String { return Formatter.issuedOnDateNonPST.string(from: self) }
     var gatewayDateAndTime: String { return Formatter.gatewayDateAndTime.string(from: self) }
     var gatewayDateAndTimeWithTimeZone: String { return Formatter.gatewayDateAndTimeWithTimeZone.string(from: self) }
     var gatewayDateAndTimeWithMS: String { return Formatter.gatewayDateAndTimeWithMS.string(from: self) }
