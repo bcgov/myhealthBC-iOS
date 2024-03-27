@@ -1,5 +1,5 @@
 //
-//  BCCancerInfoView.swift
+//  HealthRecordsLearnMoreView.swift
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2024-02-06.
@@ -7,7 +7,13 @@
 
 import UIKit
 
-class BCCancerInfoView: UIView {
+enum RecordsLearnMoreTypes {
+    case BCCancerScreening
+    case DiagnosticImaging
+    case NotApplicable
+}
+
+class HealthRecordsLearnMoreView: UIView {
     
     @IBOutlet weak private var contentView: UIView!
     @IBOutlet weak private var containerView: UIView!
@@ -29,14 +35,13 @@ class BCCancerInfoView: UIView {
     }
     
     private func commonInit() {
-        Bundle.main.loadNibNamed(BCCancerInfoView.getName, owner: self, options: nil)
+        Bundle.main.loadNibNamed(HealthRecordsLearnMoreView.getName, owner: self, options: nil)
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        setup()
     }
     
-    private func setup() {
+    func configure(type: RecordsLearnMoreTypes) {
         containerView.backgroundColor = AppColours.bannerBlue
         containerView.layer.cornerRadius = 4
         containerView.clipsToBounds = true
@@ -49,6 +54,17 @@ class BCCancerInfoView: UIView {
             NSAttributedString.Key.foregroundColor: AppColours.appBlue,
             NSAttributedString.Key.font: UIFont.bcSansRegularWithSize(size: 15)
         ]
+        
+        guard type != .NotApplicable else { return }
+        let attrStr = type == .BCCancerScreening ? setupForBCCancer(attributes: attributes) : setupForDiagnosticImaging(attributes: attributes)
+        
+        infoTextView.attributedText = attrStr
+        
+        infoIconImageView.image = UIImage(named: "more-info")
+        self.layoutIfNeeded()
+    }
+    
+    private func setupForBCCancer(attributes: [NSAttributedString.Key: Any]) -> NSMutableAttributedString {
         let attrStr = NSMutableAttributedString(string: "Only BC Cancer cervix screening letters are available here. Your Health Gateway timeline may include these and other screening test results in lab or imaging reports. Learn more", attributes: attributes)
         if let range = attrStr.range(textToFind: "Learn more"), let url = URL(string: "http://www.bccancer.bc.ca/screening") {
             let attr: [NSAttributedString.Key: Any] = [
@@ -64,15 +80,32 @@ class BCCancerInfoView: UIView {
             ]
         }
         
-        infoTextView.attributedText = attrStr
+        return attrStr
+    }
+    
+    private func setupForDiagnosticImaging(attributes: [NSAttributedString.Key: Any]) -> NSMutableAttributedString {
+        let attrStr = NSMutableAttributedString(string: "Most reports are available 10-14 days after your procedure. Learn more \n", attributes: attributes)
+        if let range = attrStr.range(textToFind: "Learn more"), let url = URL(string: "https://www2.gov.bc.ca/gov/content/health/managing-your-health/health-gateway/guide/healthrecords#medicalimaging") {
+            let attr: [NSAttributedString.Key: Any] = [
+                NSAttributedString.Key.link: url
+            ]
+            attrStr.setAttributes(attr, range: range)
+            
+            infoTextView.linkTextAttributes = [
+                NSAttributedString.Key.underlineColor: AppColours.appBlue,
+                NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue,
+                NSAttributedString.Key.foregroundColor: AppColours.appBlue,
+                NSAttributedString.Key.font: UIFont.bcSansRegularWithSize(size: 15)
+            ]
+        }
         
-        infoIconImageView.image = UIImage(named: "more-info")
+        return attrStr
     }
     
     
 }
 
-extension BCCancerInfoView: UITextViewDelegate {
+extension HealthRecordsLearnMoreView: UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         AppDelegate.sharedInstance?.showExternalURL(url: URL.absoluteString)

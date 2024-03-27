@@ -175,6 +175,9 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
         // Fields
         let fieldSection = hasHeader ? indexPath.section - 1 : indexPath.section
         guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+        // Next two lines are a hot fix
+        guard fieldSection < fields.count else { return UITableViewCell() }
+        guard indexPath.row < fields[fieldSection].count else { return UITableViewCell() }
         cell.setup(with: fields[fieldSection][indexPath.row])
         return cell
     }
@@ -241,10 +244,10 @@ extension LabOrderRecordDetailView {
                         header: TextProperties(text: "Test status:", bolded: true),
                         subtext: TextProperties(text: statusTuple.text ,bolded: statusTuple.bolded))
                 ]
-                if index == 0 {
-                    let links = [LinkedStrings(text: "Learn more", link: "https://www2.gov.bc.ca/gov/content?id=FE8BA7F9F1F0416CB2D24CF71C4BAF80")]
-                    section.insert(TextListModel(header: TextProperties(text: "Test summary", bolded: true), subtext: TextProperties(text: "Find resources to learn about your lab test and what the results mean. Learn more", bolded: false, links: links)), at: 0)
-                }
+//                if index == 0 {
+//                    let links = [LinkedStrings(text: "Learn more", link: "https://www2.gov.bc.ca/gov/content?id=FE8BA7F9F1F0416CB2D24CF71C4BAF80")]
+//                    section.insert(TextListModel(header: TextProperties(text: "Test summary", bolded: true), subtext: TextProperties(text: "Find resources to learn about your lab test and what the results mean. Learn more", bolded: false, links: links)), at: 0)
+//                }
                 fields.append(section)
             }
         }
