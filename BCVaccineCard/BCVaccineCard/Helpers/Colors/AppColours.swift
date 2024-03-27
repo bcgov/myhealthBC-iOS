@@ -23,7 +23,7 @@ class AppColours {
     static let lightGray = UIColor(red: 183/255, green: 183/255, blue: 183/255, alpha: 1.0)
     static let borderGray = UIColor(red: 207/255, green: 207/255, blue: 207/255, alpha: 1.0)
     static let commentBackground = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
-    static let greyText = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
+    static let greyText = UIColor(red: 96/255, green: 96/255, blue: 96/255, alpha: 1)
     static let divider = UIColor(red: 0.22, green: 0.349, blue: 0.541, alpha: 0.3)
     static let lightBlueText = UIColor(red: 0.102, green: 0.353, blue: 0.588, alpha: 1)
     static let darkGreyText = UIColor(red: 0.192, green: 0.192, blue: 0.196, alpha: 1)

@@ -179,7 +179,7 @@ extension UIViewController {
                           manuallyAdded: Bool,
                           completion: @escaping(VaccineCard?)->Void
     ) {
-        let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
+        let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate)
         let name = patientAPI?.getFullName ?? model.name
         guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn,
                                                                                 name: name,
