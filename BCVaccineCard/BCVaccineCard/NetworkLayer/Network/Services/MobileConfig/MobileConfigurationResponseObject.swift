@@ -32,7 +32,13 @@ struct AuthenticationConfig: Codable {
     enum CodingKeys: String, CodingKey {
         case endpoint
         case identityProviderID = "identityProviderId"
-        case clientID = "clientId"
+#if PROD
+        case clientID = "clientId" //iosClientId
+#elseif TEST
+        case clientID = "iosClientId"
+#elseif DEV
+        case clientID = "iosClientId"
+#endif
         case redirectURI = "redirectUri"
     }
 }
