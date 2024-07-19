@@ -33,7 +33,7 @@ struct AuthenticationConfig: Codable {
         case endpoint
         case identityProviderID = "identityProviderId"
 #if PROD
-        case clientID = "clientId" //iosClientId
+        case clientID = "iosClientId" //iosClientId
 #elseif TEST
         case clientID = "iosClientId"
 #elseif DEV
