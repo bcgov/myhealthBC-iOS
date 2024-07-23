@@ -36,7 +36,7 @@ struct AddDependentFormData {
     }
     
     private func convertDate(date: Date) -> String {
-        return date.postServerDateTime
+        return date.yearMonthDayString
     }
 }
 

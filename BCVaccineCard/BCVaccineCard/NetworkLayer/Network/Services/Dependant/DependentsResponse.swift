@@ -50,6 +50,6 @@ struct RemoteDependent: Codable {
 extension Dependent {
     func toRemote(totalDelegateCount: Int, expiryDate: Date?) -> RemoteDependent? {
         guard let patient = info else {return nil}
-        return RemoteDependent(dependentInformation: DependentInformation(hdid: patient.hdid, firstname: patient.firstName, lastname: patient.lastName, phn: patient.phn, dateOfBirth: patient.birthday?.postServerDateTime, gender: patient.gender), ownerID: ownerID, delegateID: delegateID, expiryDate: expiryDate?.yearMonthDayString, totalDelegateCount: totalDelegateCount, reasonCode: Int(reasonCode), version: Int(version))
+        return RemoteDependent(dependentInformation: DependentInformation(hdid: patient.hdid, firstname: patient.firstName, lastname: patient.lastName, phn: patient.phn, dateOfBirth: patient.birthday?.yearMonthDayString, gender: patient.gender), ownerID: ownerID, delegateID: delegateID, expiryDate: expiryDate?.yearMonthDayString, totalDelegateCount: totalDelegateCount, reasonCode: Int(reasonCode), version: Int(version))
     }
 }

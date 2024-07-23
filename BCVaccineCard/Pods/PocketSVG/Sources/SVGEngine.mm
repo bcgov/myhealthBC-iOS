@@ -463,10 +463,11 @@ NSString *SVGStringFromCGPaths(NSArray * const paths, SVGAttributeSet * const at
         for(NSString *key in pathAttrs) {
             if(![pathAttrs[key] isKindOfClass:[NSString class]]) { // Color
                 [svg appendFormat:@" %@=\"%@\"", key, hexTriplet((__bridge CGColorRef)pathAttrs[key]).string()];
-                
-                float const alpha = CGColorGetAlpha((__bridge CGColorRef)pathAttrs[key]);
-                if(alpha < 1.0)
-                    [svg appendFormat:@" %@-opacity=\"%.2g\"", key, alpha];
+                if (CFGetTypeID((__bridge CFTypeRef)(pathAttrs[key])) == CGColorGetTypeID()) {
+                    float const alpha = CGColorGetAlpha((__bridge CGColorRef)pathAttrs[key]);
+                    if(alpha < 1.0)
+                        [svg appendFormat:@" %@-opacity=\"%.2g\"", key, alpha];
+                }
             } else
                 [svg appendFormat:@" %@=\"%@\"", key, pathAttrs[key]];
         }
@@ -539,9 +540,22 @@ CF_RETURNS_RETAINED CGMutablePathRef pathDefinitionParser::parse()
         if([cmdBuf length] > 1) {
             scanner.scanLocation -= [cmdBuf length]-1;
         } else {
-            for(float operand;
-                [scanner scanFloat:&operand];
-                _operands.push_back(operand));
+            while (!scanner.isAtEnd) {
+                NSUInteger zeros = 0;
+                while ([scanner scanString:@"0" intoString:NULL]) { ++zeros; }
+                // Start of a 0.x ?
+                if (zeros > 0 && [scanner scanString:@"." intoString:NULL]) {
+                    --zeros;
+                    scanner.scanLocation -= 2;
+                }
+                for (NSUInteger i = 0; i < zeros; ++i) { _operands.push_back(0.0); }
+
+                float operand;
+                if (![scanner scanFloat:&operand]) {
+                    break;
+                }
+                _operands.push_back(operand);
+            }
         }
 
 #ifdef SVG_PATH_SERIALIZER_DEBUG
@@ -882,7 +896,7 @@ hexTriplet::hexTriplet(NSString *str)
     static NSDictionary *colorMap = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-#if SWIFT_PACKAGE
+#ifdef SWIFTPM_MODULE_BUNDLE    
         NSURL *url = [SWIFTPM_MODULE_BUNDLE URLForResource:@"SVGColors" withExtension:@"plist"];
 #else
         NSURL *url = [[NSBundle bundleForClass:[SVGAttributeSet class]] URLForResource:@"SVGColors" withExtension:@"plist"];

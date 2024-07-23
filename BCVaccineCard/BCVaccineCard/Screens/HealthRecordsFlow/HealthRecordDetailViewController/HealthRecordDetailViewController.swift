@@ -19,7 +19,8 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
         return HealthRecordDetailViewController()
     }
     
-    @IBOutlet weak private var tableView: UITableView!
+    @IBOutlet private weak var recordsView: HealthRecordsView!
+//    private var recordsView: HealthRecordsView?
     
     public static var currentInstance: HealthRecordDetailViewController!
     
@@ -86,6 +87,11 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
         super.viewDidAppear(animated)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+//        HealthRecordDetailViewController.currentInstance = nil
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
@@ -99,16 +105,22 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     }
     
     func setupContent() {
-        let recordsView: HealthRecordsView = HealthRecordsView()
-        recordsView.frame = .zero
-        recordsView.bounds = view.bounds
-        view.addSubview(recordsView)
-        recordsView.layoutIfNeeded()
-        recordsView.addEqualSizeContraints(to: self.view, safe: true)
+//        self.recordsView = HealthRecordsView()
+//        guard let recordsView = self.recordsView else { return }
+////        let recordsView: HealthRecordsView = HealthRecordsView()
+//        recordsView.frame = .zero
+//        recordsView.bounds = view.bounds
+//        view.addSubview(recordsView)
+//        recordsView.layoutIfNeeded()
+//        recordsView.addEqualSizeContraints(to: self.view, safe: true)
         // Note: keep this here so the child views in HealthRecordsView get sized properly
         view.layoutSubviews()
         recordsView.configure(models: dataSource.records, delegate: self)
         view.layoutSubviews()
+    }
+    
+    private func removeContent() {
+        self.recordsView?.removeFromSuperview()
     }
     
     func showComments(for record: HealthRecordsDetailDataSource.Record) {
@@ -127,7 +139,7 @@ extension HealthRecordDetailViewController {
         case .laboratoryOrder(model: let labOrder):
             if labOrder.reportAvailable == true {
                 self.type = .normal
-//                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+                rightNavButton = NavButton(image: UIImage(named: "info-icon"), action: #selector(self.showMoreInfo), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitleMoreInfo, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintMoreInfo))
             }
         case .covidTestResultRecord(model: let covidTestOrder):
             if covidTestOrder.reportAvailable == true {
@@ -144,13 +156,26 @@ extension HealthRecordDetailViewController {
             rightNavButton = nil
         }
         
+        let leftNavButton = NavButton(image: UIImage(named: "app-back-arrow"), action: #selector(self.goBack), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitleMoreInfo, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintMoreInfo))
+        
         self.navDelegate?.setNavigationBarWith(title: dataSource.detailNavTitle,
-                                               leftNavButton: nil,
+                                               leftNavButton: leftNavButton,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
+    }
+    @objc private func goBack() {
+//        self.recordsView = nil
+//        removeContent()
+        HealthRecordDetailViewController.currentInstance = nil
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func showMoreInfo() {
+        let vc = LearnMoreViewController.construct()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc private func deleteButton(manuallyAdded: Bool) {

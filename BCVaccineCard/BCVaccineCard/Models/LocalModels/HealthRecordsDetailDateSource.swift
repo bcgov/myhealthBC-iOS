@@ -30,6 +30,29 @@ struct HealthRecordsDetailDataSource {
         let date: String?
         let listStatus: String
         let commentID: String?
+        let title: String?
+        
+        var displayable: Bool {
+            switch type {
+            case .hospitalVisit, .clinicalDocument:
+                return title != nil
+            default:
+                return (title != nil) && (date != nil)
+            }
+        }
+        
+        var titleError: Bool {
+            return title == nil
+        }
+        
+        var dateParsingError: Bool {
+            switch type {
+            case .hospitalVisit, .clinicalDocument:
+                return false
+            default:
+                return date == nil
+            }
+        }
         
         var comments: [Comment] {
             switch type {
@@ -91,6 +114,8 @@ struct HealthRecordsDetailDataSource {
     let image: UIImage?
     
     let records: [Record]
+    
+//    let shouldDisplay: Bool
     
     
     var mainRecord: Record? {
@@ -259,6 +284,7 @@ struct HealthRecordsDetailDataSource {
             
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
+            // No Date check here
         case .clinicalDocument(model: let model):
             // TODO: Confirm data
             id = model.id
@@ -269,6 +295,7 @@ struct HealthRecordsDetailDataSource {
             
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
+            // No Date check here
         case .diagnosticImaging(model: let model):
             id = model.id
             title = model.modality ?? "-"
@@ -354,14 +381,14 @@ extension HealthRecordsDetailDataSource {
     private static func genRecord(vaccineModel model: LocallyStoredVaccinePassportModel, immunizations: [CovidImmunizationRecord]) -> Record {
         let date: String? = model.vaxDates.last
         let modifiedDate = Date.Formatter.yearMonthDay.date(from: date ?? "")?.monthDayYearString ?? date
-        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: model.status.getTitle, date: modifiedDate, listStatus: model.status.getTitle, commentID: "-")
+        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: model.status.getTitle, date: modifiedDate, listStatus: model.status.getTitle, commentID: "-", title: .covid19vaccination)
     }
     
     // MARK: Covid Test Results
     private static func genRecord(testResult: TestResult, parentResult: CovidLabTestResult) -> Record {
         let status: String = testResult.resultType.getTitle
         let date: String? = testResult.collectionDateTime?.monthDayYearString
-        return Record(id: testResult.id ?? UUID().uuidString, name: testResult.patientDisplayName ?? "", type: .covidTestResultRecord(model: testResult), status: status, date: date, listStatus: status, commentID: parentResult.orderId)
+        return Record(id: testResult.id ?? UUID().uuidString, name: testResult.patientDisplayName ?? "", type: .covidTestResultRecord(model: testResult), status: status, date: date, listStatus: status, commentID: parentResult.orderId, title: .covid19TestResultTitle)
     }
     
     // MARK: Medications
@@ -390,7 +417,7 @@ extension HealthRecordsDetailDataSource {
         
         // Notes:
         /// Unsure about status field - this is what it appears to be in designs though
-        return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .medication(model: prescription), status: prescription.medication?.genericName, date: dateString, listStatus: prescription.medication?.genericName ?? "", commentID: prescription.prescriptionIdentifier)
+        return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .medication(model: prescription), status: prescription.medication?.genericName, date: dateString, listStatus: prescription.medication?.genericName ?? "", commentID: prescription.prescriptionIdentifier, title: prescription.medication?.brandName ?? "Statins")
     }
     
     // MARK: Lab Orders
@@ -398,14 +425,14 @@ extension HealthRecordsDetailDataSource {
         let dateString = labOrder.timelineDateTime?.monthDayYearString
         let labTests = labOrder.labTests
         
-        return Record(id: labOrder.id ?? UUID().uuidString, name: labOrder.patient?.name ?? "", type: .laboratoryOrder(model: labOrder, tests: labTests), status: labOrder.orderStatus, date: dateString, listStatus: "\(labOrder.laboratoryTests?.count ?? 0) \(String.tests)", commentID: labOrder.labPdfId)
+        return Record(id: labOrder.id ?? UUID().uuidString, name: labOrder.patient?.name ?? "", type: .laboratoryOrder(model: labOrder, tests: labTests), status: labOrder.orderStatus, date: dateString, listStatus: "\(labOrder.laboratoryTests?.count ?? 0) \(String.tests)", commentID: labOrder.labPdfId, title: labOrder.commonName)
     }
     
     // MARK: Immunization
     private static func genRecord(immunization: Immunization) -> Record {
         let dateString = immunization.dateOfImmunization?.monthDayYearString
         
-        return Record(id: immunization.id ?? UUID().uuidString, name: immunization.patient?.name ?? "" , type: .immunization(model: immunization), status: immunization.status, date: dateString, listStatus: immunization.status ?? "", commentID: "imm")
+        return Record(id: immunization.id ?? UUID().uuidString, name: immunization.patient?.name ?? "" , type: .immunization(model: immunization), status: immunization.status, date: dateString, listStatus: immunization.status ?? "", commentID: "imm", title: immunization.immunizationDetails?.name)
         
     }
     
@@ -413,7 +440,7 @@ extension HealthRecordsDetailDataSource {
     private static func genRecord(healthVisit: HealthVisit) -> Record {
         let dateString = healthVisit.encounterDate?.monthDayYearString
         
-        return Record(id: healthVisit.id ?? UUID().uuidString, name: healthVisit.clinic?.name ?? "" , type: .healthVisit(model: healthVisit), status: healthVisit.practitionerName, date: dateString, listStatus: healthVisit.practitionerName ?? "", commentID: healthVisit.id)
+        return Record(id: healthVisit.id ?? UUID().uuidString, name: healthVisit.clinic?.name ?? "" , type: .healthVisit(model: healthVisit), status: healthVisit.practitionerName, date: dateString, listStatus: healthVisit.practitionerName ?? "", commentID: healthVisit.id, title: healthVisit.specialtyDescription)
         
     }
     
@@ -421,7 +448,7 @@ extension HealthRecordsDetailDataSource {
     private static func genRecord(specialAuthorityDrug: SpecialAuthorityDrug) -> Record {
         let dateString = specialAuthorityDrug.requestedDate?.monthDayYearString
         
-        return Record(id: specialAuthorityDrug.referenceNumber ?? UUID().uuidString, name: specialAuthorityDrug.patient?.name ?? "" , type: .specialAuthorityDrug(model: specialAuthorityDrug), status: specialAuthorityDrug.requestStatus, date: dateString, listStatus: specialAuthorityDrug.requestStatus ?? "", commentID: specialAuthorityDrug.referenceNumber)
+        return Record(id: specialAuthorityDrug.referenceNumber ?? UUID().uuidString, name: specialAuthorityDrug.patient?.name ?? "" , type: .specialAuthorityDrug(model: specialAuthorityDrug), status: specialAuthorityDrug.requestStatus, date: dateString, listStatus: specialAuthorityDrug.requestStatus ?? "", commentID: specialAuthorityDrug.referenceNumber, title: specialAuthorityDrug.drugName)
         
     }
     
@@ -429,7 +456,7 @@ extension HealthRecordsDetailDataSource {
     private static func genRecord(hospitalVisit: HospitalVisit) -> Record {
         let dateString = hospitalVisit.admitDateTime?.monthDayYearString
         // TODO: confirm data
-        return Record(id: hospitalVisit.encounterID ?? UUID().uuidString, name: hospitalVisit.healthService ?? "", type: .hospitalVisit(model: hospitalVisit), status: hospitalVisit.facility, date: dateString, listStatus: hospitalVisit.visitType ?? "", commentID: hospitalVisit.encounterID)
+        return Record(id: hospitalVisit.encounterID ?? UUID().uuidString, name: hospitalVisit.healthService ?? "", type: .hospitalVisit(model: hospitalVisit), status: hospitalVisit.facility, date: dateString, listStatus: hospitalVisit.visitType ?? "", commentID: hospitalVisit.encounterID, title: hospitalVisit.facility)
         
     }
     
@@ -437,7 +464,7 @@ extension HealthRecordsDetailDataSource {
     private static func genRecord(clinicalDocument: ClinicalDocument) -> Record {
         let dateString = clinicalDocument.serviceDate?.monthDayYearString
         // TODO: confirm data
-        return Record(id: clinicalDocument.id ?? UUID().uuidString, name: clinicalDocument.name ?? "", type: .clinicalDocument(model: clinicalDocument), status: clinicalDocument.type, date: dateString, listStatus: clinicalDocument.type ?? "", commentID: clinicalDocument.id)
+        return Record(id: clinicalDocument.id ?? UUID().uuidString, name: clinicalDocument.name ?? "", type: .clinicalDocument(model: clinicalDocument), status: clinicalDocument.type, date: dateString, listStatus: clinicalDocument.type ?? "", commentID: clinicalDocument.id, title: clinicalDocument.name)
         
     }
     
@@ -448,7 +475,7 @@ extension HealthRecordsDetailDataSource {
         if diagnosticImaging.isObjectUpdated == true {
             status = "Updated"
         }
-        return Record(id: diagnosticImaging.id ?? UUID().uuidString, name: diagnosticImaging.modality ?? "", type: .diagnosticImaging(model: diagnosticImaging), status: status, date: dateString, listStatus: status, commentID: diagnosticImaging.id)
+        return Record(id: diagnosticImaging.id ?? UUID().uuidString, name: diagnosticImaging.modality ?? "", type: .diagnosticImaging(model: diagnosticImaging), status: status, date: dateString, listStatus: status, commentID: diagnosticImaging.id, title: diagnosticImaging.modality)
     }
     
     // MARK: Cancer Screening
@@ -456,14 +483,16 @@ extension HealthRecordsDetailDataSource {
         // Note: Having to convert date to PST statically (done on the date itself in Storage save)
         let dateString = cancerScreening.eventType == "Result" ? cancerScreening.resultDateTime?.monthDayYearString : cancerScreening.eventDateTime?.monthDayYearString
         var status = cancerScreening.programName ?? ""
+        
+        let text = cancerScreening.eventType == "Result" ? "BC Cancer Screening Result Letter" : "BC Cancer Screening Reminder Letter"
 
-        return Record(id: cancerScreening.id ?? UUID().uuidString, name: cancerScreening.itemType ?? "", type: .cancerScreening(model: cancerScreening), status: status, date: dateString, listStatus: status, commentID: cancerScreening.id)
+        return Record(id: cancerScreening.id ?? UUID().uuidString, name: cancerScreening.itemType ?? "", type: .cancerScreening(model: cancerScreening), status: status, date: dateString, listStatus: status, commentID: cancerScreening.id, title: text)
     }
     
     // MARK: Note
     private static func genRecord(note: Note) -> Record {
         let dateString = note.journalDate?.yearMonthStringDayString
         // TODO: confirm data
-        return Record(id: note.id ?? UUID().uuidString, name: note.title ?? "", type: .note(model: note), status: "", date: dateString, listStatus: "", commentID: note.id)
+        return Record(id: note.id ?? UUID().uuidString, name: note.title ?? "", type: .note(model: note), status: "", date: dateString, listStatus: "", commentID: note.id, title: note.title)
     }
 }
