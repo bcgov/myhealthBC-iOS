@@ -158,13 +158,22 @@ class CancerScreeningDetailView: BaseHealthRecordsDetailView, UITableViewDelegat
 
 extension CancerScreeningDetailView {
     
+    private func formatIntoLinkString(cancerType: String) -> String {
+        var linkString = cancerType
+        if let range = cancerType.range(of: "Cancer") {
+            linkString.removeSubrange(range)
+        }
+        return linkString.trimWhiteSpacesAndNewLines
+    }
+    
     private func createFields() -> [TextListModel] {
         guard let model = model else {return []}
         switch model.type {
         case .cancerScreening(model: let model):
-           
-            let firstText = model.eventType == "Result" ? "Download your cervix screening result letter. It may include important information about next steps. If you have questions, check the BC Cancer website or talk to your care provider." : "Find out about your cervix screening next steps. You will also get this letter in the mail. Learn more about cervix screening."
-            let linkedStrings = model.eventType == "Result" ? LinkedStrings(text: "check the BC Cancer website", link: "http://www.bccancer.bc.ca/screening/cervix", underlined: true) : LinkedStrings(text: "Learn more about cervix screening", link: "http://www.bccancer.bc.ca/screening/cervix", underlined: true)
+            let cancerType = model.programName ?? "Cervical Cancer"
+            let linkCancer = cancerType == "Cervical Cancer" ? "Cervix" : formatIntoLinkString(cancerType: cancerType)
+            let firstText = model.eventType == "Result" ? "Download your \(cancerType) screening result letter. It may include important information about next steps. If you have questions, check the BC Cancer website or talk to your care provider." : "Find out about your \(cancerType) screening next steps. You will also get this letter in the mail. Learn more about \(cancerType) screening."
+            let linkedStrings = model.eventType == "Result" ? LinkedStrings(text: "check the BC Cancer website", link: "http://www.bccancer.bc.ca/screening/\(linkCancer)", underlined: true) : LinkedStrings(text: "Learn more about \(cancerType) screening", link: "http://www.bccancer.bc.ca/screening/\(linkCancer)", underlined: true)
             let links = [linkedStrings]
                         
             let fields: [TextListModel] = [
