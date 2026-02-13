@@ -148,7 +148,7 @@ struct HealthRecordsService {
                 notesService.fetchAndStore(for: patient) { result in
                     guard let result = result else {
                         hadFailures = true
-                        
+                        dispatchGroup.leave()
                         return
                     }
                     let unwrapped = result.map { HealthRecord(type: .Note($0)) }
