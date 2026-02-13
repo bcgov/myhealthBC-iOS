@@ -63,3 +63,4 @@ fastlane/test_output
 iOSInjectionProject/
 
 BCVaccineCard/BCVaccineCard/Utility/Analytics/AnalyticsAppID.swift
+.claude/
