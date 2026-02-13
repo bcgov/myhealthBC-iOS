@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import JOSESwift
-import BCVaccineValidator
 
 struct DependentService {
     
@@ -35,12 +33,8 @@ struct DependentService {
             }
             Logger.log(string: "Storing dependents", type: .Network)
             StorageService.shared.store(dependents: payload, for: patient, completion: { result in
-                // Fetch vaccine cards for dependents - Always needed after fetching patients
-                Logger.log(string: "fetching dependents vaccine cards", type: .Network)
-                VaccineCardService(network: network, authManager: authManager, configService: configService).fetchAndStoreForDependents(of: patient, completion: { _ in
-                    network.removeLoader(caller: .DependentService_fetchDependents)
-                    completion(result)
-                })
+                network.removeLoader(caller: .DependentService_fetchDependents)
+                completion(result)
             })
             
         }

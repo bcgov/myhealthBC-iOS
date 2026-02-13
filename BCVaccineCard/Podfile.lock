@@ -8,20 +8,14 @@ PODS:
   - AppAuth/Core (1.7.5)
   - AppAuth/ExternalUserAgent (1.7.5):
     - AppAuth/Core
-  - BCVaccineValidator (2.1.6):
-    - Alamofire
-    - JOSESwift
   - EncryptedCoreData (3.1):
     - SQLCipher (~> 3.4.0)
   - FMDB (2.7.10):
     - FMDB/standard (= 2.7.10)
   - FMDB/standard (2.7.10)
   - IQKeyboardManagerSwift (6.5.16)
-  - JOSESwift (2.4.0)
   - JWTDecode (2.6.3)
   - KeychainAccess (4.2.2)
-  - PocketSVG (2.7.3)
-  - QueueITLibrary (3.0.14)
   - ReachabilitySwift (5.0.0)
   - SnowplowTracker (2.2.2):
     - FMDB (~> 2.7)
@@ -30,23 +24,18 @@ PODS:
   - SQLCipher/common (3.4.2)
   - SQLCipher/standard (3.4.2):
     - SQLCipher/common
-  - SwiftQRCodeGenerator (1.0.3)
   - SwiftyJSON (4.3.0)
   - SwipeCellKit (2.7.1)
 
 DEPENDENCIES:
   - AlamofireRSSParser
   - AppAuth
-  - BCVaccineValidator (from `https://github.com/bcgov/iOSVaccineValidator`, branch `legacyy`)
   - EncryptedCoreData (from `https://github.com/project-imas/encrypted-core-data.git`)
   - IQKeyboardManagerSwift
   - JWTDecode (~> 2.6)
   - KeychainAccess
-  - PocketSVG (~> 2.6)
-  - QueueITLibrary (~> 3.0.3)
   - ReachabilitySwift
   - SnowplowTracker (~> 2.0)
-  - SwiftQRCodeGenerator (~> 1.0.3)
   - SwiftyJSON (~> 4.0)
   - SwipeCellKit
 
@@ -57,29 +46,19 @@ SPEC REPOS:
     - AppAuth
     - FMDB
     - IQKeyboardManagerSwift
-    - JOSESwift
     - JWTDecode
     - KeychainAccess
-    - PocketSVG
-    - QueueITLibrary
     - ReachabilitySwift
     - SnowplowTracker
     - SQLCipher
-    - SwiftQRCodeGenerator
     - SwiftyJSON
     - SwipeCellKit
 
 EXTERNAL SOURCES:
-  BCVaccineValidator:
-    :branch: legacyy
-    :git: https://github.com/bcgov/iOSVaccineValidator
   EncryptedCoreData:
     :git: https://github.com/project-imas/encrypted-core-data.git
 
 CHECKOUT OPTIONS:
-  BCVaccineValidator:
-    :commit: bd4d760d02424f03454c2dbd704e7b50df973421
-    :git: https://github.com/bcgov/iOSVaccineValidator
   EncryptedCoreData:
     :commit: b97ffaf2f19dad4d1558bc9b0668cc2e09d17347
     :git: https://github.com/project-imas/encrypted-core-data.git
@@ -88,22 +67,17 @@ SPEC CHECKSUMS:
   Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
   AlamofireRSSParser: c8aeb615ac194d45e6648c121bbb442d16aaa4dc
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
-  BCVaccineValidator: 96328b6e13f999417033f8e50ffaa19888fed169
   EncryptedCoreData: f6762fb05f88a52f36c5648659abc91b57f244b4
   FMDB: eae540775bf7d0c87a5af926ae37af69effe5a19
   IQKeyboardManagerSwift: 12d89768845bb77b55cc092ecc2b1f9370f06b76
-  JOSESwift: 7ff178bb9173ff42c6e990929a9f2fa702a34f69
   JWTDecode: 33e5e26e5ddbd21b2065820894c08fef0cad9509
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
-  PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
-  QueueITLibrary: cf3498f07bb711690f1bd4d28e4050034cc1d278
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   SnowplowTracker: 2eee2d6606a60db98f7c4e1515499bb216b6c8ad
   SQLCipher: f9fcf29b2e59ced7defc2a2bdd0ebe79b40d4990
-  SwiftQRCodeGenerator: c5cdef1603699784b07af0fd3cc1c2f45ac26ada
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 7311420ab7067b4803d0897edb4f2c5d3e2c9abf
+PODFILE CHECKSUM: 716de65416f6f49ed049bdcbbbc94dc9a0c81e50
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

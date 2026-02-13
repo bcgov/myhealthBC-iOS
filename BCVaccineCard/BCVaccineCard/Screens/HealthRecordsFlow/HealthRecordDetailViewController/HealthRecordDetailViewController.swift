@@ -183,8 +183,8 @@ extension HealthRecordDetailViewController {
             [weak self] in
             guard let `self` = self else {return}
             switch self.dataSource.type {
-            case .covidImmunizationRecord(model: let model, immunizations: _):
-                StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
+            case .covidImmunizationRecord:
+                Logger.log(string: "Not able to delete COVID immunization records", type: .general)
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)

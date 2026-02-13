@@ -156,8 +156,8 @@ struct HealthRecordsDetailDataSource {
     
     var isAuthenticated: Bool {
         switch type {
-        case .covidImmunizationRecord(let model, _):
-            return StorageService.shared.fetchVaccineCard(code: model.code)?.authenticated ?? false
+        case .covidImmunizationRecord:
+            return true // COVID immunization records are always authenticated
         case .covidTestResultRecord(let model):
             return model.authenticated
         case .medication(model: let model):

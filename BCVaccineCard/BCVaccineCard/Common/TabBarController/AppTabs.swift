@@ -14,7 +14,7 @@ protocol TabDelegate {
 }
 
 enum AppTabs: Int, CaseIterable {
-    case Home = 0, UnAuthenticatedRecords, AuthenticatedRecords, Services, Proofs, Dependents
+    case Home = 0, UnAuthenticatedRecords, AuthenticatedRecords, Services, Dependents
     
     var getIndexOfTab: Int {
         return self.rawValue
@@ -41,13 +41,6 @@ enum AppTabs: Int, CaseIterable {
                               selectedTabBarImage: UIImage(named: "home-tab-selected")!,
                               unselectedTabBarImage:  UIImage(named: "home-tab-unselected")!,
                               baseViewController: HomeScreenViewController.construct())
-            
-        case .Proofs:
-            let vm = HealthPassViewController.ViewModel(fedPassStringToOpen: nil)
-            return Properties(title: "Proofs",
-                              selectedTabBarImage: UIImage(named: "passes-tab-selected")!,
-                              unselectedTabBarImage: UIImage(named: "passes-tab-unselected")!,
-                              baseViewController: HealthPassViewController.construct(viewModel: vm))
             
         case .Dependents:
             let vm = DependentsHomeViewController.ViewModel(patient: patient)

@@ -14,7 +14,6 @@ protocol AddCardsTableViewCellDelegate: AnyObject {
 class ReusableHeaderAddView: UIView {
     
     enum ScreenType {
-        case healthPass
         case healthRecords
     }
     
@@ -63,23 +62,6 @@ class ReusableHeaderAddView: UIView {
     
     @IBAction func addCardButtonTapped(_ sender: UIButton) {
         delegate?.addCardButtonTapped(screenType: self.screenType)
-    }
-    
-    // NOTE: For now, have two different config methods (in which case, we wouldn't need the screen type property - leaving for now as I'll likely be making just one config function once designs are finalized
-    func configureForHealthPass(savedCards: Int, delegateOwner: UIViewController) {
-        self.screenType = .healthPass
-        boldTextLabel.font = UIFont.bcSansBoldWithSize(size: 15)
-        let cardsPostfix = savedCards > 1 ? "Cards" : "Card"
-        boldTextLabel.text = "\(savedCards) \(cardsPostfix)"
-        setupAccessibility()
-//        if let savedCards = savedCards, savedCards > 1 {
-//            subtextLabel.isHidden = false
-//            subtextLabel.text = .passCount(count: "\(savedCards)")
-//        } else {
-//
-//        }
-        subtextLabel.isHidden = true
-        self.delegate = delegateOwner as? AddCardsTableViewCellDelegate
     }
     
     func configureForHealthRecords(delegateOwner: UIViewController) {
