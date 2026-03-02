@@ -64,6 +64,10 @@ class HealthRecordsLearnMoreView: UIView {
         self.layoutIfNeeded()
     }
     
+    // Banner shown on the health records list when cancer screening records are present.
+    // Updated to reflect that all four BC Cancer screening programs (Breast, Colon, Lung, Cervix)
+    // are now supported. The "Learn more" link points to the Health Gateway guide rather than
+    // the BC Cancer site, consistent with the Android implementation.
     private func setupForBCCancer(attributes: [NSAttributedString.Key: Any]) -> NSMutableAttributedString {
         let attrStr = NSMutableAttributedString(string: "BC Cancer screening letters for Breast, Colon, Lung, and Cervix are available here. Your Health Gateway timeline may include these and other screening test results in lab or imaging reports. Learn more", attributes: attributes)
         if let range = attrStr.range(textToFind: "Learn more"), let url = URL(string: "https://www2.gov.bc.ca/gov/content/health/managing-your-health/health-gateway/guide/healthrecords") {
