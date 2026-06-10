@@ -162,9 +162,27 @@ extension CancerScreeningDetailView {
         guard let model = model else {return []}
         switch model.type {
         case .cancerScreening(model: let model):
-           
-            let firstText = model.eventType == "Result" ? "Download your cervix screening result letter. It may include important information about next steps. If you have questions, check the BC Cancer website or talk to your care provider." : "Find out about your cervix screening next steps. You will also get this letter in the mail. Learn more about cervix screening."
-            let linkedStrings = model.eventType == "Result" ? LinkedStrings(text: "check the BC Cancer website", link: "http://www.bccancer.bc.ca/screening/cervix", underlined: true) : LinkedStrings(text: "Learn more about cervix screening", link: "http://www.bccancer.bc.ca/screening/cervix", underlined: true)
+
+            // Derive a URL-safe program name from the API's programName field (e.g. "Breast Cancer" -> "breast").
+            // BC Cancer screening expanded beyond cervix to include Breast, Colon, and Lung programs.
+            // The API returns the full program name; we take the first word and lowercase it for use in
+            // display text and deep-link URLs (e.g. bccancer.bc.ca/screening/breast).
+            // "Cervical" is normalised to "cervix" to match the BC Cancer URL convention.
+            var programName = (model.programName ?? "cervix")
+                .components(separatedBy: " ")
+                .first?
+                .lowercased() ?? "cervix"
+            if programName == "cervical" { programName = "cervix" }
+
+            // Base URL for all BC Cancer screening program pages — append programName to deep-link
+            // to the correct program (e.g. /screening/breast, /screening/colon, /screening/cervix).
+            let baseScreeningURL = "http://www.bccancer.bc.ca/screening/"
+            let firstText = model.eventType == "Result"
+                ? "Download your \(programName) screening result letter. It may include important information about next steps. If you have questions, check the BC Cancer website or talk to your care provider."
+                : "Find out about your \(programName) screening next steps. You will also get this letter in the mail. Learn more about \(programName) screening."
+            let linkedStrings = model.eventType == "Result"
+                ? LinkedStrings(text: "check the BC Cancer website", link: "\(baseScreeningURL)\(programName)", underlined: true)
+                : LinkedStrings(text: "Learn more about \(programName) screening", link: "\(baseScreeningURL)\(programName)", underlined: true)
             let links = [linkedStrings]
                         
             let fields: [TextListModel] = [
