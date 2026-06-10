@@ -127,10 +127,6 @@ extension UIViewController {
         case Authentication
         case Settings
         case Profile
-        case HealthPass
-        case CovidVaccineCards
-        case QRRetrievalMethod
-        case GatewayForm
         case UsersListOfRecords
         case FilterRecordsView
         case HealthRecordDetail
@@ -166,21 +162,6 @@ extension UIViewController {
                 return nil
             }
             return ProfileDetailsViewController.construct(viewModel: vm)
-        case .HealthPass:
-            guard let vm = viewModel as? HealthPassViewController.ViewModel else {
-                return nil
-            }
-            return HealthPassViewController.construct(viewModel: vm)
-        case .CovidVaccineCards:
-            guard let vm = viewModel as? CovidVaccineCardsViewController.ViewModel else {
-                return nil
-            }
-            return CovidVaccineCardsViewController.construct(viewModel: vm)
-        case .QRRetrievalMethod:
-            guard let vm = viewModel as? QRRetrievalMethodViewController.ViewModel else {
-                return nil
-            }
-            return QRRetrievalMethodViewController.construct(viewModel: vm)
         case .UsersListOfRecords:
             guard let vm = viewModel as? UsersListOfRecordsViewController.ViewModel else {
                 return nil
@@ -227,11 +208,6 @@ extension UIViewController {
             return CommentsViewController.construct(viewModel: vm)
         case .SecurityAndData:
             return SecurityAndDataViewController.construct()
-        case .GatewayForm:
-            guard let vm = viewModel as? GatewayFormViewController.ViewModel else {
-                return nil
-            }
-            return GatewayFormViewController.construct(viewModel: vm)
         case .TermsOfService:
             return TermsOfServiceViewController.construct()
         case .Notifications:

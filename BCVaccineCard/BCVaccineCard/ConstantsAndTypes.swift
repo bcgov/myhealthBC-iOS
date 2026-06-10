@@ -200,6 +200,14 @@ struct RecordsFilter {
         case DiagnosticImaging = "Imaging reports"
         case CancerScreening = "BC Cancer Screening"
         case Notes = "Notes"
+        
+        var getRecordLearnMoreType: RecordsLearnMoreTypes {
+            switch self {
+            case .DiagnosticImaging: return .DiagnosticImaging
+            case .CancerScreening: return .BCCancerScreening
+            default: return .NotApplicable
+            }
+        }
     }
     
     var fromDate: Date?

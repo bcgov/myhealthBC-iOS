@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import BCVaccineValidator
 import CoreData
 
 extension StorageService {
@@ -74,17 +73,6 @@ extension StorageService {
         }
     }
     
-    func deleteDependentVaccineCards(forPatient patient: Patient) {
-        var vaccineCardsArray: [[VaccineCard]] = []
-        patient.dependentsArray.forEach({ dependent in
-            if let array = dependent.info?.vaccineCardArray {
-                vaccineCardsArray.append(array)
-            }
-        })
-        let vaccineCards = vaccineCardsArray.flatMap { $0 }
-        deleteAllRecords(in: vaccineCards)
-    }
-    
     func delete(healthRecord: HealthRecord) {
         switch healthRecord.type {
         case .CovidTest(let object):
@@ -141,9 +129,7 @@ extension StorageService {
                 toDelete.append(contentsOf: tests)
                 notify(event: StorageEvent(event: .Delete, entity: .TestResult, object: tests))
             case .VaccineCard:
-                let vaccineCards = fetchVaccineCards().filter({$0.authenticated == true})
-                toDelete.append(contentsOf: vaccineCards)
-                notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: vaccineCards))
+                break // Vaccine cards feature removed
             case .Prescription:
                 let medications = fetchPrescriptions().filter({ $0.authenticated == true })
                 toDelete.append(contentsOf: medications)
@@ -203,8 +189,7 @@ extension StorageService {
                 let tests = fetchCovidTestResults()
                 deleteAllRecords(in: tests)
             case .VaccineCard:
-                let vaccineCards = fetchVaccineCards()
-                deleteAllRecords(in: vaccineCards)
+                break // Vaccine cards feature removed
             case .Prescription:
                 let medications = fetchPrescriptions()
                 deleteAllRecords(in: medications)
@@ -251,9 +236,7 @@ extension StorageService {
                     deleteAllRecords(in: tests)
                 }
             case .VaccineCard:
-                if let vaccineCards = dependent.info?.vaccineCardArray {
-                    deleteAllRecords(in: vaccineCards)
-                }
+                break // Vaccine cards feature removed
             case .Prescription:
                 if let medications = dependent.info?.prescriptionArray {
                     deleteAllRecords(in: medications)

@@ -1,6 +1,0 @@
-framework module QRCodeGenerator {
-  umbrella header "SwiftQRCodeGenerator-umbrella.h"
-
-  export *
-  module * { export * }
-}
