@@ -9,7 +9,6 @@ import Foundation
 import AppAuth
 import KeychainAccess
 import JWTDecode
-import BCVaccineValidator
 
 extension AuthManager {
     enum AuthenticationResult {

@@ -17,8 +17,6 @@ protocol EndpointsAccessor {
     func medicationStatement(base url: URL, hdid: String) -> URL
     func healthVisits(base url: URL, hdid: String) -> URL
     func communication(base url: URL) -> URL
-    func vaccineCardPublic(base url: URL) -> URL
-    func vaccineCardAuthenticated(base url: URL) -> URL
     func termsOfService(base url: URL) -> URL
     func patientDetails(base url: URL, hdid: String) -> URL
     func comments(base url: URL, hdid: String) -> URL
@@ -99,14 +97,6 @@ struct UrlAccessor: EndpointsAccessor {
     
     func communication(base url: URL) -> URL {
         gatewayAPIService(base: url).appendingPathComponent("Communication/Mobile")
-    }
-    
-    func vaccineCardPublic(base url: URL) -> URL {
-        immunizationBaseUrl(base: url).appendingPathComponent("PublicVaccineStatus")
-    }
-    
-    func vaccineCardAuthenticated(base url: URL) -> URL {
-        immunizationBaseUrl(base: url).appendingPathComponent("AuthenticatedVaccineStatus")
     }
     
     // MARK: PDF

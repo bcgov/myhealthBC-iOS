@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import BCVaccineValidator
 import SwiftUI
 
 protocol StorageLaboratoryOrderManager {

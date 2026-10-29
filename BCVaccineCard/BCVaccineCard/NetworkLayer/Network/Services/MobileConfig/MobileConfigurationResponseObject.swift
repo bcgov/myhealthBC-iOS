@@ -150,10 +150,6 @@ struct EnabledTypes: Codable {
                 recordTypes.append(record)
             }
         }
-        // NOTE: Doing this manually here because it doesn't seem to be included in the list - should check with Aravind here if theres a bug - but I believe we should fetch this regardless - or perhaps only fetch if immunizations are enabled
-        if !recordTypes.contains(.VaccineCard) {
-            recordTypes.append(.VaccineCard)
-        }
         return recordTypes
     }
     
