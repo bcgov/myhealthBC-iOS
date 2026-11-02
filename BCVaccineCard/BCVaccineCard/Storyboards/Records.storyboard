@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2hG-gH-503">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2hG-gH-503">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -162,6 +162,36 @@
             </objects>
             <point key="canvasLocation" x="2830" y="-665"/>
         </scene>
+        <!--Learn More View Controller-->
+        <scene sceneID="Lhu-E3-cov">
+            <objects>
+                <viewController storyboardIdentifier="LearnMoreViewController" id="YDv-AQ-LL0" customClass="LearnMoreViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="27g-PW-CbQ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="vyo-aL-px8">
+                                <rect key="frame" x="24" y="56" width="366" height="806"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="kja-So-zzq"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="vyo-aL-px8" firstAttribute="top" secondItem="kja-So-zzq" secondAttribute="top" constant="8" id="1xZ-t2-VeI"/>
+                            <constraint firstItem="kja-So-zzq" firstAttribute="trailing" secondItem="vyo-aL-px8" secondAttribute="trailing" constant="24" id="G3a-8T-4pv"/>
+                            <constraint firstItem="kja-So-zzq" firstAttribute="bottom" secondItem="vyo-aL-px8" secondAttribute="bottom" id="a7c-rY-oYP"/>
+                            <constraint firstItem="vyo-aL-px8" firstAttribute="leading" secondItem="kja-So-zzq" secondAttribute="leading" constant="24" id="rei-PQ-Jsr"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="vyo-aL-px8" id="S47-6s-Xat"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d6D-Di-Ek7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3710" y="-666"/>
+        </scene>
         <!--Users List Of Records View Controller-->
         <scene sceneID="euA-09-vEQ">
             <objects>
@@ -213,7 +243,7 @@
                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X0v-Xx-ZMU">
                                         <rect key="frame" x="0.0" y="162" width="414" height="545"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RZh-If-sGR" customClass="BCCancerInfoView" customModule="HealthGateway" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RZh-If-sGR" customClass="HealthRecordsLearnMoreView" customModule="HealthGateway" customModuleProvider="target">
                                                 <rect key="frame" x="24" y="20" width="366" height="156"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
@@ -329,22 +359,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="U2u-Gs-sK0">
-                                <rect key="frame" x="24" y="56" width="366" height="806"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RqZ-si-3Fe" customClass="HealthRecordsView" customModule="HealthGateway" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Xb5-L5-VYM"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="U2u-Gs-sK0" firstAttribute="top" secondItem="Xb5-L5-VYM" secondAttribute="top" constant="8" id="EKH-0s-zku"/>
-                            <constraint firstItem="Xb5-L5-VYM" firstAttribute="bottom" secondItem="U2u-Gs-sK0" secondAttribute="bottom" id="GAB-67-aFP"/>
-                            <constraint firstItem="Xb5-L5-VYM" firstAttribute="trailing" secondItem="U2u-Gs-sK0" secondAttribute="trailing" constant="24" id="TWR-oo-5ug"/>
-                            <constraint firstItem="U2u-Gs-sK0" firstAttribute="leading" secondItem="Xb5-L5-VYM" secondAttribute="leading" constant="24" id="mJk-M8-huu"/>
+                            <constraint firstItem="RqZ-si-3Fe" firstAttribute="top" secondItem="Xb5-L5-VYM" secondAttribute="top" id="2PK-Oj-USS"/>
+                            <constraint firstItem="Xb5-L5-VYM" firstAttribute="bottom" secondItem="RqZ-si-3Fe" secondAttribute="bottom" id="3wu-JN-Mm2"/>
+                            <constraint firstItem="RqZ-si-3Fe" firstAttribute="leading" secondItem="Xb5-L5-VYM" secondAttribute="leading" id="pVH-jK-cZY"/>
+                            <constraint firstItem="Xb5-L5-VYM" firstAttribute="trailing" secondItem="RqZ-si-3Fe" secondAttribute="trailing" id="xKe-d5-ZU1"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="tableView" destination="U2u-Gs-sK0" id="67f-zD-Zmw"/>
+                        <outlet property="recordsView" destination="RqZ-si-3Fe" id="z7D-nC-qQu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qOJ-9A-qBL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

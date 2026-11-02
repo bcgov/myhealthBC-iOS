@@ -48,17 +48,8 @@ struct HealthRecordsService {
                     
                 }
             case .VaccineCard:
-                let vaccineCardService = VaccineCardService(network: network, authManager: authManager, configService: configService)
-                vaccineCardService.fetchAndStore(for: patient) { result in
-                    guard let result = result else {
-                        hadFailures = true
-                        dispatchGroup.leave()
-                        return
-                    }
-                    let covidRec = HealthRecord(type: .CovidImmunization(result))
-                    records.append(covidRec)
-                    dispatchGroup.leave()
-                }
+                // Vaccine card feature removed
+                dispatchGroup.leave()
             case .Prescription:
                 let medicationService = MedicationService(network: network, authManager: authManager, configService: configService)
                 medicationService.fetchAndStore(for: patient, protectiveWord: protectiveWord) { result, error in
@@ -157,7 +148,7 @@ struct HealthRecordsService {
                 notesService.fetchAndStore(for: patient) { result in
                     guard let result = result else {
                         hadFailures = true
-                        
+                        dispatchGroup.leave()
                         return
                     }
                     let unwrapped = result.map { HealthRecord(type: .Note($0)) }

@@ -8,14 +8,14 @@
 import Foundation
 import UIKit
 
-protocol HealthRecordDetailDelegate {
+protocol HealthRecordDetailDelegate: AnyObject {
     func showComments(for record: HealthRecordsDetailDataSource.Record)
 }
 
 class HealthRecordsView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    private var collectionView: UICollectionView?
+    private weak var collectionView: UICollectionView?
     
-    private var delegate: HealthRecordDetailDelegate? = nil
+    private weak var delegate: HealthRecordDetailDelegate? = nil
     
     private var models: [HealthRecordsDetailDataSource.Record] = []
     

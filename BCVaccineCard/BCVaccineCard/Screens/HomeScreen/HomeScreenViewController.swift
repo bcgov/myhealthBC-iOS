@@ -103,8 +103,7 @@ class HomeScreenViewController: BaseViewController {
         var data: [DataSource] = [
             .quickAccess(types: [
                 .Records,
-                .Resources,
-                .Proofs
+                .Resources
             ])
         ]
         let quickAccess = data[0]
@@ -569,9 +568,6 @@ extension HomeScreenViewController {
                 // TODO: Not sure what we should show here, ask claire
                 showLogin(initialView: .Landing)
             }
-        case .Proofs:
-            let vm = HealthPassViewController.ViewModel(fedPassStringToOpen: nil)
-            show(route: .HealthPass, withNavigation: true, viewModel: vm)
         case .Resources:
             show(route: .Resource, withNavigation: true)
         case .Recommendations:

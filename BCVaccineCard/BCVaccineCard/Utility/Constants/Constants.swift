@@ -42,8 +42,6 @@ struct Constants {
     
     static func onBoardingScreenLatestVersion(for type: OnboardingScreenType) -> Int {
         switch type {
-        case .healthPasses:
-            return 1
         case .healthRecords:
             return 3
         case .healthResources:
@@ -69,17 +67,7 @@ struct Constants {
     struct Help {
         static let urlString = "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/proof#help"
     }
-    
-    struct QueueItStrings {
-        static let queueittoken = "queueittoken"
-    }
-    
-    struct GatewayVaccineCardRequestParameters {
-        static let phn = "phn"
-        static let dateOfBirth = "dateOfBirth"
-        static let dateOfVaccine = "dateOfVaccine"
-    }
-    
+
     struct GatewayTestResultsRequestParameters {
         static let phn = "phn"
         static let dateOfBirth = "dateOfBirth"

@@ -36,7 +36,7 @@ struct AddDependentFormData {
     }
     
     private func convertDate(date: Date) -> String {
-        return date.postServerDateTime
+        return date.yearMonthDayString
     }
 }
 
@@ -133,16 +133,12 @@ class AddDependentViewController: BaseDependentViewController, UITextFieldDelega
                 }
                 return
             }
-            VaccineCardService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: storedDependent, completion: {[weak self] _ in
-                guard let `self` = self else {return}
-                if let patientName = storedDependent.info?.name {
-                    self.showToast(message: "\(patientName) was added")
-                } else {
-                    self.showToast(message: "Dependent was added")
-                }
-
-                self.navigationController?.popViewController(animated: true)
-            })
+            if let patientName = storedDependent.info?.name {
+                self.showToast(message: "\(patientName) was added")
+            } else {
+                self.showToast(message: "Dependent was added")
+            }
+            self.navigationController?.popViewController(animated: true)
         }
     }
     

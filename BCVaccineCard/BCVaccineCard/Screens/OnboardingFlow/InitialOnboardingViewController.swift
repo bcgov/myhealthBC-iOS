@@ -35,7 +35,7 @@ class InitialOnboardingViewController: UIViewController {
     
     private var viewModel: ViewModel?
     private var screensToShow: [OnboardingScreenType] = []
-    private var screenNumber: OnboardingScreenType = .healthPasses
+    private var screenNumber: OnboardingScreenType = .healthRecords
     private var newTextShown: Bool = false
     private var screenProgressImageDotsCollection: [UIImageView] = []
     private var screenProgressImageDotsWidthConstraintCollection: [NSLayoutConstraint] = []

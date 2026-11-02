@@ -8,12 +8,22 @@
 import Foundation
 
 extension Notification.Name {
+    func post(object: Any? = nil, userInfo: [AnyHashable : Any]? = nil) {
+        NotificationCenter.default.post(name: self, object: object, userInfo: userInfo)
+    }
+
+    @discardableResult
+    func onPost(object: Any? = nil, queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+        return NotificationCenter.default.addObserver(forName: self, object: object, queue: queue, using: using)
+    }
+}
+
+extension Notification.Name {
     static let tabChanged = Notification.Name("TabChanged")
     static let reloadNewsFeed = Notification.Name("ReloadNewsFeed")
     static let cardAddedNotification = Notification.Name("cardAddedNotification")
     static let storageChangeEvent = Notification.Name("StorageChangeEvent")
-    static let fedPassOnlyAdded = Notification.Name("FedPassOnlyAdded")
-    
+
     static let refreshTokenExpired = Notification.Name("refreshTokenExpired")
     static let authTokenExpired = Notification.Name("authTokenExpired")
     
@@ -38,8 +48,7 @@ extension Notification.Name {
     
     static let showTermsOfService = Notification.Name("showTermsOfService")
     static let respondToTermsOfService = Notification.Name("respondToTermsOfService")
-    
-    static let queueItUIManuallyClosed = Notification.Name("queueItUIManuallyClosed")
+
     static let patientStored = Notification.Name("patientStored")
     static let applyQuickLinkFilter = Notification.Name("applyQuickLinkFilter")
     static let refetchQuickLinksFromCoreData = Notification.Name("refetchQuickLinksFromCoreData")
