@@ -131,16 +131,16 @@ struct SyncService {
                 if hadFails {
                     hadFailures = true
                 }
-                
-                if HealthRecordConstants.commentsEnabled {
-                    commentsService.fetchAndStore(for: patient) { comments in
-                        Logger.log(string: "\(String.fetched) \(comments.count) \(String.comments.lowercased())", type: .Network)
-                        group.leave()
-                    }
-                } else {
+                Logger.log(string: "\(String.fetched) \(records.count) \(String.records.lowercased())", type: .Network)
+                group.leave()
+            }
+
+            if HealthRecordConstants.commentsEnabled {
+                group.enter()
+                commentsService.fetchAndStore(for: patient) { comments in
+                    Logger.log(string: "\(String.fetched) \(comments.count) \(String.comments.lowercased())", type: .Network)
                     group.leave()
                 }
-                Logger.log(string: "\(String.fetched) \(records.count) \(String.records.lowercased())", type: .Network)
             }
             
 //            group.enter()

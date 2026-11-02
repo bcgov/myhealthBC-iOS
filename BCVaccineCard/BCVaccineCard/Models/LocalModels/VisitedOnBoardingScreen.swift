@@ -28,13 +28,11 @@ struct VisitedOnboardingScreen: Encodable, Decodable {
 enum OnboardingScreenType: Int, CaseIterable {
     case healthRecords = 0
     case dependents
-    case healthPasses
     case healthResources
     case services
 }
 
 enum OnboardingScreenTypeID: String {
-    case healthPasses = "healthPasses"
     case healthRecords = "healthRecords"
     case healthResources = "healthResources"
     case dependents = "dependents"
@@ -44,8 +42,6 @@ enum OnboardingScreenTypeID: String {
 extension OnboardingScreenType {
      func toScreenTypeID() -> OnboardingScreenTypeID {
         switch self {
-        case .healthPasses:
-            return .healthPasses
         case .healthRecords:
             return .healthRecords
         case .healthResources:
@@ -61,8 +57,6 @@ extension OnboardingScreenType {
 extension OnboardingScreenTypeID {
      func toScreenType() -> OnboardingScreenType {
         switch self {
-        case .healthPasses:
-            return .healthPasses
         case .healthRecords:
             return .healthRecords
         case .healthResources:
@@ -78,8 +72,6 @@ extension OnboardingScreenTypeID {
 extension OnboardingScreenType {
     var getResourceImage: UIImage? {
         switch self {
-        case .healthPasses:
-            return UIImage(named: "bubble-proofs")
         case .healthRecords:
             return UIImage(named: "bubble-records")
         case .healthResources:
@@ -96,8 +88,6 @@ extension OnboardingScreenType {
         switch self {
         case .healthRecords:
             return (width: 124, height: 107, xOffset: -45, yOffset: -40)
-        case .healthPasses:
-            return (width: 133, height: 99, xOffset: 64, yOffset: 48)
         case .healthResources:
             return (width: 132, height: 99, xOffset: -60, yOffset: 48)
         case .dependents:
@@ -106,11 +96,9 @@ extension OnboardingScreenType {
             return (width: 133, height: 99, xOffset: 64, yOffset: 48)
         }
     }
-    
+
     var getTitle: String {
         switch self {
-        case .healthPasses:
-            return .healthPasses.sentenceCase()
         case .healthRecords:
             return .healthRecords.sentenceCase()
         case .healthResources:
@@ -121,11 +109,9 @@ extension OnboardingScreenType {
             return .services
         }
     }
-    
+
     var getDescription: String {
         switch self {
-        case .healthPasses:
-            return .initialOnboardingHealthPassesDescription
         case .healthRecords:
             return .initialOnboardingHealthRecordsDescription
         case .healthResources:

@@ -12,13 +12,11 @@ enum HomeScreenCellType {
     case ImmunizationSchedule
     case Recommendations
     case Resources
-    case Proofs
     case QuickLink(type: QuickLinksPreferences)
     
     var getTitle: String {
         switch self {
         case .Records: return "Health\nRecords"
-        case .Proofs: return "Proof of\nVaccination"
         case .Resources: return "Health\nResources"
         case .ImmunizationSchedule: return "Immunization\nSchedules"
         case .Recommendations: return "Recommended\nImmunizations"
@@ -30,7 +28,6 @@ enum HomeScreenCellType {
     var getIcon: UIImage? {
         switch self {
         case .Records: return UIImage(named: "records-home-icon")
-        case .Proofs: return UIImage(named: "proofs-home-icon")
         case .Resources: return UIImage(named: "resources-home-icon")
         case .ImmunizationSchedule: return UIImage(named: "immunization-schedules-icon")
         case .Recommendations: return UIImage(named: "recommended-immunizations-icon")
@@ -46,7 +43,6 @@ enum HomeScreenCellType {
     var getDescriptionText: String {
         switch self {
         case .Records: return "Access your lab test results, medication history, immunization records, health visits and more"
-        case .Proofs: return "Save proof of vaccination documents for you and your family"
         case .Resources: return "Find trusted health information and resources"
         case .Recommendations: return "Find out which vaccinations are recommended for you"
         case .ImmunizationSchedule:
@@ -61,7 +57,6 @@ enum HomeScreenCellType {
         case .Records:
             let image = auth ? UIImage(named: "records-home-button-auth") : UIImage(named: "records-home-button-unauth")
             return image
-        case .Proofs: return UIImage(named: "proofs-home-button")
         case .Resources: return UIImage(named: "resources-home-button")
         case .Recommendations:  return UIImage(named: "resources-home-button")
         case .ImmunizationSchedule: return UIImage(named: "resources-home-button")

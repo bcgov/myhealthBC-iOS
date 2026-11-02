@@ -29,60 +29,39 @@ extension HealthRecordsDetailDataSource.Record {
 }
 
 class CovidImmunizationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
-    
+
     private var fields: [[TextListModel]] = [[]]
 
     override func setup() {
-        tableView?.register(UINib.init(nibName: CovidImmunizationBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CovidImmunizationBannerTableViewCell.getName)
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
     }
-    
-    public func CovidImmunizationBannerCell(indexPath: IndexPath, tableView: UITableView) -> CovidImmunizationBannerTableViewCell? {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CovidImmunizationBannerTableViewCell.getName, for: indexPath) as? CovidImmunizationBannerTableViewCell
-        cell?.selectionStyle = .none
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return fields.count
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return fields[section].count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+        cell.setup(with: fields[indexPath.section][indexPath.row])
         return cell
     }
-  
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return fields.count + 1 // Immunization dose sets + header
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1 // Hedaer section
-       default:
-            return fields[section - 1].count // Immunizations
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let model = self.model, let immunizationModel = model.covidImmunization() else {return UITableViewCell()}
-        switch indexPath.section {
-        case 0:
-            guard let cell = CovidImmunizationBannerCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.setup(model: immunizationModel)
-            return cell
-        default:
-            guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.setup(with: fields[indexPath.section - 1][indexPath.row])
-            return cell
-        }
-    }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section != 0 else {return nil}
         return separatorView()
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard section != 0 else {return 0}
         return separatorHeight + separatorBottomSpace
     }
-    
+
 }
 
 extension CovidImmunizationRecordDetailView {

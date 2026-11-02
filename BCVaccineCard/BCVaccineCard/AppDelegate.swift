@@ -6,7 +6,6 @@
 
 import UIKit
 import CoreData
-import BCVaccineValidator
 import EncryptedCoreData
 import IQKeyboardManagerSwift
 import AppAuth
@@ -56,14 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func configure() {
         AppStates.shared.listen()
-        //use .Prod or .Test for different endpoints for keys
-#if PROD
-        BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
-#elseif TEST
-        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
-#elseif DEV
-        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
-#endif
         AnalyticsService.shared.setup()
         
         let networkService = AFNetwork()
@@ -340,10 +331,6 @@ enum LoaderCaller {
     case PatientService_fetchAndStoreCancerScreening
     case PatientService_validateProfile
     case CovidTestsService_fetchAndStore
-    case VaccineCardService_fetchAndStore_Patient
-    case VaccineCardService_fetchAndStore_Dependent
-    case VaccineCardService_fetchAndStore_DependentsOfPatient
-    case VaccineCardService_fetchAndStore_FormInfo
     case ClinicalDocumentService_fetchAndStore
     case DependentService_fetchDependents
     case DependentService_addDependent
