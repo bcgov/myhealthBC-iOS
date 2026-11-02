@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var configService: MobileConfigService?
     
     var coreDataContext: NSManagedObjectContext?
+    private var storageLoadFailed = false
     
     fileprivate var dataLoadCount: Int = 0 
     internal var dataLoadHideTimer: Timer? = nil
@@ -43,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CoreDataProvider.shared.loadManagedContext { context in
             if context == nil {
                 // Could not load storage
+                self.storageLoadFailed = true
                 self.showDBLoadError()
             } else {
                 self.coreDataContext = context
@@ -51,6 +53,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         return true
+    }
+    
+    // MARK: UIScene lifecycle
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    }
+    
+    /// Called by SceneDelegate once the scene's window exists.
+    /// didFinishLaunching runs before any scene is connected, so UI that needs the window is set up here.
+    func attach(window: UIWindow?) {
+        self.window = window
+        if storageLoadFailed {
+            showDBLoadError()
+        } else if coreDataContext != nil {
+            setupRootViewController()
+        }
     }
     
     private func configure() {
@@ -193,9 +211,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 // MARK: Auth {
 extension AppDelegate {
-    func application(_ app: UIApplication,
-                     open url: URL,
-                     options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    /// Called from SceneDelegate. application(_:open:options:) is not invoked under the UIScene lifecycle.
+    @discardableResult
+    func handleOpenURL(_ url: URL) -> Bool {
         // Sends the URL to the current authorization flow (if any) which will
         // process it if it relates to an authorization response.
         if let authorizationFlow = self.currentAuthorizationFlow,
@@ -213,6 +231,8 @@ extension AppDelegate {
 // MARK: Root setup
 extension AppDelegate {
     func setupRootViewController() {
+        // No window until the scene connects; attach(window:) calls this again
+        guard let window = window else { return }
         guard let authManager = authManager,
               let syncService = syncService,
               let networkService = networkService,
@@ -225,7 +245,7 @@ extension AppDelegate {
                                                syncService: syncService,
                                                networkService: networkService,
                                                configService: configService)
-        self.window?.rootViewController = vc
+        window.rootViewController = vc
 //        let unseen = Defaults.unseenOnBoardingScreens()
 //        guard let first = unseen.first else {
 //            let vc = AppTabBarController.construct(authManager: authManager,
@@ -271,7 +291,13 @@ extension AppDelegate {
 
 public extension UIApplication {
     
-    class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+    var activeKeyWindow: UIWindow? {
+        let windowScenes = connectedScenes.compactMap { $0 as? UIWindowScene }
+        let activeScene = windowScenes.first { $0.activationState == .foregroundActive } ?? windowScenes.first
+        return activeScene?.keyWindow ?? activeScene?.windows.first
+    }
+    
+    class func topViewController(base: UIViewController? = UIApplication.shared.activeKeyWindow?.rootViewController) -> UIViewController? {
         if let nav = base as? UINavigationController {
             return topViewController(base: nav.visibleViewController)
         }

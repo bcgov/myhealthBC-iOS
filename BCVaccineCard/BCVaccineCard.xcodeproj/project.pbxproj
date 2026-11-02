@@ -1013,6 +1013,9 @@
 		7928346D27311C9000EE2710 /* DropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7928346C27311C9000EE2710 /* DropDownView.xib */; };
 		7928346E27311C9000EE2710 /* DropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7928346C27311C9000EE2710 /* DropDownView.xib */; };
 		7944F67926F12613006B9444 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67826F12613006B9444 /* AppDelegate.swift */; };
+		5CE0A0012F00000000A10002 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE0A0012F00000000A10001 /* SceneDelegate.swift */; };
+		5CE0A0012F00000000A10003 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE0A0012F00000000A10001 /* SceneDelegate.swift */; };
+		5CE0A0012F00000000A10004 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE0A0012F00000000A10001 /* SceneDelegate.swift */; };
 		7944F68026F12613006B9444 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
 		7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */; };
 		7944F68526F1261B006B9444 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7944F68426F1261B006B9444 /* Assets.xcassets */; };
@@ -1923,6 +1926,7 @@
 		7928346C27311C9000EE2710 /* DropDownView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DropDownView.xib; sourceTree = "<group>"; };
 		7944F67526F12613006B9444 /* HealthGatewayDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthGatewayDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7944F67826F12613006B9444 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		5CE0A0012F00000000A10001 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		7944F67F26F12613006B9444 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7944F68226F12614006B9444 /* BCVaccineCard.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BCVaccineCard.xcdatamodel; sourceTree = "<group>"; };
 		7944F68426F1261B006B9444 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -3580,6 +3584,7 @@
 				7944F6AD26F129DE006B9444 /* Storyboards */,
 				7944F6B226F12AB3006B9444 /* Screens */,
 				7944F67826F12613006B9444 /* AppDelegate.swift */,
+				5CE0A0012F00000000A10001 /* SceneDelegate.swift */,
 				3EAF8184296DF0CE00738553 /* ConstantsAndTypes.swift */,
 				2965281628358F4800C411E1 /* AppDelegate+EXT.swift */,
 				5BA177D127A18CDD00D61F2A /* CoreDataStack.swift */,
@@ -5032,6 +5037,7 @@
 				3E62CFC5299BE003000FBB40 /* PatientService.swift in Sources */,
 				3E68312D2940D41200100402 /* HealthVisit+CoreDataClass.swift in Sources */,
 				7944F67926F12613006B9444 /* AppDelegate.swift in Sources */,
+				5CE0A0012F00000000A10002 /* SceneDelegate.swift in Sources */,
 				3ECD398A28B522970033B866 /* StorageService+Recommendations.swift in Sources */,
 				795AA73E271094B400E59FF1 /* Endpoint.swift in Sources */,
 				797DE3C227D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift in Sources */,
@@ -5444,6 +5450,7 @@
 				3E66F05B290B437500D90EF6 /* Dependent+CoreDataClass.swift in Sources */,
 				79B1A10228774B12009B3EFB /* AuthenticatedSpecialAuthorityDrugsResponseModel.swift in Sources */,
 				794BD6342702EEC00084ADA8 /* AppDelegate.swift in Sources */,
+				5CE0A0012F00000000A10003 /* SceneDelegate.swift in Sources */,
 				3EDA6F7529EF205D00A5DC7B /* UnAuthenticatedView.swift in Sources */,
 				79218AF92756A0B30063004E /* HealthRecordsDetailDateSource.swift in Sources */,
 				29736A412788EBD700CCB1D2 /* VaccineCard+CoreDataProperties.swift in Sources */,
@@ -5805,6 +5812,7 @@
 				3ECD398928B522970033B866 /* StorageService+Recommendations.swift in Sources */,
 				7980053E2852C66E006E390F /* AnalyticsService.swift in Sources */,
 				7980053F2852C66E006E390F /* AppDelegate.swift in Sources */,
+				5CE0A0012F00000000A10004 /* SceneDelegate.swift in Sources */,
 				3E6831202940D41200100402 /* CovidLabTestResult+CoreDataProperties.swift in Sources */,
 				798005402852C66E006E390F /* Endpoint.swift in Sources */,
 				798005412852C66E006E390F /* AuthenticatedPDFResponseObject.swift in Sources */,
