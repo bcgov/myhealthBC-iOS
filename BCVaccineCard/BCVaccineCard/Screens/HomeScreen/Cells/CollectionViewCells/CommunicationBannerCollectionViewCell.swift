@@ -77,26 +77,29 @@ class CommunicationBannerCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(data: CommunicationBanner?, delegate: CommunicationBannerCollectionViewCellDelegate) {
-        guard let data = data else {
-            return
-        }
-        expandButton.setImage(UIImage(named: "expand_arrow_up"), for: .normal)
-        self.data = data
-        self.delegate = delegate
-        titleLabel.text = data.subject
+        // The 'DispatchQueue.main.async' here prevents the UICollectionView crash caused by improper dequeuing and lifecycle management - triggered by the AttributedString on Xcode 26 and above.
+        DispatchQueue.main.async {
+            guard let data = data else {
+                return
+            }
+            self.expandButton.setImage(UIImage(named: "expand_arrow_up"), for: .normal)
+            self.data = data
+            self.delegate = delegate
+            self.titleLabel.text = data.subject
 
-        var textAttributed = data.text?.injectHTMLFont(size: 14).htmlToAttributedString?.trimmedAttributedString()
+            var textAttributed = data.text?.injectHTMLFont(size: 14).htmlToAttributedString?.trimmedAttributedString()
 
-        if let text = textAttributed, let shortText = text.cutOff(at: maxMessageChar) {
-            learnMoreButton.isHidden = false
-            textAttributed = shortText
-        } else {
-            learnMoreButton.isHidden = true
+            if let text = textAttributed, let shortText = text.cutOff(at: self.maxMessageChar) {
+                self.learnMoreButton.isHidden = false
+                textAttributed = shortText
+            } else {
+                self.learnMoreButton.isHidden = true
+            }
+            
+            self.textView.attributedText = textAttributed
+            self.textView.delegate = self
+            self.style()
         }
-        
-        textView.attributedText = textAttributed
-        textView.delegate = self
-        style()
     }
 
     private func style() {
