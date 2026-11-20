@@ -234,7 +234,7 @@ class LocalAuthView: UIView, Theme {
 
 extension UIView {
     func findTopMostVC() -> UIViewController? {
-        let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+        let keyWindow = UIApplication.shared.activeKeyWindow
 
         if var topController = keyWindow?.rootViewController {
             while let presentedViewController = topController.presentedViewController {
