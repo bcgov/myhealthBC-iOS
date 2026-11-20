@@ -198,7 +198,7 @@ class AuthManager {
     }
     
     func topMostController() -> UIViewController? {
-        guard let window = UIApplication.shared.keyWindow, let rootViewController = window.rootViewController else {
+        guard let window = UIApplication.shared.activeKeyWindow, let rootViewController = window.rootViewController else {
             return nil
         }
 
