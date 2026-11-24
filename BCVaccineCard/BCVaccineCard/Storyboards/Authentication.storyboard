@@ -63,7 +63,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="128" id="Tzn-SR-abA"/>
                                         </constraints>
-                                        <string key="text">We are unable to retrive your health record at this moment because of problem with BC Service Card log in, please contact Health Gateway team: healthgateway@gov.bc.ca for more information</string>
+                                        <string key="text">We are unable to retrieve your health record at this time because of a problem with the BC Services Card login. Please try again later. If this continues, contact us at healthgateway@gov.bc.ca for more information.</string>
                                         <color key="textColor" systemColor="labelColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
