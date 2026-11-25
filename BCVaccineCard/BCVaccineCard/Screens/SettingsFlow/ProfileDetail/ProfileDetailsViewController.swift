@@ -226,33 +226,8 @@ extension ProfileDetailsViewController: RemoveDependentTableViewCellDelegate {
 // MARK: Address help button delegate
 extension ProfileDetailsViewController: ProfileDetailsTableViewCellDelegate {
     func addressHelpButtonTapped() {
-//        let urlString = "https://www.addresschange.gov.bc.ca/"
-//        let vc = UpdateAddressViewController.constructUpdateAddressViewController(delegateOwner: self, urlString: urlString)
-//        self.navigationController?.pushViewController(vc, animated: true)
         if let url = URL(string: "https://www.addresschange.gov.bc.ca/"), UIApplication.shared.canOpenURL(url) {
-//            UIApplication.shared.open(url)
             AppDelegate.sharedInstance?.showExternalURL(url: url.absoluteString)
-        }
-    }
-}
-
-// MARK: For address change callback - Not using currently
-extension ProfileDetailsViewController: UpdateAddressViewControllerDelegate {
-    func webViewClosed() {
-        self.fetchPatientDetails()
-    }
-}
-
-// MARK: Fetch Patient Details after address has been updated
-extension ProfileDetailsViewController {
-    private func fetchPatientDetails() {
-        profileService?.fetchAndStoreDetails { patient in
-            self.physicalAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.physicalAddress?.streetLines, city: patient?.physicalAddress?.city, state: patient?.physicalAddress?.state, postalCode: patient?.physicalAddress?.postalCode, country: patient?.physicalAddress?.country).getAddressString
-            self.mailingAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.postalAddress?.streetLines, city: patient?.postalAddress?.city, state: patient?.postalAddress?.state, postalCode: patient?.postalAddress?.postalCode, country: patient?.postalAddress?.country).getAddressString
-            self.dataSource = []
-            self.initializeDataSource(for: self.type)
-            self.tableView.reloadData()
-            self.tableView.endLoadingIndicator()
         }
     }
 }

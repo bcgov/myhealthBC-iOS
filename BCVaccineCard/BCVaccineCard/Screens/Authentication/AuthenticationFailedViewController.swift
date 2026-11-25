@@ -78,7 +78,7 @@ class AuthenticationFailedViewController: BaseViewController {
             .font: UIFont.bcSansRegularWithSize(size: 17),
             .foregroundColor: AppColours.textBlack
         ]
-        let normal = NSAttributedString(string: "We are unable to retrieve your health records at this time. For more information, contact ", attributes: normalAttributes)
+        let normal = NSAttributedString(string: "We are unable to retrieve your health record at this time because of a problem with the BC Services Card login. Please try again later. If this continues, contact us at ", attributes: normalAttributes)
         attributedText.append(normal)
         // underlined text
         let url = URL(string: "mailto:healthgateway@gov.bc.ca")
@@ -96,7 +96,7 @@ class AuthenticationFailedViewController: BaseViewController {
             .font: UIFont.bcSansRegularWithSize(size: 17),
             .foregroundColor: AppColours.textBlack
         ]
-        let remainingNormal = NSAttributedString(string: " for more information", attributes: remainingNormalAttributes)
+        let remainingNormal = NSAttributedString(string: " for more information.", attributes: remainingNormalAttributes)
         attributedText.append(remainingNormal)
         
         descriptionTextView.attributedText = attributedText
