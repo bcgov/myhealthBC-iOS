@@ -104,6 +104,24 @@ extension TermsOfServiceViewController: WKNavigationDelegate {
         let js = "document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust='250%'"
         webView.evaluateJavaScript(js, completionHandler: nil)
     }
+    
+    // Only the locally loaded terms HTML (about:blank) may render here; tapped links open in Safari.
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        guard let url = navigationAction.request.url else {
+            decisionHandler(.cancel)
+            return
+        }
+        if url.scheme?.lowercased() == "about" {
+            decisionHandler(.allow)
+            return
+        }
+        decisionHandler(.cancel)
+        let externalSchemes = ["http", "https", "mailto", "tel"]
+        guard navigationAction.navigationType == .linkActivated,
+              let scheme = url.scheme?.lowercased(),
+              externalSchemes.contains(scheme) else { return }
+        UIApplication.shared.open(url)
+    }
 }
 
 // MARK: Button actions
