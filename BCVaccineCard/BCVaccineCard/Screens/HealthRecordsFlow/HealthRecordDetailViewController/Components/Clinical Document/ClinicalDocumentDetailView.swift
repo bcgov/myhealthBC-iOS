@@ -65,7 +65,7 @@ class ClinicalDocumentRecordDetailView: BaseHealthRecordsDetailView, UITableView
             return cell
         case .DownloadButton:
             guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
-            cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance, style: .downloadFullReport)
+            cell.configure(delegateOwner: delegateOwner, style: .downloadFullReport)
             return cell
         }
     }

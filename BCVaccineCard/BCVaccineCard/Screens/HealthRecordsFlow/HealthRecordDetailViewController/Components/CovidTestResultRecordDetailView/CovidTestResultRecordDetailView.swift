@@ -103,7 +103,7 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
                 }
             } else if indexPath.row == 1 {
                 guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
-                cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance, style: .viewPDF)
+                cell.configure(delegateOwner: delegateOwner, style: .viewPDF)
                 return cell
             }
            return UITableViewCell()

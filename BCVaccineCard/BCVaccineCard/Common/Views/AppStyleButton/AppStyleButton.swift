@@ -123,7 +123,7 @@ class AppStyleButton: UIView {
         self.delegate?.buttonTapped(type: self.buttonType)
     }
     
-    func configure(withStyle style: ButtonStyle, buttonType: ButtonType, delegateOwner: UIViewController, enabled: Bool, accessibilityValue: String? = nil, accessibilityHint: String? = nil, font: UIFont = UIFont.bcSansBoldWithSize(size: 18)) {
+    func configure(withStyle style: ButtonStyle, buttonType: ButtonType, delegateOwner: UIViewController?, enabled: Bool, accessibilityValue: String? = nil, accessibilityHint: String? = nil, font: UIFont = UIFont.bcSansBoldWithSize(size: 18)) {
         roundedButton.backgroundColor = style.getColorScheme.backgroundColor
         roundedButton.setTitleColor(style.getColorScheme.titleColor, for: .normal)
         roundedButton.setTitle(buttonType.getTitle, for: .normal)

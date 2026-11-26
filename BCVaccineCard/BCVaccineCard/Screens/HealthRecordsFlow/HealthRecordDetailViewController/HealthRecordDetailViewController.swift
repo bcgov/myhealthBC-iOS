@@ -22,8 +22,6 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     @IBOutlet private weak var recordsView: HealthRecordsView!
 //    private var recordsView: HealthRecordsView?
     
-    public static var currentInstance: HealthRecordDetailViewController!
-    
     private var dataSource: HealthRecordsDetailDataSource!
     private var authenticatedRecord: Bool!
     private var userNumberHealthRecords: Int!
@@ -37,7 +35,6 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        HealthRecordDetailViewController.currentInstance = self
         navSetup(hasConnection: NetworkConnection.shared.hasConnection)
         setupStorageListener()
         connectionListener.initListener { [weak self] connected in
@@ -89,7 +86,6 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        HealthRecordDetailViewController.currentInstance = nil
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -169,7 +165,6 @@ extension HealthRecordDetailViewController {
     @objc private func goBack() {
 //        self.recordsView = nil
 //        removeContent()
-        HealthRecordDetailViewController.currentInstance = nil
         self.navigationController?.popViewController(animated: true)
     }
     

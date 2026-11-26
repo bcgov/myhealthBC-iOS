@@ -22,6 +22,8 @@ class BaseHealthRecordsDetailView: UIView {
     }
     
     private var delegate: HealthRecordDetailDelegate?
+    /// The view controller hosting this record view, used as the delegate for buttons in cells.
+    var delegateOwner: UIViewController? { delegate as? UIViewController }
     private var commentsEnabled: Bool = false
     private var stackViewBottomAnchor: NSLayoutConstraint? = nil
     private var stackViewBottomKeyboardAnchor: NSLayoutConstraint? = nil

@@ -15,7 +15,7 @@ class ViewPDFTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    public func configure(delegateOwner: UIViewController, style: AppStyleButton.ButtonType) {
+    public func configure(delegateOwner: UIViewController?, style: AppStyleButton.ButtonType) {
         viewPDFButton.configure(withStyle: .white, buttonType: style, delegateOwner: delegateOwner, enabled: true)
     }
     

@@ -109,7 +109,7 @@ class CancerScreeningDetailView: BaseHealthRecordsDetailView, UITableViewDelegat
         case .ViewPDF:
             guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
 //            let type: AppStyleButton.ButtonType = self.model?.cancerScreen()?.eventType == "Result" ? .viewResults : .viewLetter
-            cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance, style: .viewLetter)
+            cell.configure(delegateOwner: delegateOwner, style: .viewLetter)
             return cell
 //        case .Links:
 //            guard let cell = cancerLinkCell(indexPath: indexPath, tableView: tableView) else {
